@@ -1,0 +1,30 @@
+
+\chapter{Objectives and Contributions}
+\label{chap:objectives}
+The main goal of this work is the use of declarative mapping rules and their knowledge encoded for the construction and evaluation of knowledge graphs from heterogeneous data sources. This chapter presents the objectives and contributions to the state of the art of our work. Additionally, we detail the assumptions considered when we started this work, hypothesis and restrictions that delimit and describe the scope of this thesis.
+
+\section{Objectives}
+In the context of this thesis we identify two different goals. First, we provide a definition and a set of properties over the new concept of \textit{mapping translation} and we describe two approaches that take into account this concept to improve the construction and access of knowledge graphs from heterogeneous data sources. The second goal of the thesis consists in define the main steps and resources for an objective and proper evaluation of these kind of approaches.
+
+In order to achieve the first objective of this thesis, the open research problems that have to be solved are:
+
+\begin{itemize}
+    \item The construction of knowledge graphs (virtual or materialized) from heterogeneous data sources using declarative mapping rules is still an open issue in the state of the art. Based on the W3C recommendation R2RML~\citep{R2RML}, and with the aim of providing support to other format beyond relational databases, many new declarative mapping languages are proposed such as RML~\citep{dimou2014rml}, xR2RML~\citep{michel2015translation}, KR2RML~\citep{slepicka2015kr2rml}, CSVW~\citep{tennison2015model}, or D2RML~\citep{chortaras2018mapping}.Many of these extensions are proposed with the aim of solving specific heterogeneity issues of the input data, hence, they start to lose their generalization and the benefit of the declarative approach of the rules. To deal with these problems, we propose the possibility of the translation among these different languages, covering at least those common characteristics that are shared across languages, introducing one of the main ideas about a new generation of knowledge graph construction approaches.
+    \item The construction of virtualized knowledge graphs from raw data (e.g., CSV, JSON or XML) has been tackle as an engineering process delegating the management of these data sources to databases such as Apache Drill\footnote{\url{https://drill.apache.org/}} and Spark-SQL\footnote{\url{https://spark.apache.org/sql/}}. These systems allow the generation of a simple relational database layer over the input data sources. However, in order to tackle the advantage of proposed SPARQL-to-SQL optimization techniques~\citep{priyatna2014formalisation,calvanese2017ontop}, a well-formed RDB is required, including its corresponding constraints. Focused on the specific case of tabular data, we propose a framework that exploits mapping rules and metadata annotation to deal with the typical heterogeneity issues on querying these datasets under an OBDA environment. Its main aim is to improve query evaluation performance, as well as query completeness.
+    \item Multiple types of query interfaces have been proposed to query heterogeneous data on the web. GraphQL~\citep{graphql} aims to solve problems such as under/over fetching of other common used interfaces such as REST APIs. Although this specification has been widely included by multiple organizations in their systems as a query layer
+    \end{itemize}
+
+The second goal (methodologies for a proper evaluation of knowledge graph construction systems) have the following open problems:
+\begin{itemize}
+    \item 
+\end{itemize}
+. We depict in Chapter \ref{chap:soa} that there is not an standard and homogenize manner to evaluate these systems. They do not taking into account relevant parameters that can impact in their behaviour or they are only based on one data format and fixed distributions.
+
+
+\section{Contributions to the State of the Art}
+
+\section{Assumptions}
+
+\section{Hypothesis}
+
+\section{Restrictions}

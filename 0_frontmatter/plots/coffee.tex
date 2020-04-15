@@ -1,0 +1,46 @@
+\begin{tikzpicture}
+
+\pgfplotstableread{0_frontmatter/plots/data/coffee.txt} \datatable
+
+\begin{axis}[
+    ybar=0,
+    ylabel={Productivity (words / min)},
+    tick label style={font=\small},
+    tickpos=left,
+    legend entries={Coffee, Distributor « coffee », Tea},
+    xtick={1,2,3,4,5,6},
+    xticklabels={,,},
+    ybar=1cm,
+    ymin=-20, ymax=60,
+    ytick={-20,0,20,40,60},
+    legend columns=3,
+    y tick label style={/pgf/number format/.cd,%
+          scaled y ticks = false,
+          set thousands separator={},
+          fixed,
+          fixed zerofill,
+          precision=1,
+    },
+    legend pos=north west,
+    legend cell align=left,
+    ymajorgrids=true,
+    grid style=dashed,
+    cycle list={fill=s6,fill=s5,fill=s1,fill=s4,fill=s5},
+    legend style={font=\small},
+    legend style={at={(0, 1.2)},
+      anchor=north west,legend columns=-1},
+    bar width=16pt,
+    enlarge x limits={abs=1.45cm},
+    every axis plot/.append style={ error bars/y dir=both, error bars/y explicit }
+    ]
+    
+    \addplot table[y=L, y error=L_e] from \datatable;
+
+    \addplot +[postaction={pattern=horizontal lines}, pattern color=white] table[y=T, y error=T_e] from \datatable;
+    
+    \addplot +[postaction={pattern=crosshatch}, pattern color=white] table[y=R, y error=R_e] from \datatable;
+    
+    \draw [thick, dashed] ({rel axis cs:0,0}|-{axis cs:0,0}) -- ({rel axis cs:1,0}|-{axis cs:0,0}) node [pos=0.33, above] {};
+    
+\end{axis}
+\end{tikzpicture}

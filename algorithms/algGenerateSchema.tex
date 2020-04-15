@@ -1,0 +1,17 @@
+\begin{algorithm}
+%\footnotesize
+\caption{GenerateType(TriplesMap)}
+\label{algGenerateSchema}
+\begin{algorithmic}
+\STATE $type.init()$
+\STATE $typeClass = getTypeFromClass(TriplesMap.getSubjectMap())$
+\STATE $type.add(typeClass)$ 
+\STATE $poms = TriplesMap.getPredicateObjectMaps()$
+\FORALL{$pom \leftarrow poms$}
+  \STATE $datatype = getDataType(pom.getObjectMap())$
+  \STATE $attribute = getConstant(pom.getPredicateMap())$
+  \STATE $type.add(createAtttribute(attribute, datatype))$
+\ENDFOR
+\RETURN $type$
+\end{algorithmic}
+\end{algorithm}

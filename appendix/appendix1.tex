@@ -1,0 +1,160 @@
+\chapter{GTFS-Madrid-Bench Completeness}
+\label{sec:appendix3} 
+
+\begin{table}[]
+\centering
+\caption{Completeness of  benchmark queries in experiment configurations with GTFS-1 dataset. Minus means that the processor is not able to execute the query (i.e. generates an error) or it does not evaluate the query within the timeout duration.}
+\label{tab:results1}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\multicolumn{1}{|c|}{\multirow{2}{*}{Dataset}} & \multirow{2}{*}{Source} & \multirow{2}{*}{Tool} & \multicolumn{18}{c|}{queries} \\ \cline{4-21} 
+\multicolumn{1}{|c|}{} &  &  & q1 & q2 & q3 & q4 & q5 & q6 & q7 & q8 & q9 & q10 & q11 & q12 & q13 & q14 & q15 & q16 & q17 & q18 \\ \hline
+\multirow{13}{*}{GTFS-1} & \multirow{3}{*}{SQL} & Ontario & 58540 & - & - & - & - & - & - & 0 & - & - & - & - & - & 0 & - & - & - & - \\ \cline{3-21} 
+ &  & Morph-RDB & 58540 & 765 & - & 13 & 84 & 1 & 2 & - & 151439 & 1 & - & 6 & 734 & 2234 & 26 & - & 855 & - \\ \cline{3-21} 
+ &  & Ontop & 58540 & 765 & 734 & - & 0 & - & 0 & - & 151439 & - & - & - & 734 & 2234 & 26 & 0 & 855 & - \\ \cline{2-21} 
+ & MongoDB & Morph-xR2RML & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 2364 & 0 & 0 & 855 & 0 \\ \cline{2-21} 
+ & \multirow{3}{*}{CSV} & Morph-RDB & 58540 & 765 & - & 13 & - & 1 & - & - & - & 1 & - & 6 & 734 & - & - & - & 855 & - \\ \cline{3-21} 
+ &  & Morph-CSV & 58540 & 765 & - & 13 & - & 1 & 2 & - & 151439 & 1 & - & 6 & 734 & - & - & - & 855 & 128 \\ \cline{3-21} 
+ &  & Ontario & 0 & - & 734 & - & - & - & - & 0 & - & - & - & - & - & 0 & - & - & - & - \\ \cline{2-21} 
+ & XML & Ontario & - & - & - & - & - & - & - & - & - & - & - & - & - & - & - & - & - & - \\ \cline{2-21} 
+ & JSON & Ontario & 58540 & - & 734 & - & - & - & - & 0 & - & - & - & - & - & 0 & - & - & - & - \\ \cline{2-21} 
+ & Best & Ontario & 0 & - & 734 & - & - & - & - & 0 & - & - & - & - & - & 0 & - & - & - & - \\ \cline{2-21} 
+ & Worst & Ontario & 0 & - & 734 & - & - & - & - & 0 & - & - & - & - & - & 0 & - & - & - & - \\ \cline{2-21} 
+ & RDF & Virtuoso & 58540 & 765 & 734 & 13 & 28 & 1 & 2 & 4728 & 151439 & 1 & 130 & 6 & 734 & 2364 & 26 & 34 & 855 & 64 \\ \hline
+\end{tabular}%
+}
+\end{table}
+
+
+
+\begin{table}[h]
+\centering
+\caption{Completeness of  benchmark queries in experiment configurations with GTFS-5 dataset. Minus means that the processor is not able to execute the query (i.e. generates an error) or it does not evaluate the query within the timeout duration.}
+\label{tab:cresults2}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\multirow{2}{*}{Dataset} & \multirow{2}{*}{Source} & \multirow{2}{*}{Tool} & \multicolumn{18}{c|}{queries} \\ \cline{4-21} 
+ &  &  & q1 & q2 & q3 & q4 & q5 & q6 & q7 & q8 & q9 & q10 & q11 & q12 & q13 & q14 & q15 & q16 & q17 & q18 \\ \hline
+\multirow{13}{*}{GTFS-5} & \multirow{3}{*}{SQL} & Ontario & 176830 & - & - & - & - & - & - & 0 & - & - & - & - & - & 0 & - & - & - & - \\ \cline{3-21} 
+ &  & Morph-RDB & 176830 & 3161 & - & 65 & 350 & 1 & 62 & - & - & 1 & - & 65 & 1325 & 11170 & 4949 & - & 4275 & - \\ \cline{3-21} 
+ &  & Ontop & 176830 & 3161 & 2104 & - & 0 & - & 0 & - & 0 & - & - & - & 1325 & 11170 & 4828 & 0 & 4275 & - \\ \cline{2-21} 
+ & MongoDB & Morph-xR2RML & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 643 & 0 & 0 & 6593 & 0 & 0 & 3357 & 0 \\ \cline{2-21} 
+ & \multirow{3}{*}{CSV} & Morph-RDB & 176830 & 3161 & - & 65 & - & 1 & - & - & - & 1 & - & - & 1325 & - & - & - & 4275 & - \\ \cline{3-21} 
+ &  & Morph-CSV & 176830 & 6310 & - & 65 & - & 1 & 0 & - & - & 1 & - & 65 & 1325 & - & - & - & 4275 & 0 \\ \cline{3-21} 
+ &  & Ontario & 0 & - & 2104 & - & - & - & - & 0 & - & - & - & - & - & 0 & - & - & - & - \\ \cline{2-21} 
+ & XML & Ontario & - & - & - & - & - & - & - & - & - & - & - & - & - & - & - & - & - & - \\ \cline{2-21} 
+ & JSON & Ontario & 0 & - & 2104 & - & - & - & - & 0 & - & - & - & - & - & 0 & - & - & - & - \\ \cline{2-21} 
+ & Best & Ontario & 0 & - & 2104 & - & - & - & - & 0 & - & - & - & - & - & 0 & - & - & - & - \\ \cline{2-21} 
+ & Worst & Ontario & 0 & - & 2104 & - & - & - & - & 0 & - & - & - & - & - & 0 & - & - & - & - \\ \cline{2-21} 
+ & RDF & Virtuoso & 176830 & 3161 & 2104 & 65 & 350 & 1 & 62 & 23640 & 359113 & 1 & 650 & 65 & 1325 & 11170 & 4949 & 2080 & 4275 & 624 \\ \hline
+\end{tabular}%
+}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{Completeness of  benchmark queries in experiment configurations with GTFS-10 dataset. Minus means that the processor is not able to execute the query (i.e. generates an error) or it does not evaluate the query within the timeout duration.}
+\label{tab:results3}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\multirow{2}{*}{Dataset} & \multirow{2}{*}{Source} & \multirow{2}{*}{Tool} & \multicolumn{18}{c|}{queries} \\ \cline{4-21} 
+ &  &  & q1 & q2 & q3 & q4 & q5 & q6 & q7 & q8 & q9 & q10 & q11 & q12 & q13 & q14 & q15 & q16 & q17 & q18 \\ \hline
+\multirow{13}{*}{GTFS-10} & \multirow{3}{*}{SQL} & Ontario & 353660 & - & - & - & - & - & - & 0 & - & - & - & - & - & 0 & - & - & - & - \\ \cline{3-21} 
+ &  & Morph-RDB & 353660 & 6312 & - & 130 & 700 & 1 & 67 & - & - & 1 & - & 130 & 2650 & 22340 & 8641 & - & 8550 & - \\ \cline{3-21} 
+ &  & Ontop & 353660 & 6312 & 4207 & - & 0 & - & 0 & - & 0 & - & - & - & 2650 & 22340 & 8521 & 0 & 8550 & - \\ \cline{2-21} 
+ & MongoDB & Morph-xR2RML & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1292 & 0 & 0 & 11348 & 0 & 0 & 5508 & 0 \\ \cline{2-21} 
+ & \multirow{3}{*}{CSV} & Morph-RDB & 353660 & 6312 & - & 130 & - & 1 & - & - & - & 1 & - & - & 2650 & - & - & - & 8550 & - \\ \cline{3-21} 
+ &  & Morph-CSV & 353660 & 12620 & - & 130 & - & 1 & 0 & - & 0 & 1 & - & 130 & 2650 & - & - & - & 8550 & 0 \\ \cline{3-21} 
+ &  & Ontario & 0 & - & 4207 & - & - & - & - & 0 & - & - & - & - & - & 0 & - & - & - & - \\ \cline{2-21} 
+ & XML & Ontario & - & - & - & - & - & - & - & - & - & - & - & - & - & - & - & - & - & - \\ \cline{2-21} 
+ & JSON & Ontario & 0 & - & 4207 & - & - & - & - & 0 & - & - & - & - & - & 0 & - & - & - & - \\ \cline{2-21} 
+ & Best & Ontario & 0 & - & 4207 & - & - & - & - & 0 & - & - & - & - & - & 0 & - & - & - & - \\ \cline{2-21} 
+ & Worst & Ontario & 0 & - & 4207 & - & - & - & - & 0 & - & - & - & - & - & 0 & - & - & - & - \\ \cline{2-21} 
+ & RDF & Virtuoso & 353660 & 6312 & 4207 & 130 & 350 & 1 & 67 & 47280 & 718317 & 1 & 1300 & 130 & 2650 & 22340 & 8641 & 1820 & 8550 & 1300 \\ \hline
+\end{tabular}%
+}
+\end{table}
+
+\vspace{200pt}
+\begin{table}[h]
+\centering
+\caption{Completeness of  benchmark queries in experiment configurations with GTFS-50 dataset. Minus means that the processor is not able to execute the query (i.e. generates an error) or it does not evaluate the query within the timeout duration.}
+\label{tab:results4}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\multirow{2}{*}{Dataset} & \multirow{2}{*}{Source} & \multirow{2}{*}{Tool} & \multicolumn{18}{c|}{queries} \\ \cline{4-21} 
+ &  &  & q1 & q2 & q3 & q4 & q5 & q6 & q7 & q8 & q9 & q10 & q11 & q12 & q13 & q14 & q15 & q16 & q17 & q18 \\ \hline
+\multirow{13}{*}{GTFS-50} & \multirow{3}{*}{SQL} & Ontario & - & - & - & - & - & - & - & 0 & - & - & - & - & - & 0 & - & - & - & - \\ \cline{3-21} 
+ &  & Morph-RDB & 1768300 & 31550 & - & 650 & 3500 & 1 & 59 & - & - & 1 & - & 650 & 13250 & 111700 & 21958 & - & 42750 & - \\ \cline{3-21} 
+ &  & Ontop & 1768300 & 31550 & 21034 & - & 0 & - & 0 & - & 0 & - & - & - & 13250 & 111700 & 17537 & 0 & 42750 & - \\ \cline{2-21} 
+ & MogoDB & Morph-xR2RML & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 5058 & 0 & 0 & - & 0 & 0 & - & 0 \\ \cline{2-21} 
+ & \multirow{3}{*}{CSV} & Morph-RDB & 1768300 & 31550 & - & 650 & - & 1 & - & - & - & 1 & - & - & 1325 & - & - & - & - & - \\ \cline{3-21} 
+ &  & Morph-CSV & 1768300 & 63100 & - & 650 & - & 1 & 0 & - & 0 & 1 & - & 650 & 13250 & - & - & - & 42750 & 0 \\ \cline{3-21} 
+ &  & Ontario & 0 & - & 21034 & - & - & - & - & 0 & - & - & - & - & - & 0 & - & - & - & - \\ \cline{2-21} 
+ & XML & Ontario & - & - & - & - & - & - & - & - & - & - & - & - & - & - & - & - & - & - \\ \cline{2-21} 
+ & JSON & Ontario & 0 & - & 21034 & - & - & - & - & 0 & - & - & - & - & - & 0 & - & - & - & - \\ \cline{2-21} 
+ & Best & Ontario & 0 & - & 21034 & - & - & - & - & 0 & - & - & - & - & - & 0 & - & - & - & - \\ \cline{2-21} 
+ & Worst & Ontario & 0 & - & 21034 & - & - & - & - & 0 & - & - & - & - & - & 0 & - & - & - & - \\ \cline{2-21} 
+ & RDF & Virtuoso & 1768300 & 31550 & 21034 & 650 & 1750 & 1 & 59 & 236400 & 3591503 & 1 & 6500 & 650 & 13250 & 111700 & 21958 & 2730 & 42750 & 6500 \\ \hline
+\end{tabular}%
+}
+\end{table}
+
+
+\begin{table}[h]
+\centering
+\caption{Completeness of  benchmark queries in experiment configurations with GTFS-100 dataset. Minus means that the processor is not able to execute the query (i.e. generates an error) or it does not evaluate the query within the timeout duration.}
+\label{tab:results5}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\multirow{2}{*}{Dataset} & \multirow{2}{*}{Source} & \multirow{2}{*}{Tools} & \multicolumn{18}{c|}{queries} \\ \cline{4-21} 
+ &  &  & q1 & q2 & q3 & q4 & q5 & q6 & q7 & q8 & q9 & q10 & q11 & q12 & q13 & q14 & q15 & q16 & q17 & q18 \\ \hline
+\multirow{13}{*}{GTFS-100} & \multirow{3}{*}{SQL} & Ontario & - & - & - & - & - & - & - & 0 & - & - & - & - & - & 0 & - & - & - & - \\ \cline{3-21} 
+ &  & Morph-RDB & 3536600 & 63100 & - & 1300 & 7000 & 1 & 67 & - & - & 1 & - & 1300 & 26500 & 223400 & 35502 & - & 85500 & - \\ \cline{3-21} 
+ &  & Ontop & 3536600 & 63100 & 42067 & - & 0 & - & 0 & - & 0 & - & - & - & 26500 & 223400 & 31080 & 0 & 85500 & - \\ \cline{2-21} 
+ & MongoDB & Morph-xR2RML & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 10336 & 0 & 0 & - & 0 & 0 & - & 0 \\ \cline{2-21} 
+ & \multirow{3}{*}{CSV} & Morph-RDB & - & 63100 & - & 1300 & - & 1 & - & - & - & 1 & - & - & - & - & - & - & - & - \\ \cline{3-21} 
+ &  & Morph-CSV & 3536600 & 126200 & - & 1300 & - & 1 & 0 & - & - & 1 & - & 1300 & 26500 & - & - & - & 85500 & 0 \\ \cline{3-21} 
+ &  & Ontario & 0 & - & 42067 & - & - & - & - & 0 & - & - & - & - & - & 0 & - & - & - & - \\ \cline{2-21} 
+ & XML & Ontario & - & - & - & - & - & - & - & - & - & - & - & - & - & - & - & - & - & - \\ \cline{2-21} 
+ & JSON & Ontario & 0 & - & 42067 & - & - & - & - & 0 & - & - & - & - & - & 0 & - & - & - & - \\ \cline{2-21} 
+ & Best & Ontario & 0 & - & 42067 & - & - & - & - & 0 & - & - & - & - & - & 0 & - & - & - & - \\ \cline{2-21} 
+ & Worst & Ontario & 0 & - & 42067 & - & - & - & - & 0 & - & - & - & - & - & 0 & - & - & - & - \\ \cline{2-21} 
+ & RDF & Virtuoso & 3536600 & 63100 & 42067 & 1300 & 3500 & 1 & 67 & 472800 & 7183874 & 1 & 13000 & 1300 & 26500 & 223400 & 35502 & 1690 & 85500 & 13000 \\ \hline
+\end{tabular}%
+}
+\end{table}
+
+
+
+\begin{table}[h]
+\centering
+\caption{Completeness of  benchmark queries in experiment configurations with GTFS-500 dataset. Minus means that the processor is not able to execute the query (i.e. generates an error) or it does not evaluate the query within the timeout duration.}
+\label{tab:results6}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\multirow{2}{*}{Dataset} & \multirow{2}{*}{Source} & \multirow{2}{*}{Tool} & \multicolumn{18}{c|}{queries} \\ \cline{4-21} 
+ &  &  & q1 & q2 & q3 & q4 & q5 & q6 & q7 & q8 & q9 & q10 & q11 & q12 & q13 & q14 & q15 & q16 & q17 & q18 \\ \hline
+\multirow{13}{*}{GTFS-500} & \multirow{3}{*}{SQL} & Ontario & - & - & - & - & - & - & - & 0 & - & - & - & - & - & 0 & - & - & - & - \\ \cline{3-21} 
+ &  & Morph-RDB & - & 315499 & - & 6500 & 35000 & 1 & 53 & - & - & 1 & - & 6500 & 132500 & 1117000 & 38749 & - & 427500 & - \\ \cline{3-21} 
+ &  & Ontop & 0 & 315499 & 210334 & - & 0 & - & 0 & - & 0 & - & - & - & 132500 & 1117000 & 34323 & 0 & 427500 & - \\ \cline{2-21} 
+ & MongoDB & Morph-xR2RML & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & - & 0 & 0 & - & 0 & 0 & - & 0 \\ \cline{2-21} 
+ & \multirow{3}{*}{CSV} & Morph-RDB & - & - & - & - & - & - & - & - & - & 1 & - & - & - & - & - & - & - & - \\ \cline{3-21} 
+ &  & Morph-CSV & - & - & - & - & - & - & - & - & - & - & - & - & - & - & - & - & - & - \\ \cline{3-21} 
+ &  & Ontario & 0 & - & - & - & - & - & - & 0 & - & - & - & - & - & 0 & - & - & - & - \\ \cline{2-21} 
+ & XML & Ontario & - & - & - & - & - & - & - & - & - & - & - & - & - & - & - & - & - & - \\ \cline{2-21} 
+ & JSON & Ontario & - & - & - & - & - & - & - & 0 & - & - & - & - & - & 0 & - & - & - & - \\ \cline{2-21} 
+ & Best & Ontario & 0 & - & - & - & - & - & - & 0 & - & - & - & - & - & 0 & - & - & - & - \\ \cline{2-21} 
+ & Worst & Ontario & 0 & - & - & - & - & - & - & 0 & - & - & - & - & - & 0 & - & - & - & - \\ \cline{2-21} 
+ & RDF & Virtuoso & 17683000 & 315499 & 210334 & 6500 & 17500 & 1 & 53 & 2364000 & 35919991 & 1 & 65000 & 6500 & 132500 & 1117000 & 38749 & 2340 & 427500 & 65000 \\ \hline
+\end{tabular}%
+}
+\end{table}
+
+\newpage

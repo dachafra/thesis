@@ -1,0 +1,22 @@
+\begin{algorithm}
+%\footnotesize
+\caption{GenerateResvolver(TriplesMap)}
+\label{algGenerateQueryRootNaive}
+\begin{algorithmic}[1]
+\STATE $resolver.init()$
+\STATE $typeClass = getTypeFromClass(TriplesMap.getSubjectMap())$
+\STATE $poms = TriplesMap.getPredicateObjectMaps()$
+\FORALL{$pom \leftarrow poms$}
+  \STATE $attribute = getConstant(pom.getPredicateMap())$
+  \STATE $attributes.add(attribute)$
+\ENDFOR
+
+\STATE $resolver.add(defineListQueryFunction(typeClass,attributes))$
+\STATE $resolver.add(translateQuery(trans(TriplesMap))$
+\STATE $resolver.add(execute(query,rdb))$
+\STATE $resolver.add(constructResults(attributes,queryResults))$
+\RETURN $Resolver$
+
+
+\end{algorithmic}
+\end{algorithm}

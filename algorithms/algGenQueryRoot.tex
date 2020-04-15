@@ -1,0 +1,20 @@
+\begin{algorithm}
+%\footnotesize
+\caption{GenerateQueryRoot(Mapping)}
+\label{algQueryRoot}
+\begin{algorithmic}
+\STATE $queryRoot.init()$
+\FORALL{$TriplesMap \leftarrow Mapping$}
+    \STATE $typeClass = getTypeFromClass(TriplesMap.getSubjectMap())$
+    \STATE $poms = TriplesMap.getPredicateObjectMaps()$
+    \FORALL{$pom \leftarrow poms$}
+      \STATE $datatype = getDataType(pom.getObjectMap())$
+      \STATE $attribute = getConstant(pom.getPredicateMap())$   
+      \STATE $attributes.add(attribute,datatype)$
+    \ENDFOR
+    \STATE $query = createListQuery(typeClass,attributes)$
+    \STATE $queryRoot.add(query)$
+\ENDFOR
+\RETURN $queryRoot$ 
+\end{algorithmic}
+\end{algorithm}

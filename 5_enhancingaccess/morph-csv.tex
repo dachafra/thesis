@@ -1,0 +1,510 @@
+\section{Morph-CSV: Virtual Knowledge Graph Access over Tabular Data}
+
+Guided by Open Data principles, governments and private organizations are regularly publishing wide amounts of public data in open data portals. For example, almost a million of datasets are available in the European Open Data Portal (EODP)\footnote{\url{https://www.europeandataportal.eu}}, and many of them are available in tabular formats (e.g., CSV, Excel), as observed in Table \ref{tab:odp}. Both the simplicity of a tabular representation and the variety of tools to manage a table (e.g., Excel, Calc) have influenced in the popularity of tabular formats to represent open data.  
+
+Although extensively utilized, tabular representations imposed various data management challenges to advanced users (e.g., developers, data scientists). The lack of a unified way to query tabular data, something that is available in other formats (e.g., RDB, JSON, XML), hinders the integration of sources, especially those having datatype inconsistencies. Moreover, data may not be normalized, and information about relationships or column names are not always descriptive or homogeneous. Hence, data consumers are usually forced to apply ad-hoc or manual data wrangling processes to consume data via open data portals. 
+
+Following Linked Data~\citep{bizer2011linked} and FAIR initiatives~\citep{wilkinson2016fair}~\footnote{\url{https://www.go-fair.org/fair-principles/}}, data providers are encouraged to make data available in an RDF-based representation following the 5-star linked data principles\footnote{\url{https://5stardata.info/en/}}. The Ontology-Based Data Access (OBDA)~\citep{poggi2008linking} paradigm facilitates the transformation of heterogeneous data into RDF.
+An OBDA corresponds to a data integration system (DIS)~\citep{Lenzerini02} over heterogeneous data sources. A DIS unified schema is defined in terms of ontologies, while mapping rules establish correspondence between the unified schema concepts and the DIS data sources. An OBDA can be materialized or virtual. In a materialized OBDA, the integration of the DIS data sources is physically represented in RDF~\citep{poggi2008linking}. Contrary, in a virtual OBDA, data integration is performed on the fly during query processing; DIS mapping rules are used to rewrite SPARQL queries into queries against the DIS data sources~\citep{calvanese2017ontop,priyatna2014formalisation}.
+Features like functions in mappings~\citep{de2017declarative,junior2016funul} and metadata~\citep{tennison2015model}, (i.e., annotations) are usually used in materialized OBDAs to overcome the aforementioned challenges of tabular data.
+
+Traditional virtual OBDA approaches, usually, rely on loading the tabular data into SQL-based systems\footnote{\url{https://github.com/oeg-upm/morph-rdb/wiki/Usage\#csv-files}}$^,$\footnote{\url{https://github.com/ontop/ontop/wiki/MappingDesignTips\#database-tips}}(e.g., MySQL, Apache Drill, Spark SQL, Presto) to perform the query translation techniques. However, the correctness and optimization of these techniques are supported by the main assumption about the existence of constraints over the source data (i.e., a good physical design of the relational database instance). Their absence during a virtual OBDA process over tabular data directly impacts over completeness and performance of these techniques. Completeness is affected because of heterogeneity issues in data sources (e.g., datatype CSV columns are simply treated as string-type SQL columns). Furthermore, performance is impacted because indexes are not created based on basic relational constraints, i.e., primary and foreign key constraints are not defined in the schema. As a consequence, query translation optimization techniques that normally exploit indexes (e.g., ~\citep{rodriguez2015efficient,priyatna2014formalisation}) do not produce the expected results.
+\begin{table}[t]
+\centering
+\caption{Most commonly used formats and percentage over the total number of datasets to expose data in mature EU open data portals in October 2019. Each dataset may be shared in different formats.}
+\label{tab:odp}
+\begin{tabular}{c|c|c|c}
+\hline
+\textbf{Data Portal} & \textbf{1st Format}  & \textbf{2nd Format} & \textbf{3rd Format} \\ \hline
+Spain                & \textbf{CSV (50\%)}  & \textbf{XLS (35\%)}  & JSON (33\%)          \\ 
+Norway               & \textbf{CSV (77\%)}    & GEOJSON (17\%)         & JSON (14\%)            \\ 
+Italy               & \textbf{CSV (76\%)}  & JSON (35\%)          & XML (25\%)           \\ 
+Croatia              & \textbf{XLS (63\%)}    & \textbf{CSV (40\%)}   & HTML (33\%)           \\ \hline
+\end{tabular}
+\end{table}
+
+OBDA annotations such as the W3C recommendation to annotate tabular data, CSVW~\citep{tennison2015model} and some extensions of standard mapping rules (e.g., RML+FnO~\citep{de2017declarative}) are commonly used to describe constraints over an OBDA tabular dataset. For example, we can standardize a column indicating its format, define integrity constraints or declare datatypes. The majority of OBDA query translation engines~\citep{priyatna2014formalisation,endris2019ontario} do not include this information. Those engines that have partially included the constrains (e.g., Squerall~\citep{mami2019squerall} parses RML+FnO mapping rules) are not fully documented; i.e., there is no explanation of how these constraints are taken into account. The definition of a workflow that includes the exploitation of these tabular annotations during a virtual OBDA process will ensure correct and optimized SPARQL-to-SQL translations.
+
+\noindent\textbf{Problem and Proposed Solution:} 
+We address the limitations of current OBDA query translation techniques over tabular data. Our goals are (i) define a framework that includes the application of a set of constraints over tabular data and (ii) define a set of operators that apply each type of constraint in order to improve query completeness and performance. We propose a set of new steps to be aligned with the current OBDA workflow. Further, we implement Morph-CSV, and evaluate its behavior in comparison with previous approaches .
+
+
+\noindent\textbf{Contributions:} Our main contributions are as follows:
+\begin{enumerate}
+\item Definition of the concept of Virtual Tabular Dataset (VTD) composed by a tabular dataset and its corresponding OBDA annotations, as well as its alignment with the current definition and assumptions of the OBDA framework~\citep{xiao2018obdasurvey}.
+\item Morph-CSV, a framework that implements a constraint-based OBDA workflow for tabular datasets; it receives a VTD and a SPARQL query as inputs and outputs an OBDA instance. Morph-CSV performs the following steps: (i) generation of the constraints based on information on the VTD; (ii) selection of sources and attributes needed to answer the query; (iii) pre-processing of the selected sources applying some of the constraints; and (iv) physical implementation of the corresponding RDB instance and associated schema, ensuring effectiveness of the SPARQL-to-SQL translations and optimizations.
+\item Evaluation of Morph-CSV over two open source engines: Morph-RDB~\citep{priyatna2014formalisation} and Ontop~\citep{calvanese2017ontop}; two benchmarks (BSBM~\citep{bizer2009berlin} and GTFS-Madrid-Bench\footnote{https://github.com/oeg-upm/gtfs-bench}), and a real-world testbed from the Bio2RDF project~\citep{belleau2008bio2rdf} are used in the study.
+\end{enumerate}
+
+
+
+
+\subsection{Motivating Example}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.6\linewidth]{figures/example.pdf}
+    \caption{\textbf{Motivating Example.} SPARQL query evaluation over two tabular data files in the transport domain through a common OBDA approach. It loads the files as single tables in an SQL-based system and uses the mapping rules for query translation. The number of results differs with respect to the expected results due the heterogeneity of the raw data. Additionally, query performance may be affected by the join condition between the two tables, the absence of indexes and the loading of columns that are not needed to answer the input query (wheelchair).}
+    \label{fig:example}
+\end{figure}
+Consider the de-facto standard for publishing open data in the transport domain, GTFS\footnote{\url{https://developers.google.com/transit/gtfs/reference/}}. This model provides information such as \textit{schedules}, \textit{stops} and \textit{routes} using 15 different inter-related CSV files called GTFS feed. Each feed usually specifies the information of one type of transportation mode (e.g., metro, train, and tram). Linking these feeds based on their stops enables route planners to offer multi-modal routes, a route that can be travelled using various types of transportation.
+The GTFS feeds from the metro and the buses of the city of Madrid have several stops and stations in common; they are created by different transport authorities, and the names of their stops are defined in different manners. Figure~\ref{fig:example} depicts a SPARQL query asking for bus and metro stops with the same name, and information related to their closing dates during holidays. Since GTFS uses temporal identifiers for its resources, links have to be established joining stop names. However, as it is usual in open datasets, stop names do not follow a standard structure (e.g., ``Colonia Jardin'' in \textit{bus\_stops.csv} and ``Colonia\_jardin'' in \textit{metro\_stops.csv}). A similar issue is present in closing dates, where there are multi-valued cells and their format is not the standard one (e.g., yyyy-MM-dd). Following the approach commonly employed by typical OBDA engines, the two files would be loaded into an SQL-system and treated as single tables. The obtained result set only contains one answer where the stop names in the two data sources are identical (``Noviciado''). However, the expected result set should include more answers by performing an improved join among the stop names of the bus and metro, through the normalization of multi-valued date columns.
+
+The manual and ad-hoc preparation of a tabular dataset for a virtual OBDA process is usually the most time-consuming and less reproducible task. Exploiting available standard OBDA annotations allows its generalization and automatization, as well as ensuring the effectiveness of query completeness and performance of SPARQL-to-SQL techniques, complying with OBDA assumptions.
+
+
+\subsection{Ontology Based Data Access over Tabular Data}
+This section describes a set of challenges demanded to be addressed whenever tabular data is queried in a virtual OBDA framework. Further, we describe relevant OBDA proposals for annotating tabular datasets and their alignment with the identified challenges.
+
+\subsubsection{Querying Challenges under virtual OBDA}
+There are specific challenges on querying tabular datasets using an OBDA approach that have not been tackled by existing techniques. We will describe those challenges and explain how they may have a negative effect in terms of completeness and performance of query-translation approaches:
+\begin{itemize}
+    \item \textbf{Selection (S):} Existing frameworks load all of the files that are specified as sources in the OBDA mapping rules into a SQL database before executing the query-translation process. This step has to be repeated whenever a SPARQL query is evaluated to ensure up-to-date results, resulting in unnecessary longer loading time, affecting, thus, ODBA performance.
+    \item \textbf{Normalization (N):} Tabular data formats do not provide restrictions on how to structure data. As a result, cells may contain multiple values, and one file may represent multiple entities. Having non-normalized tables may affect the completeness of the query. When a tabular source with multiple-valued cells is loaded into an RDB table, the cell's value is interpreted by the RDBMS as an atomic value, reducing, thus, completeness for queries that filter or ``join'' on the corresponding column. Representing several entities in a single file may lead to duplicate answers, and in turn, decrease query answering performance.
+    \item\textbf{Heterogeneity (H):} Tabular data normally contain values that need to be transformed before query evaluation (e.g., column default values or normalization of date formats). Since there may be different formats for the same datatype or default values may have not been included in the dataset, query completeness can be affected.
+    \item \textbf{Lightweight Schema (LS):} Most of the tabular data only provide minimal information about their underlying schema in the form of column names in the header, if at all present. Also, although there is implicit information on keys and relationships among sources, there is no way to specify primary key or foreign key constraints. The same can be said on indexes and datatypes. The existence of this type of information is assumed~\citep{xiao2018obdasurvey} in an OBDA approach for performing optimizations in query evaluation techniques. Therefore, the lack of this information affects the performance of OBDA engines.
+\end{itemize}
+
+Although some of the aforementioned challenges are not only specific to tabular datasets and are proposed in several data integration approaches~\citep{golshan2017data,halevy2006data,doan2012principles} there are two main reasons why it is important to address these problems in this context: first, as we reflect in Section \ref{sec:intro}, the number of tabular datasets available in the web of data is enormous and still growing and these challenges were not taken into account in previous OBDA proposals; second, although there are declarative proposals to handle these issues in the state of the art like CSV on the Web~\citep{tennison2015model} for metadata annotations, or mapping languages that include transformation functions to deal with heterogeneity (e.g., RML+FnO~\citep{de2017declarative} or R2RML-F~\citep{debruyne2016r2rml}), there is not yet a proposal that exploits the information from these inputs including their application in the form of constraints into a common OBDA workflow.
+
+
+
+\begin{table}[]
+\centering
+\caption{Properties of CSVW and RML+FnO that can be used to address the challenges of dealing with tabular data in a virtual OBDA approach}
+\label{tab:features}
+\begin{tabular}{l|l}
+\hline
+\multicolumn{1}{c|}{\textbf{Challenges}} & \multicolumn{1}{c}{\textbf{Relevant Properties}} \\ \hline
+Describe the corresponding concept (LS) & rr:class \\ \hline
+Describe the corresponding property (LS) & rr:predicateMap \\ \hline
+Add header to a CSV file (H) & csvw:rowTitles \\ \hline
+Column datatype (LS) & csvw:datatype \\ \hline
+Constraining values (H) & csvw:minimum, csvw:maximum \\ \hline
+Specify the format of a column (H) & csvw:format \\ \hline
+Specify a join (H) & rr:refObjectMap, csvw:foreignKeys \\ \hline
+Transform value (H) & fnml:functionValue \\ \hline
+Support for multiple values in one cell (N) & csvw:separator \\ \hline
+Primary key (N) &  csvw:primaryKey \\ \hline
+Default for missing values (H) & csvw:default \\ \hline
+Specify NULL values (H) & csvw:null \\ \hline
+Specify NOT NULL constraint (LS) & csvw:required \\ \hline
+Specify columns to be transformed (H) & rr:reference, rr:template \\ \hline
+\end{tabular}
+
+\end{table}
+
+\subsubsection{OBDA annotations for Tabular Data}
+R2RML~\citep{R2RML} is a W3C Recommendation for describing transformation rules from RDB to RDF and a widely used mapping language in virtual OBDA approaches. RML~\citep{dimou2014rml} extends R2RML; it provides support to a variety of data formats, e.g., XML, CSV, and JSON. Both languages provide basic transformation functions to concatenate strings, which are especially useful for generating URIs from columns/fields of the dataset. Recently, RML has been integrated with the Function Ontology (FnO)~\citep{de2016ontology} to support other types of transformations. Additionally, for tabular data, CSVW metadata~\citep{tennison2015model} is a W3C Recommendation to describe tabular datasets. Although there are other proposals in the state of the art to deal with some of the aforementioned challenges~\citep{junior2016funul,debruyne2016r2rml}, Morph-CSV relies on these two proposals because they cover the identified challenges. Additionally, this election is supported by the fact that CSVW is a recommendation from the W3C and RML+FnO (in addition of being a extended version of a W3C recommendation) has been previously applied in other projects~\citep{de2017declarative,mami2019squerall} and is widely used by several materialization engines, e.g.,  RMLMapper\footnote{https://github.com/RMLio/rmlmapper-java}, CARML\footnote{https://github.com/carml/carml/} and RocketRML~\citep{csimcsek2019rocketrml}. Finally, relevant benefits of these annotations is that both of them are defined in a declarative manner. Thus, the maintainability, the readability, and the understanding of the virtual OBDA approach is improved and independent from any specific programming language.
+
+We now describe relevant properties of RML+FnO and CSVW, summarized in Table \ref{tab:features}, which are useful to deal with the challenges identified:
+\begin{itemize}
+    \item \textbf{Metadata.} The property \texttt{csvw:rowTitles} can be used to specify column names in case the first row is not used to specify them.
+    \item \textbf{Transformation functions.} String concatenation functions are supported by both CSVW (\texttt{csvw:aboutUrl}, \texttt{csvw:valueUrl}) and the RML property (\texttt{rr:template}). In addition, more complex functions can be declaratively specified using RML+FnO, specifically, with the \texttt{fnml:functionValue} property. Finally, two special cases of transformation functions in the context of OBDA are related to how default values and NULL representations have to be generated in the RDB instance. These two cases can be handled by CSVW properties: \texttt{csvw:defaultValue} and \texttt{cvwv:null}.
+    
+    \item \textbf{Domain Constraints.} CSVW allows for the specification of the datatype (\texttt{csvw:datatype} property) and format (\texttt{csvw:format} property) of tabular columns. CSVW also provides a couple of properties (e.g., \texttt{csvw:mininum} or \texttt{csvw:maximum}) to specify the range of numerical columns and a property \texttt{csvw:required} to specify the NOT NULL constraint over the column of a table.
+    
+    \item \textbf{Integrity Constraints.} In CSVW the property \texttt{csvw:primaryKey} can be used to declare explicitly the primary key of a table. As for the foreign key, the use of RML's \texttt{rr:joinCondition} can be seen as an indication that the parent column used over this rule could be a foreign key. CSVW provides an explicit way to declare whether a column is a foreign key, using the \texttt{csvw:foreignKeys} property. 
+    
+    \item \textbf{Normalization.} The property \texttt{csvw:separator} from CSVW indicates the character used to separate multiple values in the cells of a CSV column, what is relevant when a CSV file is in 1NF. Multiple RML TriplesMap using the same data source can be used as an indication that the source contains multiple concepts (2NF).
+\end{itemize}
+
+
+
+\subsection{The Morph-CSV Framework}
+The formal framework presented in~\citep{xiao2018obdasurvey} defines an OBDA specification as a tuple $P$ = $\langle O,S,M\rangle$ where $O$ is an ontology, $S$ is the source schema, and $M$ a set of mappings. Additionally, an OBDA instance is defined as a tuple $PI$ = $\langle P,D\rangle$ where P is an OBDA specification and $D$ is a data instance conforming to $S$. In a virtual OBDA framework, queries are posed over a conceptual layer and then translated to queries over the data layer using information in the mappings. There is a set of assumptions over the framework that support the possibility of doing query translation and  ensuring  semantic preservation in the process, together with the application of  optimization techniques proposed in the state of the art. To motivate our proposal, we have to establish what are the main assumptions made in previous proposals and their impact when data is represented in tabular form.
+\subsubsection{OBDA assumptions}
+Analyzing the definition of OBDA of~\citep{xiao2018obdasurvey} and its extension for NoSQL databases defined in~\citep{botoeva2019ontology} we identified a set of assumptions made over the framework and their impact when the dataset is tabular:
+\begin{itemize}
+    \item There is a native query language $QL$ for $D$. For a tabular dataset, there is not a native query language for querying this format, which generates an important difference with other common formats for exposing raw data on the web such as JSON and XML as they include ways to query them (JSONPath, XPath). This is the main issue that needs to be solved in order to query tabular datasets in a virtual OBDA context and has a direct impact over the rest of assumptions, that have been solved in a naive manner.
+    \item $S$ typically includes a set of domain and integrity constraints. In the case of querying a tabular dataset $D_{tabular}$, $S$ is defined using column names extracted from $D_{tabular}$ and it does not include any type of constraint (neither domain nor integrity constraints). This has a negative impact not only in terms of query execution time but also over query result completeness as there will be queries that cannot be executed due to the lack of explicit domain constraints.
+    \item $D$ is an RDB instance or is a NoSQL database instance, equipped with an RDB wrapper that is able to provide a relational view over $S$ and $D$. In the context of a tabular dataset $D_{tabular}$, $D$=$R_{wrapper}(D_{tabular})$ where $R_{wrapper}$ is a relational database wrapper that satisfies $S$.
+\end{itemize}
+
+\begin{figure}[ht]
+  \centering
+  \subfloat[Baseline approach]{
+    \includegraphics[width=0.48\linewidth]{figures/naive-approach.pdf}  
+    \label{fig:naive}
+  }
+  \subfloat[Enhanced virtual OBDA workflow.]{
+  \includegraphics[width=0.48\linewidth]{figures/vtd-approach.pdf} 
+  \label{fig:vtd}
+  }
+\caption{\textbf{Virtual OBDA for tabular data approaches.} The baseline approach creates the schema and relational database instance extracting file and columns names from the tabular dataset. The proposed workflow exploits the information from the mapping rules and metadata to extracted a set of constraints and applying them over the tabular data to generate the schema and the relational database instance.}
+\label{fig:obda}
+\end{figure}
+
+\subsubsection{From Virtual Tabular Dataset to OBDA instance}
+Based on the previous OBDA assumptions, we define the concepts and functions to address the problem of querying a tabular dataset in OBDA.
+\begin{definition}
+\label{def:vtd}
+A virtual tabular dataset is defined as a tuple $VTD$=$\langle D_{tabular},O,M,MD\rangle$ where $D_{tabular}$ is a tabular dataset that is composed of a set of data sources, defined as $\mathcal{D}_{tabular}$ = $\{s_1,\ldots, s_n\}$ and where each $s_i$ is a tabular relation defined over the domains of the attributes $Att(s_i)=\{A_{i1},\ldots,A_{im}\}$\footnote{A relation is defined as the subset of the Cartesian product of the domains of the attributes.}, where $m$ is the number of attributes of $s_i$. $O$ is an ontology, and $M$ is a set of global as view mappings between $O$ and $schema(D_{tabular})$\footnote{The set of the attributes of each tabular relation in $D_{tabular}$, i.e., $schema(D_{tabular})=\{Att(s_i),\ldots,Att(s_n)\}$}. $MD$ is a set of metadata tabular (domain) annotations, where for each $s_i$ there exists a set $\{(A_{i1},Type(A_{i1})),\ldots,(A_{im},Type(A_{im}))\}$ in $MD$. 
+\end{definition}
+
+Given a $VTD$, we define the function $\theta(VTD)=PI$ where $PI$ is an OBDA instance $PI=\langle P,D\rangle$ where $D$=$R_{wrapper}(D_{tabular})$ and $P=\langle O,S,M\rangle$ is an OBDA definition where $S$ does not contain any type of constraint.
+We extend the function $\theta(VTD)$ with the aim of enhancing the virtual OBDA baseline approach over tabular data. We define $\theta^{++}(VTD)$=$PI$ as a function that extracts a set of constraints from $M$ and $MD$ and then applies them over $D_{tabular}$ to obtain $PI$. More in detail, the function can be expressed as $\theta^{++}(VTD)$=$\gamma(D_{tabular},O,M,\psi(M,MD))$ where the function $\psi(M,MD)= C$ extracts a set of constraints from  OBDA annotations for tabular data. Then, $\gamma(D_{tabular},O,M,C)$ applies the constraints $C$ over $D_{tabular}$ to create a relational database schema $S^{'}$ and its corresponding instance $D^{'}$. In summary, the final output is an OBDA instance $PI^{'}=\langle P^{'},D^{'}\rangle$, where $D^{'}$ is a relational database instance that is compliant with the main assumptions of the OBDA framework and $P^{'}=\langle O,S^{'},M\rangle$ where $S^{'}$ contains a set of domain and integrity constraints (see Figure \ref{fig:vtd}). 
+
+Constraints are conjunctive rules specified for tabular data that restrict the valid data in one or more tables. $C$ is a set of constraints, where each constraint $c$ is a logical statement that expresses the condition that needs to be satisfied by the data in order to be valid. Each constraint is applied through a function.
+
+\textit{Example 1.} CSVW allows expressing a primary key constraint for a table. The function $\psi(M,MD)=C$ generates the corresponding constraints in the form of a function $primaryKey(t,a)$ that applies this constraint to a source $t$ and a set of columns $a$, and generates a primary key in the output schema. 
+
+Given an OBDA instance $PI$=$\langle\mathcal{P,D}\rangle$, we define the function $eval(Q,PI)$, that retrieves a SPARQL answer set that is the result of the translation of $Q$ from SPARQL to SQL using the mapping rules $M$ defined in $P$, and then evaluating the query directly over $D$. 
+
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1\linewidth]{figures/workflow.pdf}
+    \caption{\textbf{The Morph-CSV Framework.} Morph-CSV extends the starting phase of a typical OBDA system including a set of steps for dealing with the identified tabular data querying challenges. The framework first, extracts the constraints from mappings and tabular metadata and then, implements them in a set of operators that are ran before executing the query translation and query execution phases. The mapping rules are translated accordingly to the modified tabular dataset to allow its access by the underlying OBDA engine.}
+    \label{fig:workflow}
+\end{figure}
+
+\subsubsection{Problem statement and solution}
+Based on the preliminaries and assumptions made over the OBDA framework, we now define the problem that we address in this paper and Morph-CSV, our proposed solution.
+
+\noindent\textbf{Problem statement:} Given a $VTD$, the problem of OBDA query translation over tabular data is defined as the problem of explicitly enforcing implicit constraints $C$ extracted from mapping rules $M$ and metadata $MD$ on a tabular dataset $D_{tabular}$, such that: 
+\begin{itemize}
+    \item The number of results obtained in the evaluation of the SPARQL query $Q$ over the function $eval(Q,\theta^{++}(VTD))$ is equal or greater than the number of results in the evaluation of the same query $Q$ over the function $eval(Q,\theta(VTD))$, i.e., $\#answers(eval(Q,\theta^{++}(VTD)) \geq \#answers(eval(Q,\theta(VTD)))$.
+    \item The total execution time of evaluating a SPARQL query $Q$ over $eval(Q,\theta^{++}(VTD))$ is decreased compared to the evaluation of the same SPARQL query $Q$ over the function $eval(Q,\theta(VTD))$, i.e., $time(eval(Q,\theta^{++}(VTD))) \leq
+    time(eval(Q,\theta(VTD)))$. 
+\end{itemize}
+
+
+\noindent\textbf{Proposed solution:} We propose Morph-CSV, an alternative to the traditional OBDA workflow for query translation when the input is a tabular dataset (see Figure \ref{fig:vtd} and Appendix \ref{apppendix:algorithm}). Morph-CSV relies on the function $eval(Q,\theta^{++}(VTD,\psi(M,MD)))$, to apply the tabular dataset constrains. Thus, Morph-CSV extends a typical OBDA workflow by including a set of steps for a maintainable extraction and efficient application of constraints. The workflow proposal is as follows:
+\begin{itemize}
+    \item \textbf{Constraint Extraction}: the evaluation of the function $\psi(M,MD)$ produces as output the set of constraints $C$; it exploits the information defined in the annotations of $M$ and $MD$, i.e., the set of metadata tabular annotations and mapping rules, respectively. At implementation level they are expressed as CSVW specifications and RML+FnO mapping rules. 
+    \item \textbf{Source Selection}: in this step the sources required to evaluate the SPARQL query $Q$ are selected. The required data sources correspond to the set of sources in the result of unfolding~\citep{poggi2008linking} $Q$ according to the mapping rules in $M$. 
+    \item \textbf{Normalization}: metadata and mapping rules are utilized to extract functional dependencies between the attributes of the data sources. The algorithm by Beeri et al. \citep{Beeri1978ASI} is followed to transform tabular data sources into tabular relations that meet 3 Normal Form (3NF).  
+    \item \textbf{Data Preparation}: application of the transformation functions based on the extracted domain constraints and on a set of optimization techniques that adapt the ideas proposed in~\citep{jozashoori2019mapsdi} to a virtual OBDA environment. 
+    \item \textbf{Schema Creation and Load}: creation of the schema and loading the data into the database instance applying a set of rules for index creation. 
+    \item \textbf{Query Translation and Execution}:the evaluation of the query $Q$ is delegated to any OBDA SPARQL-to-SQL engine.
+\end{itemize}
+ We show the workflow of Morph-CSV in Figure \ref{fig:workflow} with the inputs and outputs of each step. 
+
+\begin{table}[h]
+\centering
+\caption{Summary of constraints, corresponding functions and OBDA annotations applied by Morph-CSV}
+\label{tab:summary}
+\resizebox{0.9\textwidth}{!}{%
+\begin{tabular}{l|l|l|l|l}
+\hline
+\multicolumn{1}{c|}{\textbf{Step}} & \multicolumn{1}{c|}{\textbf{Constraint/Improvement}} & \multicolumn{1}{c|}{\textbf{Rule/Annotation}} & \multicolumn{1}{c|}{\textbf{Function}} & \multicolumn{1}{c}{\textbf{Challenge}} \\ \hline
+\multirow{2}{*}{Extraction} & \multirow{2}{*}{Reduce search space} & SSG from Query & select\_annotations & \multirow{2}{*}{Selection} \\ \cline{3-4}
+ &  & Mapping Rules & select\_sources &  \\ \hline
+\multirow{2}{*}{\begin{tabular}[c]{@{}l@{}}Data \\ Normalization\end{tabular}} & 2NF & csvw:separator & split & \multicolumn{1}{c}{\multirow{2}{*}{Normalization}} \\ \cline{2-4}
+ & 3NF & \begin{tabular}[c]{@{}l@{}}TriplesMap with\\ same source\end{tabular} & cut & \multicolumn{1}{c}{} \\ \hline
+\multirow{3}{*}{\begin{tabular}[c]{@{}l@{}}Data \\ Preparation\end{tabular}} & \multirow{2}{*}{Standarization} & \begin{tabular}[c]{@{}l@{}}csvw:null, csvw:default\\ csvw:format, etc.\end{tabular} & sub & \multicolumn{1}{c}{\multirow{3}{*}{Heterogeneity}} \\ \cline{3-4}
+ &  & fnml:functionValue & create & \multicolumn{1}{c}{} \\ \cline{2-4}
+ & Duplicates & - & duplicates & \multicolumn{1}{c}{} \\ \hline
+\multirow{4}{*}{\begin{tabular}[c]{@{}l@{}}Schema \\ Creation and\\ Load\end{tabular}} & Primary Key & csvw:primaryKey & primaryKey & \multirow{4}{*}{\begin{tabular}[c]{@{}l@{}}Lightweight \\ Schema\end{tabular}} \\ \cline{2-4}
+ & Foreign Key & csvw:foreignKey & foreignKey &  \\ \cline{2-4}
+ & DataType & csvw:datatype & datatype &  \\ \cline{2-4}
+ & Index & \begin{tabular}[c]{@{}l@{}}selectivity on mapping \\ join conditions\end{tabular} & index &  \\ \hline
+\end{tabular}%
+}
+\end{table}
+
+\begin{figure}[ht]
+  \centering
+  \subfloat[Input SPARQL query.]{
+  \includegraphics[width=0.5\linewidth]{figures/steps/selectquery.pdf}  
+  \label{fig:selectionq}
+  } 
+  \subfloat[Mapping rules selection.]{
+    \includegraphics[width=0.5\linewidth]{figures/steps/selectmapping.pdf}  
+    \label{fig:selectionm}
+  }
+\caption{\textbf{Selection of Mapping Rules.} Based on the SPARQL query relevant rules are selected (in bold), the rest are discarded.}
+\label{fig:selection}
+\end{figure}
+
+\subsubsection{Steps performed in the Morph-CSV framework}
+We describe in detail the steps proposed in Morph-CSV together with an example extracted from the benchmark for virtual knowledge graph access, Madrid-GTFS-Bench, using the query shown in Figure \ref{fig:selectionq}, the GTFS feed from the the Madrid metro as source data, and the corresponding RML+FnO mapping rules and CSVW annotations\footnote{Resources at: \url{https://github.com/oeg-upm/gtfs-bench}}.
+
+\paragraph{Constraint Extraction}
+The first step performed by Morph-CSV is the extraction of the constraints that are applied to improve query execution and completeness. Morph-CSV benefits from having declarative and standard approaches to generalize this step: CSVW~\citep{tennison2015model} for the metadata; and RML+FnO~\citep{de2017declarative} for mapping rules and specific transformation functions. Thus, maintainability, understandability and readability of this process are improved in comparison with ad-hoc pre-processing approaches. 
+
+Most of the constraints such as PK-FK relations, datatypes or NULL values are explicitly declared in the metadata of the sources. However, there are a set of implicit constraints such as the conditions for the normalization of sources and the creation of indexes, that require complex rules to extract them and that are explained in detail in the corresponding steps. The summary of the constraints, associated functions, and properties used from OBDA annotations to extract them, are shown in Table~\ref{tab:summary}.
+
+
+\paragraph{Source Selection}
+The second step is to select the relevant sources to answer the input query. The baseline approach delegates this step to the RDBMS: it loads all the sources of the dataset in the RDB instance because it does not have information about what sources are going to be queried. This has a negative impact in the total execution time of a query. Taking the input mapping rules, Morph-CSV performs query unfolding, and pushes down source selection by executing the function $select(Q,M)$, divided into two main steps. First, Morph-CSV performs an operation to select only the relevant annotations for answering the input query, $select\_annotations(Q,M)$. It first creates the set of star shaped groups SSG$_1\ldots $SSG$_n$ of the query~\citep{vidal2010efficient} (triple patterns with the same subject)\footnote{As usual in these approaches, we assume bounded predicates in the triple patterns}. Then, for each SSG$_i$ and \texttt{rr:TriplesMap} $TM_j$ defined in $M$, the engine selects $TM_j$ when the predicates in SSG$_i$ are contained in the set of \texttt{rr:PredicateObjectMap} (POMs) defined in $TM_j$. Finally, for each selected \texttt{rr:TriplesMap} $TM_j$, Morph-CSV only selects the POMs according to the predicates defined in the SSG$_i$, hence, removing from each $TM_j$ irrelevant rules for the input query. Using these mapping rules $M^{'}$, only relevant metadata annotations are also selected $MD^{'}$. The obtained mapping rules $M^{'}$ and annotations $MD^{'}$ by this step substitute the original ones in $VTD$. An example of this step is shown in Figure \ref{fig:selection}, where the input query asks for trips, their route type, routes names and corresponding time frequencies. Morph-CSV first creates the SSGs, 3 in this case, and using the predicates of each SSG, the \texttt{rr:TriplesMap} are selected from the general GTFS mapping document, discarding the rest of the rules. Then, it only selects the necessary POMs for evaluating the query such as \texttt{gtfs:startTime}, \texttt{gtfs:shortName} and \texttt{gtfs:routeType} (Figure \ref{fig:selectionm}).
+
+Second, Morph-CSV runs $select\_sources(M)$, where it projects, from the input $D_{tabular}$, the sources and columns that are referenced in $M$, hence, relevant sources for the input query. The output of this function generates a set of new tabular sources $s_i\ldots s_n$ that substitute the original $D_{tabular}$ of $VTD$. Following the previous example, Figure \ref{fig:selection2} shows the selection of the relevant columns of  source \textit{routes.csv}, where Morph-CSV has the original source as  input  (Figure \ref{fig:selection2i}), and discards the unnecessary columns of the source based on the mapping rules, obtaining as output the source with the relevant columns for evaluating the input query (Figure \ref{fig:selection2r}). Note that in this step, unnecessary sources from the input GTFS feed such as \textit{agency.csv} and \textit{stops.csv} are also discarded.
+
+\begin{figure}[ht]
+\centering
+\subfloat[Original routes.csv input source.]{
+    \includegraphics[width=0.5\linewidth]{figures/steps/pushdowninput.pdf} 
+    \label{fig:selection2i}
+}
+\subfloat[Output of routes.csv source.]{
+  \includegraphics[width=0.5\linewidth]{figures/steps/pushdownresult.pdf}  
+  \label{fig:selection2r}
+}
+\caption{\textbf{Source Selection.} Based on the selection of the rules, only route\_id and trip\_id columns are selected, discarding the rest fields.}
+\label{fig:selection2}
+\end{figure}
+
+\paragraph{Normalization}
+There are two functions for performing data normalization. The first one is the treatment of multi-values in a column. In this case, Morph-CSV performs the function $split(A_{ij},sep)$ where $A_{ij}$ is the multi-valued column of source $s_{j}$ and $sep$ is the character defined in the CSVW metadata using the \texttt{csvw:separator} property. The output is a modified $VTD$ with a new source $s_t$ containing the separated values, and a updated mapping document $M$ with a new \texttt{rr:TriplesMap} $TM_t$ generated for the new source $s_t$ and a \texttt{rr:joinCondition} between the \texttt{rr:TriplesMap} of $s_j$, $TM_j$ and $TM_t$. 
+The application of this function is known as the normalization step for second normal form (2NF)~\citep{codd1979extending}.
+ 
+The second function is the treatment of multiple entities in the same source. Morph-CSV takes the mapping rules and executes the function $cut(\mathcal{M},\mathcal{D}_{tabular})$. This function analyzes mapping rules $\mathcal{M}$, and performs a 3NF~\citep{codd1979extending} normalization step over ${D}_{tabular}$ when there are two sets of mapping rules ($TM_j$ and $TM_i$) that have the same source, and the intersection of their columns in the rules only contains the join condition references. Following a similar approach as in 2NF, the output is a modified $VTD$ with a set of new sources $s_i\ldots s_n$, each one with the corresponding columns of each entity. For example, in Figure \ref{fig:normalization} we show the 3NF normalization of the \textit{routes.csv} file, that generates an auxiliary source for the \texttt{rr:TriplesMap} with the \textit{gtfs:RouteType} entity data (Figure \ref{fig:normalization}), removing that information for the \textit{routes.csv}. In several data integration approaches, normalization steps are not taken into account in order to improve query execution (reducing the number of joins among sources). However, in the case of RDF, where each entity of a class has a unique URI (subject),  joins cannot be reduced (see input mapping of Figure \ref{fig:selectionm}). This means that taking into account normalization steps in an OBDA context not only helps to improve query completeness, but also helps to improve performance. Additionally, normalization is also essential for allowing Morph-CSV to efficiently run data preparation steps, as we show in the next step.
+
+\begin{figure}[ht]
+\centering
+\subfloat[Routes.csv after 3NF normalization step.]{
+    \includegraphics[width=0.5\linewidth]{figures/steps/normalization1.pdf}  
+    \label{fig:norm1}
+}
+\subfloat[Route\_type.csv file generated with Morph-CSV.]{
+    \includegraphics[width=0.5\linewidth]{figures/steps/normalization2.pdf} 
+    \label{fig:norm}
+}
+\caption{\textbf{Normalization.} 3NF Normalization step over the \textit{routes.csv} file generating other file with the data for \texttt{gtfs:RouteType} class.}
+\label{fig:normalization}
+\end{figure}
+
+\paragraph{Data preparation}
+In this step, Morph-CSV addresses the challenge of \textit{Heterogeneity} and executes three different functions: $duplicates$, $sub$ and $create$. First, Morph-CSV removes all duplicates in the raw data, not only the original ones, but also other duplicates that can appear during the normalization step (see Figure \ref{fig:norm}). It applies the ideas described in~\citep{jozashoori2019mapsdi}, performing $duplicates(s_{j})$ where $s_{j}$ is a source in $D_{tabular}$. As it has already been demonstrated in~\citep{jozashoori2019mapsdi}, this step not only has a high impact on the behavior of these engines, but in this case, it also reduces the number of operations performed by Morph-CSV $sub$ and $create$, as they are defined as deterministic functions. The first one is defined as $sub(exp(A_{ij}),val)$ where $exp(A_{ij})$ is a boolean function over column $A_{ij}$ of source $s_{j}$ that when true, the value of $A_{ij}$ is substituted by $val$. There are multiple substitution functions that Morph-CSV executes such as default values, null values and date formats. The second function creates a new column in a specific source $s_{j}$. It is defined as $create(c(A_{nj},\ldots,A_{mj}))$, where $c(A_{nj},\ldots,A_{mj})$ is the application of a set of transformation functions over the columns $A_{nj},\ldots,A_{mj}$ in source $s_{j}$. This function is used to push down the application of ad-hoc transformation functions, usually defined inside the mapping rules~\citep{junior2016funul,de2017declarative}, thus, avoiding the incorporation of them inside the SQL translated query. In Figure \ref{fig:preparation} we show the \textit{route\_type.csv} file after the execution of this step. First, Morph-CSV removes the duplicates of the file obtaining as output a file with only two rows. Then, it executes the transformation function defined in the mapping rules and creates a new column in the file, generating the desired value for the subject of the class according to the LinkedGTFS ontology, ``Subway''. Additionally, the engine substitutes the definition of the transformation functions in the mapping rules by a reference to the created column. In this manner, Morph-CSV efficiently performs the $sub$ and $create$ functions directly over the raw data and together with the normalization step. Thus, the number of joins in the input query is reduced.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\linewidth]{figures/steps/creation-result.pdf}
+    \caption{Data preparation of \textit{route-types.csv} file.}
+    \label{fig:preparation}
+\end{figure}
+
+\paragraph{Schema Creation and Load}
+The final step before translating and executing the query is the creation of an SQL schema applying the rest of the identified constraints, and loading the selected tabular data sources. Besides the typical integrity constraints that can be extracted from CSVW annotations (PK/FK), Morph-CSV implements a rule for creating indexes in the RDB instance in order to optimize the execution of query joins. In tabular datasets, it is common that the join conditions defined in the mapping rules are based on columns that are not part of PK-FK relations; thus, they are not indexed and OBDA optimizations do not have the desired effect. To address this problem, Morph-CSV gets the \texttt{rr:child} and \texttt{rr:parent} references of the mapping rules and calculates their selectivity on the fly. Then, taking this selectivity into account Morph-CSV decides to create, or not, an index over these columns. Figure \ref{fig:rdb} shows the RDB schema generated by Morph-CSV for the input query in Figure \ref{fig:selectionq}, with the applied domain and integrity constraints. 
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\linewidth]{figures/steps/rdb.pdf}
+    \caption{\textbf{Generated schema.} The schema generated by Morph-CSV extracting domain and integrity constraints from the annotations and based on the identified sources selected from the input query.}
+    \label{fig:rdb}
+\end{figure}
+
+
+\paragraph{}
+There are two main points that make the contributions of Morph-CSV relevant: (i) it incorporates the steps to the standard OBDA workflow without modifying the rest of the steps, hence, it can also benefit from optimizations in other steps of the workflow like query rewriting (reasoning)~\citep{mora2014kyrie2} or query translation (SPARQL-to-SQL)~\citep{priyatna2014formalisation}, and (ii) the reliance of the approach on declarative and standard annotations for OBDA allows generalizing the proposed steps, usually solved in an ad-hoc manner, not only automatizing the process but also improving its maintainability, understandability and readability.
+
+
+
+
+\subsection{Experimental Evaluation}
+
+This section reports on the results of the empirical evaluation conducted to test the effect of respecting constraints, on the fly, during OBDA query translation over tabular data. Our aim is to answer the following research questions: \textbf{RQ1)} What is the effect of combining different types of constraints over a tabular dataset? \textbf{RQ2)} What is the impact of the constraints when the tabular dataset size increases? \textbf{RQ3)} What is the effect of different levels of data heterogeneity int the extraction and application of constraints? To answer these questions, we have performed three evaluations in different domains: e-commerce, transportation, and biology. Our first evaluation is in the e-commerce domain, in which we used the Berlin SPARQL Benchmark (BSBM)~\cite{bizer2009berlin}. Our second evaluation is in the transportation domain in which we used the GTFS-Madrid-Bench. GTFS-Madrid-Bench benchmark focuses on measuring the performance of ontology based data access for heterogeneous data sources, based on the publicly-released public transportation data in GTFS format. One of the resources provided by GTFS-Madrid-Bench is a tabular dataset together with its corresponding mappings and annotations. Finally, our third evaluation is in the domain of biological data, in which we extend one of our previous proposals~\cite{iglesias2019enhancing} for the generation of an OBDA layer over Bio2RDF tabular datasets. Appendix \ref{apppendix:queries} presents the features of the queries together with the constraints and number of sources used by Morph-CSV. In all of the evaluations the common configurations are:
+
+\noindent\textbf{Engines.} The baselines of our study are two open source OBDA engines: Ontop\footnote{\url{https://github.com/ontop/ontop}}$^,$\footnote{We modified the default configuration of Ontop extending the maximum used memory from 512Mg to 8Gb} v3.0.1 and Morph-RDB v3.9.15\footnote{\url{https://github.com/oeg-upm/morph-rdb}}. To evaluate the baseline approach, we manually generate the relational database schemas of each benchmark without any kind of constraints, and measure the load and query execution times. In order to measure the impact of the additional steps proposed by Morph-CSV\footnote{\url{https://doi.org/10.5281/zenodo.3731941}}$^,$\footnote{\url{https://github.com/oeg-upm/morph-csv}}, we integrate our solution on top of the two OBDA engines. To ensure the reproducibility of the experiments, we also provide all of the resources in a docker image. In order to test the number of  answers, we use the gold standards provided by both benchmarks in RDF, loaded in a Virtuoso triple store.
+
+\noindent\textbf{Metrics.} We measure the loading time of each query and the total query execution time (including the steps proposed by Morph-CSV or baseline when it corresponds), and the number of answers obtained (see Appendix \ref{appendix:completeness}). Each query was executed 5 times with a timeout of 2 hours in cold mode, that means that the corresponding database is generated each time a query is going to be evaluated in order to ensure up to date number of answers. The experiments were run in an Intel(R) Xeon(R) equipped with a CPU E5-2603 v3 @ 1.60GHz 20 cores, 64GB memory and with the O.S. Ubuntu 16.04LTS.
+
+
+\subsubsection{BSBM}
+The Berlin SPARQL Benchmark~\cite{bizer2009berlin} is one the most popular benchmarks in the Semantic Web field that not only tests the performance of RDF triple stores, but also tests approaches that perform SPARQL-to-SQL query translations providing a RDB instance. It is the chosen benchmark to test the capabilities of many state-of-the-art OBDA engines~\cite{priyatna2014formalisation,calvanese2017ontop,mami2019squerall}. 
+ 
+\begin{figure}[th]
+  \centering
+  \subfloat[Loading time for BSBM 45K.]{
+  \includegraphics[width=0.48\linewidth]{figures/bsbm/carga_bsbm_45.pdf}
+  \label{fig:bsbmload45}
+  }
+  \subfloat[Loading time for BSBM 90K.]{
+  \includegraphics[width=0.48\linewidth]{figures/bsbm/carga_bsbm_90.pdf}  
+  \label{fig:bsbmload90}
+  }
+  \qquad
+  \subfloat[Loading time for BSBM 180K.]{
+  \includegraphics[width=0.48\linewidth]{figures/bsbm/carga_bsbm_180.pdf}  
+  \label{fig:bsbmload180}
+  }
+  \subfloat[Loading time for BSBM 360K.]{
+  \includegraphics[width=0.48\linewidth]{figures/bsbm/carga_bsbm_360.pdf}
+  \label{fig:bsbmload360}
+  }
+\caption{\textbf{Loading Time of Tabular Datasets in BSBM.} Loading time in seconds of the tabular datasets from the BSBM benchmark with number of products 45K, 90K, 180K and 360K. The baseline approach (blue columns) is constant for each dataset and query, while Morph-CSV (orange columns) depends on the query and number of constraints to be applied over the selected sources.}
+\label{fig:bsbmload}
+\end{figure}
+
+
+\begin{figure}[th]
+
+  \centering
+  \subfloat[Total query execution time for BSBM-45.]{
+  \includegraphics[width=0.48\linewidth]{figures/bsbm/execution_bsbm_morph_45.pdf}  
+  \label{fig:morphbsbm45}
+  }
+  \subfloat[Total query execution time for BSBM-90.]{
+  \includegraphics[width=0.48\linewidth]{figures/bsbm/execution_bsbm_morph_90.pdf}  
+  \label{fig:morphbsbm90}
+  }
+  \qquad
+  \subfloat[Total query execution time for BSBM-180.]{
+  \includegraphics[width=0.48\linewidth]{figures/bsbm/execution_bsbm_morph_180.pdf}  
+  \label{fig:morphbsbm180}
+  }
+  \subfloat[Total query execution time for BSBM-360.]{
+  \includegraphics[width=0.48\linewidth]{figures/bsbm/execution_bsbm_morph_360.pdf}
+  \label{fig:morphbsbm360}
+  }
+\caption{\textbf{Query execution Time of Tabular Datasets in BSBM with Morph-RDB.} Execution time in seconds of the tabular datasets from the BSBM benchmark with scale values 45K, 90K, 180K and 360K. The baseline Morph-RDB approach (blue columns) is compared with the combination of Morph-CSV together with Morph-RDB (orange columns). Red marks on the top of the columns mean a timeout (72000 seconds) in query execution.}
+\label{fig:morphbsbm}
+\end{figure}
+
+
+\begin{figure}[th]
+  \centering
+  \subfloat[Total query execution time for BSBM-45.]{
+  \includegraphics[width=0.48\linewidth]{figures/bsbm/execution_bsbm_ontop_45.pdf}  
+  \label{fig:ontopbsbm45}
+  }
+  \subfloat[Total query execution time for BSBM-90.]{
+  \includegraphics[width=0.48\linewidth]{figures/bsbm/execution_bsbm_ontop_90.pdf}  
+  \label{fig:ontopbsbm90}
+  }
+  \qquad
+  \subfloat[Total query execution time for BSBM-180.]{
+  \includegraphics[width=0.48\linewidth]{figures/bsbm/execution_bsbm_ontop_180.pdf}  
+  \label{fig:ontopbsbm180}
+  }
+  \subfloat[Total query execution time for BSBM-360.]{
+  \includegraphics[width=0.48\linewidth]{figures/bsbm/execution_bsbm_ontop_360.pdf}
+  \label{fig:ontopbsbm360}
+  }
+\caption{\textbf{Query execution Time of Tabular Datasets in BSBM with Ontop.} Execution time in seconds of the tabular datasets from the BSBM benchmark with scale values 45K, 90K, 180K and 360K. The baseline Ontop approach (blue columns) is compared with the combination of Morph-CSV together with Ontop (orange columns). Red marks on the top of the columns mean a timeout (72000 seconds) in query execution.}
+\label{fig:ontopbsbm}
+\end{figure}
+
+ 
+\noindent\textbf{Datasets, annotations and queries.} In order to test our proposal we decided to adapt BSBM, extracting the tabular data sources in CSV format from the SQL generated instances. Additionally, we create the corresponding mapping rules in RML and the metadata following the CSVW specification. We measure the loading time of the two proposals (baseline and Morph-CSV) for each query in the benchmark. Since the focus Morph-CSV is not the improvement of the support of SPARQL operators in the query translation process, we only select the queries of the benchmark that include supported operators and operations by each engine. This means that Morph-RDB will be evaluated over the queries  Q1, Q2, Q3, Q4, Q5, Q6, Q7, Q8, Q9, Q10 and Q12  and Ontop will be evaluated over Q1, Q3, Q4, Q5 and Q10, both of them using the corresponding R2RML mapping document. For the baseline approach we manually create the RDB schema without any constraints.
+
+
+
+\noindent\paragraph*{\textit{BSBM Results}}
+
+\noindent\paragraph*{\textit{Loading Time}.}
+The results of the load time for each query and dataset size are shown in Figure \ref{fig:bsbmload}. The main difference between the two methods is that while the loading time for the baseline approach is constant for each size, Morph-CSV loading time depends on several input parameters such as the query and the number and type of constraints. It could be understandable that the application of a set of constraints over the raw data in order to improve query performance and completeness would have a negative impact in the loading time of our proposal. This happens in queries Q8 and Q11, where the number of sources and the application of the constraints (mainly integrity constraints)  impact negatively on the loading time of the data in the RDB instance in comparison with the baseline approach. However, in the rest of the queries, the Morph-CSV step is focused on the selection of constraints, sources and columns, and exploiting the information in query and mapping rules improves the loading time for each query in comparison with the baseline loading time. This means that, although the engine is including a set of additional steps during the starting phase of an OBDA system, the application of these steps only over the data that is required to answer the query, has a positive impact in the total query execution time. Additionally, we can observe that Morph-CSV is able to process, apply the different constraints and generate the corresponding instance of the RDB for any query.
+
+\noindent\paragraph*{\textit{Evaluation Time with Morph-RDB}.} The query execution time using Morph-RDB as the back-end OBDA engine is shown in Figure \ref{fig:morphbsbm}. The first remarkable observation can be seen in query Q5. Although this query contains operators supported by Morph-RDB, the engine reports an error when evaluating the query over the database generated by the baseline approach, because it is not able to evaluate the arithmetic expressions in the FILTER clauses. On the contrary, the datatype of each column in the database generated by Morph-CSV is properly defined, making it possible for Morph-RDB to evaluate the query without any problem and obtaining the expected results. Another remarkable difference is in query Q2, which contains a large number of joins, Morph-RDB reports a timeout error for 180K and 360K with the database generated by the baseline approach. However, it is still able to evaluate this query in reasonable time over the databases generated by Morph-CSV. The effect of the application of integrity constraints in the generation of the RDB instance can also be seen in most of the queries (i.e., Q1, Q2, Q3, Q6, Q9, Q10) reducing considerably the query execution time in the database generated by Morph-CSV in comparison with the baseline approach. There are cases (i.e., Q4, Q7, Q12) where the amount of data to retrieve is large, minimizing the effect of the optimizations. Finally, there are cases where optimizations over the indexes cannot be applied (e.g. asking for all the properties of a class). We observe this behavior in Q8, although the difference between the two approaches is not very relevant and is maintained across the datasets. 
+
+\noindent\paragraph*{\textit{Evaluation Time with Ontop}.}
+The query execution time using Ontop as the back-end OBDA engine is shown in Figure \ref{fig:ontopbsbm}. Like Morph-RDB, Ontop needs the Morph-CSV generated databases to be able to evaluate Q5 due to the arithmetic expressions of its FILTER operators. Additionally, it also fails in Q10 because it cannot process a FILTER with a date value. In the rest of the queries (Q1, Q3, Q4) we can see that the query evaluation time in Ontop with Morph-CSV is lower than the query evaluation time over the baseline database. Note that in larger databases (180K and 360K), Q1 and Q4 can only be evaluated over the databases generated by Morph-CSV. 
+
+As mentioned in the Ontop repository page\footnote{\url{https://github.com/ontop/ontop/wiki/MappingDesignTips}}, integrity constraints are essential for the correct behavior of the engine. Although it is out of the scope of this paper, we observe in our experiments that the main reason why Ontop is only able to answer half of the queries in this benchmark, is related to some issues about maintaining the desirable properties~\cite{corcho2019towards} when translating R2RML mapping rules to its own mappings, called OBDA. The engine also fails to evaluate queries with OPTIONAL clauses when there are NULL values in the answers, as they acknowledged, it is possible that this support has not been implemented in the engine~\cite{xiao2018efficient}.
+
+\begin{figure}[th]
+  \centering
+  \subfloat[Loading time for GTFS-1.]{
+  \includegraphics[width=0.48\linewidth]{figures/gtfs/carga_gtfs_1.pdf}  
+  \label{fig:gtfsload1}
+  }
+  \subfloat[Loading time for GTFS-10.]{
+  \includegraphics[width=0.48\linewidth]{figures/gtfs/carga_gtfs_10.pdf}  
+  \label{fig:gtfsload10}
+  }
+  \qquad
+  \subfloat[Loading time for GTFS-100.]{
+  \includegraphics[width=0.48\linewidth]{figures/gtfs/carga_gtfs_100.pdf}  
+  \label{fig:gtfsload100}
+  }
+  \subfloat[Loading time for GTFS-1000.]{
+  \includegraphics[width=0.48\linewidth]{figures/gtfs/carga_gtfs_1000.pdf}
+  \label{fig:gtfsload1000}
+  }
+\caption{\textbf{Loading Time of Tabular Datasets in GTFS.} Loading time in seconds of the tabular datasets from the Madrid-GTFS-Bench with scale values 1, 10, 100 and 1000. The baseline approach (blue columns) is constant for each dataset and query while Morph-CSV (orange columns) depends on the query and number of constraints to be applied over the selected sources.}
+\label{fig:gtfsload}
+\end{figure}
+
+
+
+\begin{figure}[th]
+  \centering
+  \subfloat[Total query execution time for GTFS-1.]{
+  \includegraphics[width=0.48\linewidth]{figures/gtfs/execution_gtfs_morph_1.pdf}  
+  \label{fig:morphgtfs1}
+  }
+  \subfloat[Total query execution time for GTFS-10.]{
+  \includegraphics[width=0.48\linewidth]{figures/gtfs/execution_gtfs_morph_10.pdf}  
+  \label{fig:morphgtfs10}
+  }
+  \qquad
+  \subfloat[Total query execution time for GTFS-100.]{
+  \includegraphics[width=0.48\linewidth]{figures/gtfs/execution_gtfs_morph_100.pdf}  
+  \label{fig:morphgtfs100}
+  }
+  \subfloat[Total query execution time for GTFS-1000.]{
+  \includegraphics[width=0.48\linewidth]{figures/gtfs/execution_gtfs_morph_1000.pdf}
+  \label{fig:morphgtfs1000}
+  }
+\caption{\textbf{Query execution Time of Tabular Datasets in GTFS with Morph-RDB.} Execution time in seconds of the tabular datasets from the Madrid-GTFS-Bench with scale values 1, 10, 100 and 1000. The baseline Morph-RDB approach (blue columns) is compared with the combination of Morph-CSV together with Morph-RDB (orange columns). Red marks on the top of the columns mean a timeout (72000 seconds) in  query execution.}
+\label{fig:morphgtfs}
+\end{figure}
+
+\begin{figure}[th]
+
+  \centering
+  \subfloat[Total query execution time for GTFS-1.]{
+  \includegraphics[width=0.48\linewidth]{figures/gtfs/execution_gtfs_ontop_1.pdf}  
+  \label{fig:ontop1}
+  }
+  \subfloat[Total query execution time for GTFS-10.]{
+  \includegraphics[width=0.48\linewidth]{figures/gtfs/execution_gtfs_ontop_10.pdf}  
+  \label{fig:ontop10}
+  }
+  \qquad
+  \subfloat[Total query execution time for GTFS-100.]{
+  \includegraphics[width=0.48\linewidth]{figures/gtfs/execution_gtfs_ontop_100.pdf}  
+  \label{fig:ontop100}
+  }
+  \subfloat[Total query execution time for GTFS-1000.]{  
+  \includegraphics[width=0.48\linewidth]{figures/gtfs/execution_gtfs_ontop_1000.pdf}
+  \label{fig:ontop1000}
+  }
+\caption{\textbf{Query execution Time of Tabular Datasets in GTFS with Ontop.} Execution time in seconds of the tabular datasets from the Madrid-GTFS-Bench with scale values 1, 10, 100 and 1000. The baseline Ontop approach (blue columns) is compared with the combination of Morph-CSV together with Ontop (orange columns). 
+Red marks on the top of the columns mean a timeout (72000 seconds) in query execution.}
+\label{fig:ontopgtfs}
+\end{figure}
+
+
+
+\subsubsection{GTFS-Madrid-Bench}
+The GTFS-Madrid Benchmark\footnote{Paper under review. Resources available at: \url{https://github.com/oeg-upm/gtfs-bench}} consists of an ontology, an initial dataset of the metro system of Madrid following the GTFS model, a set of mappings in several specifications, a set of queries according to the ontology that cover relevant features of the SPARQL query language, and a data scaler based on a state of the art proposal~\cite{lanti2015npd}. 
+
+\noindent\textbf{Datasets, annotations and queries.} We select the tabular sources of this benchmark (i.e., the CSV files) and we scale up the original data in several instances (scale factors 10, 100 and 1000). Each generated dataset is denoted by GTFS-$S$ where S is the scale factor. The resources of the benchmark already include the necessary mapping rules and tabular metadata. Like our previous evaluation with BSBM benchmark, we only select the queries with operators that are supported by each engine: Morph-RDB will be evaluated using  queries Q1, Q2, Q4, Q6, Q7, Q9, Q12, Q13, Q14, Q17 and Ontop will be evaluated using  queries Q1, Q2, Q3, Q4, Q5, Q7, Q9, Q13, Q14, Q17. The description and features of each query are also available online\footnote{\url{https://github.com/oeg-upm/gtfs-bench/tree/master/queries}}.
+
+\noindent\paragraph*{\textbf{Madrid-GTFS-Bench Results}}
+
+\noindent\paragraph*{\textit{Loading Time}.}
+The loading time of the GTFS-Madrid-Bench queries is shown in Figure \ref{fig:gtfsload}. For GTFS-1 the baseline approach clearly has better performance than Morph-CSV. However, when the size of the datasets increases, the positive effects of applying constraints become more apparent. For most of the queries, the loading time needed by Morph-CSV is lower in comparison to the loading time in the baseline approach. Additionally, similarly to BSBM, there are a set of queries where the application of integrity constraints has a negative impact on the loading time (queries Q1 and Q9).
+
+\noindent\paragraph*{\textit{Evaluation Time with Morph-RDB}.}
+The query execution time with Morph-RDB as the back-end OBDA engine is shown in Figure \ref{fig:morphgtfs}. Analyzing the results, we generally observe that the incorporation of Morph-CSV in the workflow of OBDA enhances query performance. With respect to the results of each query, we can observe that on the one hand the behavior of the engine over simple queries (Q1, Q2, Q7, Q12 and Q17) is similar. This is understandable as the selected data sources needed to answer the query do not include the application of several constraints (e.g. there are no joins in the query). On the other hand, in the case of complex queries such as Q4, Q6, Q9, Q13 and Q14, where  several tabular sources are needed to answer the queries, the application of constraints has a better impact in comparison to the the baseline approach. For example, in the case of query Q9, Morph-RDB is not able to evaluate the query over the 10th scale database generated by the baseline approach, while in the case of the database generated by Morph-CSV, the query can be answered in reasonable time. If we analyze the results obtained, we can observe that for small datasets (GTFS-1), the cost of applying the proposed steps of Morph-CSV impacts total execution time. However, when the size of the dataset increases, the baseline approach is impacted due to the fact that it has to load all of the input data sources in the RDB before executing the query, low performance is reported for GTFS-100 and GTFS-1000, including timeout in some queries of the latter. Thanks to the application of the constraints and to the source selection step, for Morph-CSV together with Morph-RDB, the return of the results of the queries has a high performance most of the time. In the cases where Morph-CSV reports a timeout (e.g., Q1 in GTFS-1000); it is because the extremely high number of obtained results cannot be handle by Morph-RDB.
+
+\noindent\paragraph*{\textit{Evaluation Time with Ontop}.}
+The experimental evaluation of the query execution in Ontop as the back-end OBDA engine is shown in Figure \ref{fig:ontopgtfs}. This engine is more strict with datatypes in the RDB in comparison with Morph-RDB, and it is why Q2, Q5, Q7 and Q9 produce a failure in the execution over the databases generated by the baseline approach. All these queries have a FILTER clause on a specific datatype (e.g., date, integer, etc) and Ontop proceeds to check the domain constraints before executing the queries. Morph-CSV solves this problem by exploiting the annotations from the metadata and defines the correct datatypes of each column before evaluating the query. For the queries that can be answered by both approaches (Q1, Q3, Q4, Q13, Q14, Q17), the absence of integrity constraints has a negative impact in Ontop, resulting in lower execution time over the databases generated by Morph-CSV. Finally, in the case where Ontop is not able to evaluate the query under the defined threshold, we report it as a time-out.
+\begin{figure}[t]
+    \centering
+    \subfloat[\textbf{Query execution Time of Tabular Datasets in Bio2RDF with Morph-RDB.} Execution time in seconds of the tabular datasets from  Bio2RDF. The loading time applying a set of constraints (yellow) and query execution with Morph-RDB (green).]{
+    \includegraphics[width=0.48\linewidth]{figures/bio2rdf/execution_bio2rdf_morph.pdf}
+    }
+    \subfloat[\textbf{Query execution Time of Tabular Datasets in Bio2RDF with Ontop.} Execution time in seconds of the tabular datasets from  Bio2RDF. The loading time applying a set of constraints (yellow) and query execution with Ontop (green).]{
+    \label{fig:bio2rdfmoprh}
+    \includegraphics[width=0.48\linewidth]{figures/bio2rdf/execution_bio2rdf_ontop.pdf}
+    \label{fig:bio2rdfontop}
+    }
+\end{figure}
+
+
+\subsubsection{Use Case: The Bio2RDF project}
+Bio2RDF is one of the most popular projects that integrates and publishes biomedical datasets as Linked Data~\cite{belleau2008bio2rdf}. Its community has actively contributed to the generation of those datasets using ad-hoc programming scripts, such as PHP. In our previous work~\cite{iglesias2019enhancing} we proposed an alternative way of generating the datasets using a set of declarative mapping rules to improve the maintainability, readability and understanding of the procedure. In comparison with the other benchmarks where the focus of the evaluation was the improvement of the query evaluation time, this real use case contains multiple heterogeneity challenges that, for example, enforce the application of ad-hoc transformation functions (i.e., mappings in the form of RML+FnO). Thus, with this use case we want to demonstrate the benefits of exploiting declarative annotations (metadata and mappings) over the raw data in order to improve query completeness and the need of incorporating the proposed steps for executing queries over real world data sources.
+
+\noindent\textbf{Dataset, annotations, and queries.} Tabular datasets in  CSV or Excel formats cover over 35\% of the total datasets in the Bio2RDF project~\cite{iglesias2019enhancing}. In order to test the capabilities of Morph-CSV, we select a subset of the tabular datasets guaranteeing that they cover all of the identified challenges. Additionally, as far as we are aware, there is no standard benchmark over the Bio2RDF project; we also propose a set of SPARQL queries in order to exploit the selected data. Their main features are shown in Appendix \ref{apppendix:queries}). 
+
+
+\noindent\paragraph*{\textbf{Bio2RDF Results}}
+The results obtained for query evaluation in Bio2RDF are shown in Figure \ref{fig:bio2rdfmoprh} with Morph-RDB as back-end engine and in Figure \ref{fig:bio2rdfontop} with Ontop. First, we can observe that there are no results for the baseline approach, this means it was not possible to create an RDB schema and load the input data. The main reasons are the heterogeneity problems of a real use case that do not exist in the previous evaluations. GTFS and BSBM have well formed and standard source data models. Problems such as the absence of column names, multiple formats of same datatype in different files (numbers, dates) and the use of delimiters inside the column data, make it impossible to generate the baseline approach without a manual and ad-hoc pre-processing step. However, exploiting declarative annotations, Morph-CSV is able to apply the proposed workflow to this dataset, and successfully answer the proposed queries with both back-end OBDA engines. More in detail, we observe that due to the size of the input datasets and the number of constraints to be applied, most of the total evaluation time of each query is spent in the loading process. Contrary, query execution is benefited by this previous step obtaining the results in reasonable time for all of the queries. 
+
+
+
+

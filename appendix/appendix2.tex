@@ -1,0 +1,252 @@
+\chapter{GTFS-Madrid-Bench Queries}
+\label{sec:appendix1}
+
+\begin{lstlisting}[caption=Prefixes, label=lst:prefixes, basicstyle=\ttfamily,frame=single]
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX gtfs: <http://vocab.gtfs.org/terms#>
+PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+PREFIX dct: <http://purl.org/dc/terms/>
+PREFIX schema: <http://schema.org/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Query 1 - List all shapes with some of their data, label=lst:sparql1, basicstyle=\ttfamily,frame=single]
+SELECT * WHERE {
+	?shape a gtfs:Shape .
+	?shape geo:lat ?shape_pt_lat .
+	?shape geo:long ?shape_pt_lon .
+	?shape gtfs:pointSequence ?shape_pt_sequence .
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Query 2 - List all stops with some of their data including geographic coordinates, where the latitude is bigger than its mean}, label=lst:sparql2, basicstyle=\ttfamily,frame=single]
+SELECT * WHERE {
+	?stop a gtfs:Stop . 
+	OPTIONAL { ?stop dct:description ?stopDescription . }
+	OPTIONAL { ?stop gtfs:wheelchairAccessible ?wheelchairAccesible }
+	?stop geo:lat ?stopLat . 
+	?stop geo:long ?stopLong .
+	FILTER (?stopLat > %LAT%) .		
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Query 3 - Find the accessibility information for the stations, if available}, label=lst:sparql3, basicstyle=\ttfamily,frame=single]
+SELECT * WHERE {
+	?stop a gtfs:Stop . 
+        ?stop gtfs:locationType ?location .
+	OPTIONAL { ?stop dct:description ?stopDescription . }
+	OPTIONAL { ?stop geo:lat ?stopLat ; geo:long ?stopLong . }
+	OPTIONAL { ?stop gtfs:wheelchairAccessible ?wheelchairAccessible .  }
+	FILTER (?location=<http://transport.linkeddata.es/resource/LocationType/2>)
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Query 4 - List all agencies and their routes with some of their data, label=lst:sparql4, basicstyle=\ttfamily,frame=single]
+SELECT * WHERE {
+	?route a gtfs:Route .
+	OPTIONAL { ?route gtfs:shortName ?routeShortName . }
+	OPTIONAL { ?route gtfs:longName ?routeLongName . } 
+	OPTIONAL { ?route dct:description ?routeDescription . } 
+	?route gtfs:agency ?agency .
+	?agency a gtfs:Agency .
+	?agency foaf:page ?agencyPage .
+	?agency foaf:name ?agencyName .
+	OPTIONAL { ?agency foaf:phone ?agencyPhone . }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Query 5 - Services that have been added on a specific day, label=lst:sparql5, basicstyle=\ttfamily,frame=single]
+SELECT * WHERE {
+	?service a gtfs:Service .
+	?service gtfs:serviceRule ?serviceRule .
+	?serviceRule a gtfs:CalendarDateRule .
+	?serviceRule dct:date ?date .
+	?serviceRule gtfs:dateAddition "true"^^xsd:boolean .
+	FILTER(?date > %DATE%)
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Query 6 - Check the number of routes of a particular agency, label=lst:sparql6,
+   basicstyle=\ttfamily,frame=single]
+SELECT (count(?route) as ?nRoutes) WHERE {
+	?route a gtfs:Route .
+	?route gtfs:agency ?agency .
+	FILTER (?agency=%AGENCY%)
+}
+\end{lstlisting}
+
+
+\begin{lstlisting}[caption={Query 7 - List all wheelchair accessible stops along a particular route, with some of their additional data}, label=lst:sparql7, basicstyle=\ttfamily,frame=single]
+SELECT DISTINCT ?routeShortName ?routeDescription ?tripShortName
+?stopDescription ?stopLat ?stopLong WHERE {
+	?route a gtfs:Route .
+	OPTIONAL { ?route gtfs:shortName ?routeShortName . }
+	OPTIONAL { ?route dct:description ?routeDescription . }
+	?trip a gtfs:Trip .
+	OPTIONAL { ?trip gtfs:shortName ?tripShortName . }
+	?trip gtfs:service ?service .
+	?trip gtfs:route ?route .
+	?stopTime a gtfs:StopTime . 
+	?stopTime gtfs:trip ?trip . 
+	?stopTime gtfs:stop ?stop . 
+	?stop a gtfs:Stop . 
+	OPTIONAL { ?stop dct:description ?stopDescription . }
+	OPTIONAL { ?stop geo:lat ?stopLat ; geo:long ?stopLong . }
+	?stop gtfs:wheelchairAccessible gtfsaccessible:1 .
+	FILTER (?route=%ROUTE%)
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Query 8 - List the routes and their related trips, services, stops and stop times with some of their additional data, if available}, label=lst:sparql8, basicstyle=\ttfamily,frame=single]
+SELECT * WHERE {
+	?route a gtfs:Route .
+	OPTIONAL { ?route gtfs:shortName ?routeShortName . }
+	OPTIONAL { ?route dct:description ?routeDescription . }
+	?trip a gtfs:Trip .
+	OPTIONAL { ?trip gtfs:shortName ?tripShortName . }
+	?trip gtfs:service ?service .
+	?trip gtfs:route ?route .
+	?stopTime a gtfs:StopTime . 
+	?stopTime gtfs:trip ?trip . 
+	?stopTime gtfs:stop ?stop . 
+	?stop a gtfs:Stop . 
+	OPTIONAL {?stop dct:description ?stopDescription . }
+	?service a gtfs:Service .
+	?service gtfs:serviceRule ?serviceRule .
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Query 9 - Trips and associated shapes where lat is bigger than its average and some of their additional data, label=lst:sparql9, basicstyle=\ttfamily,frame=single]
+SELECT * WHERE {
+	?trip a gtfs:Trip .
+	OPTIONAL { ?trip gtfs:shortName ?tripShortName . }
+	?trip gtfs:service ?service .
+	?trip gtfs:route ?route .
+	?trip gtfs:shape ?shape .
+	?shape a gtfs:Shape .
+	?shape geo:lat ?lat .
+	FILTER (?lat > %LAT%)
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Query 10 - Number of trips that have a duration over 30 minutes, label=lst:sparql10,basicstyle=\ttfamily,frame=single]
+SELECT (count(distinct ?trip) as ?count) WHERE {
+	?trip a gtfs:Trip .
+	?stopTime a gtfs:StopTime . 
+	?stopTime gtfs:trip ?trip . 
+	?stopTime gtfs:departureTime ?departureTime .
+	FILTER (?departureTime >= "00:30:00"^^xsd:duration) 
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Query 11 - Trips that are available on a certain date and some of their additional data, label=lst:sparql11, basicstyle=\ttfamily,frame=single]
+SELECT * WHERE {
+    ?service a gtfs:Service .
+    ?service gtfs:serviceRule ?calendarRule .
+    ?trip gtfs:service ?service .
+    ?calendarRule a gtfs:CalendarRule .
+    ?calendarRule schema:startDate ?startDate .
+    ?calendarRule schema:endDate ?endDate .
+    FILTER (?startDate <%DATE%) .
+    FILTER (?endDate > %DATE%) .
+    FILTER NOT EXISTS {
+        ?service gtfs:serviceRule ?calendarDateRule . 
+        ?calendarDateRule a gtfs:CalendarDateRule .
+        ?calendarDateRule dct:date %DATE% .
+        ?calendarDateRule gtfs:dateAddition "false"^^xsd:boolean 
+    }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Query 12 - Number of stops that are wheelchair-accessible grouped by route and some of their additional data, label=lst:sparql12,basicstyle=\ttfamily,frame=single]
+SELECT ?longName (count(?name) as ?count) WHERE { 	
+	?route a gtfs:Route .
+	?route gtfs:longName ?longName .
+ 	?trip a gtfs:Trip .
+	?trip gtfs:route ?route .
+ 	?stopTime a gtfs:StopTime .
+	?stopTime gtfs:trip ?trip .
+	?stopTime gtfs:stop ?stop .
+  	?stop a gtfs:Stop .
+ 	?stop foaf:name  ?name .
+ 	?stop gtfs:wheelchairAccessible gtfsaccessible:1 .	
+}
+GROUP BY ?longName
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Query 13 - All the accesses of the stations, label=lst:sparql13,basicstyle=\ttfamily,frame=single]
+SELECT  * WHERE {     
+    ?stop a gtfs:Stop .
+    ?stop gtfs:parentStation ?parStation .
+    OPTIONAL {?stop foaf:name ?accName} .
+    ?stop gtfs:locationType gtfslocation:2 .
+    ?parStation a gtfs:Stop .
+    ?parStation foaf:name ?name      
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Query 14 - All stops times and their related routes and stops order by their sequence,label=lst:sparql14,basicstyle=\ttfamily,frame=single]
+SELECT * WHERE {
+    ?stopTime a gtfs:StopTime .
+    ?stopTime gtfs:trip ?trip .
+    ?stopTime gtfs:stop ?stop .
+    ?stopTime gtfs:stopSequence ?sequence .
+    ?stop a gtfs:Stop .
+    ?trip a gtfs:Trip .
+    ?trip gtfs:route ?route .
+    OPTIONAL {?stop foaf:name ?stopName} 
+} ORDER BY ?sequence
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Query 15 - Everything that contains a specific string in the object placeholder (any property), label=lst:sparql15, basicstyle=\ttfamily,frame=single]
+SELECT * WHERE { 
+	?stop a gtfs:Stop .
+	?stop ?p ?str .
+	FILTER regex (?str, %STRING%)
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Query 16 - For all the routes, all the calendar changes during a specific month}, label=lst:sparql16, basicstyle=\ttfamily,frame=single]
+SELECT * WHERE {
+	?trip a gtfs:Trip .
+	?trip gtfs:service ?service .
+	?trip gtfs:route ?route . 
+	?service a gtfs:Service .
+	?service gtfs:serviceRule ?serviceRule .
+	?serviceRule a gtfs:CalendarDateRule .
+	?serviceRule  dct:date ?servDate .
+	?serviceRule  gtfs:dateAddition "true"^^xsd:boolean .
+	FILTER (?servDate >= %DATE1%) .
+	FILTER (?servDate <= '%DATE2%) .
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Query 17 - Trips with their start and end time of the frequencies and associated routes, label=lst:sparql17, basicstyle=\ttfamily,frame=single]
+SELECT ?routeName ?routeType ?trip ?startTime ?endTime WHERE {
+    ?trip a gtfs:Trip .
+    ?trip gtfs:route ?route .
+    ?frequency a gtfs:Frequency .
+    ?frequency gtfs:startTime ?startTime .
+    ?frequency gtfs:endTime ?endTime .
+    ?frequency gtfs:trip ?trip .
+    ?route a gtfs:Route .
+    ?route gtfs:shortName ?routeName .
+    ?route gtfs:routeType ?routeType .
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Query 18 - All routes that have trips on Sunday}, label=lst:sparql18, basicstyle=\ttfamily,frame=single]
+SELECT * WHERE {
+	?service a gtfs:Service .
+	?service gtfs:serviceRule ?serviceRule .
+	?serviceRule a gtfs:CalendarRule .
+	?serviceRule gtfs:sunday "true"^^xsd:boolean . 
+	?trip gtfs:service ?service .
+	?trip gtfs:route ?route  .
+	{ ?route gtfs:longName ?longName }  UNION
+	{ ?route gtfs:shortName ?shortName } 	.
+}
+\end{lstlisting}
+
