@@ -43,7 +43,7 @@ We address the limitations of current OBDA query translation techniques over tab
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.6\linewidth]{figures/example.pdf}
-    \caption{\textbf{Motivating Example.} SPARQL query evaluation over two tabular data files in the transport domain through a common OBDA approach. It loads the files as single tables in an SQL-based system and uses the mapping rules for query translation. The number of results differs with respect to the expected results due the heterogeneity of the raw data. Additionally, query performance may be affected by the join condition between the two tables, the absence of indexes and the loading of columns that are not needed to answer the input query (wheelchair).}
+    \caption[Morph-CSV motivating example]{\textbf{Motivating Example.} SPARQL query evaluation over two tabular data files in the transport domain through a common OBDA approach. It loads the files as single tables in an SQL-based system and uses the mapping rules for query translation. The number of results differs with respect to the expected results due the heterogeneity of the raw data. Additionally, query performance may be affected by the join condition between the two tables, the absence of indexes and the loading of columns that are not needed to answer the input query (wheelchair).}
     \label{fig:example}
 \end{figure}
 Consider the de-facto standard for publishing open data in the transport domain, GTFS\footnote{\url{https://developers.google.com/transit/gtfs/reference/}}. This model provides information such as \textit{schedules}, \textit{stops} and \textit{routes} using 15 different inter-related CSV files called GTFS feed. Each feed usually specifies the information of one type of transportation mode (e.g., metro, train, and tram). Linking these feeds based on their stops enables route planners to offer multi-modal routes, a route that can be travelled using various types of transportation.
@@ -130,7 +130,7 @@ Analyzing the definition of OBDA of~\citep{xiao2018obdasurvey} and its extension
   \includegraphics[width=0.48\linewidth]{figures/vtd-approach.pdf} 
   \label{fig:vtd}
   }
-\caption{\textbf{Virtual OBDA for tabular data approaches.} The baseline approach creates the schema and relational database instance extracting file and columns names from the tabular dataset. The proposed workflow exploits the information from the mapping rules and metadata to extracted a set of constraints and applying them over the tabular data to generate the schema and the relational database instance.}
+\caption[Virtual OBDA for tabular data approaches]{\textbf{Virtual OBDA for tabular data approaches.} The baseline approach creates the schema and relational database instance extracting file and columns names from the tabular dataset. The proposed workflow exploits the information from the mapping rules and metadata to extracted a set of constraints and applying them over the tabular data to generate the schema and the relational database instance.}
 \label{fig:obda}
 \end{figure}
 
@@ -154,7 +154,7 @@ Given an OBDA instance $PI$=$\langle\mathcal{P,D}\rangle$, we define the functio
 \begin{figure}[t]
     \centering
     \includegraphics[width=1\linewidth]{figures/workflow.pdf}
-    \caption{\textbf{The Morph-CSV Framework.} Morph-CSV extends the starting phase of a typical OBDA system including a set of steps for dealing with the identified tabular data querying challenges. The framework first, extracts the constraints from mappings and tabular metadata and then, implements them in a set of operators that are ran before executing the query translation and query execution phases. The mapping rules are translated accordingly to the modified tabular dataset to allow its access by the underlying OBDA engine.}
+    \caption[Morph-CSV framework]{\textbf{The Morph-CSV Framework.} Morph-CSV extends the starting phase of a typical OBDA system including a set of steps for dealing with the identified tabular data querying challenges. The framework first, extracts the constraints from mappings and tabular metadata and then, implements them in a set of operators that are ran before executing the query translation and query execution phases. The mapping rules are translated accordingly to the modified tabular dataset to allow its access by the underlying OBDA engine.}
     \label{fig:workflow}
 \end{figure}
 
@@ -213,7 +213,7 @@ Based on the preliminaries and assumptions made over the OBDA framework, we now 
     \includegraphics[width=0.5\linewidth]{figures/steps/selectmapping.pdf}  
     \label{fig:selectionm}
   }
-\caption{\textbf{Selection of Mapping Rules.} Based on the SPARQL query relevant rules are selected (in bold), the rest are discarded.}
+\caption[Selection of mapping rules]{\textbf{Selection of Mapping Rules.} Based on the SPARQL query relevant rules are selected (in bold), the rest are discarded.}
 \label{fig:selection}
 \end{figure}
 
@@ -241,7 +241,7 @@ Second, Morph-CSV runs $select\_sources(M)$, where it projects, from the input $
   \includegraphics[width=0.5\linewidth]{figures/steps/pushdownresult.pdf}  
   \label{fig:selection2r}
 }
-\caption{\textbf{Source Selection.} Based on the selection of the rules, only route\_id and trip\_id columns are selected, discarding the rest fields.}
+\caption[Source selection]{\textbf{Source Selection.} Based on the selection of the rules, only route\_id and trip\_id columns are selected, discarding the rest fields.}
 \label{fig:selection2}
 \end{figure}
 
@@ -261,7 +261,7 @@ The second function is the treatment of multiple entities in the same source. Mo
     \includegraphics[width=0.5\linewidth]{figures/steps/normalization2.pdf} 
     \label{fig:norm}
 }
-\caption{\textbf{Normalization.} 3NF Normalization step over the \textit{routes.csv} file generating other file with the data for \texttt{gtfs:RouteType} class.}
+\caption[Normalization step]{\textbf{Normalization.} 3NF Normalization step over the \textit{routes.csv} file generating other file with the data for \texttt{gtfs:RouteType} class.}
 \label{fig:normalization}
 \end{figure}
 
@@ -271,7 +271,7 @@ In this step, Morph-CSV addresses the challenge of \textit{Heterogeneity} and ex
 \begin{figure}[h]
     \centering
     \includegraphics[width=1\linewidth]{figures/steps/creation-result.pdf}
-    \caption{Data preparation of \textit{route-types.csv} file.}
+    \caption[Data preparation step]{Data preparation of \textit{route-types.csv} file.}
     \label{fig:preparation}
 \end{figure}
 
@@ -281,7 +281,7 @@ The final step before translating and executing the query is the creation of an 
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.8\linewidth]{figures/steps/rdb.pdf}
-    \caption{\textbf{Generated schema.} The schema generated by Morph-CSV extracting domain and integrity constraints from the annotations and based on the identified sources selected from the input query.}
+    \caption[Generated schema]{\textbf{Generated schema.} The schema generated by Morph-CSV extracting domain and integrity constraints from the annotations and based on the identified sources selected from the input query.}
     \label{fig:rdb}
 \end{figure}
 
@@ -323,7 +323,7 @@ The Berlin SPARQL Benchmark~\cite{bizer2009berlin} is one the most popular bench
   \includegraphics[width=0.48\linewidth]{figures/bsbm/carga_bsbm_360.pdf}
   \label{fig:bsbmload360}
   }
-\caption{\textbf{Loading Time of Tabular Datasets in BSBM.} Loading time in seconds of the tabular datasets from the BSBM benchmark with number of products 45K, 90K, 180K and 360K. The baseline approach (blue columns) is constant for each dataset and query, while Morph-CSV (orange columns) depends on the query and number of constraints to be applied over the selected sources.}
+\caption[Loading Time of Tabular Datasets in BSBM.]{\textbf{Loading Time of Tabular Datasets in BSBM.} Loading time in seconds of the tabular datasets from the BSBM benchmark with number of products 45K, 90K, 180K and 360K. The baseline approach (blue columns) is constant for each dataset and query, while Morph-CSV (orange columns) depends on the query and number of constraints to be applied over the selected sources.}
 \label{fig:bsbmload}
 \end{figure}
 
@@ -348,7 +348,7 @@ The Berlin SPARQL Benchmark~\cite{bizer2009berlin} is one the most popular bench
   \includegraphics[width=0.48\linewidth]{figures/bsbm/execution_bsbm_morph_360.pdf}
   \label{fig:morphbsbm360}
   }
-\caption{\textbf{Query execution Time of Tabular Datasets in BSBM with Morph-RDB.} Execution time in seconds of the tabular datasets from the BSBM benchmark with scale values 45K, 90K, 180K and 360K. The baseline Morph-RDB approach (blue columns) is compared with the combination of Morph-CSV together with Morph-RDB (orange columns). Red marks on the top of the columns mean a timeout (72000 seconds) in query execution.}
+\caption[Query execution Time in BSBM with Morph-RDB]{\textbf{Query execution Time of Tabular Datasets in BSBM with Morph-RDB.} Execution time in seconds of the tabular datasets from the BSBM benchmark with scale values 45K, 90K, 180K and 360K. The baseline Morph-RDB approach (blue columns) is compared with the combination of Morph-CSV together with Morph-RDB (orange columns). Red marks on the top of the columns mean a timeout (72000 seconds) in query execution.}
 \label{fig:morphbsbm}
 \end{figure}
 
@@ -372,7 +372,7 @@ The Berlin SPARQL Benchmark~\cite{bizer2009berlin} is one the most popular bench
   \includegraphics[width=0.48\linewidth]{figures/bsbm/execution_bsbm_ontop_360.pdf}
   \label{fig:ontopbsbm360}
   }
-\caption{\textbf{Query execution Time of Tabular Datasets in BSBM with Ontop.} Execution time in seconds of the tabular datasets from the BSBM benchmark with scale values 45K, 90K, 180K and 360K. The baseline Ontop approach (blue columns) is compared with the combination of Morph-CSV together with Ontop (orange columns). Red marks on the top of the columns mean a timeout (72000 seconds) in query execution.}
+\caption[Query execution Time in BSBM with Ontop]{\textbf{Query execution Time of Tabular Datasets in BSBM with Ontop.} Execution time in seconds of the tabular datasets from the BSBM benchmark with scale values 45K, 90K, 180K and 360K. The baseline Ontop approach (blue columns) is compared with the combination of Morph-CSV together with Ontop (orange columns). Red marks on the top of the columns mean a timeout (72000 seconds) in query execution.}
 \label{fig:ontopbsbm}
 \end{figure}
 
@@ -412,7 +412,7 @@ As mentioned in the Ontop repository page\footnote{\url{https://github.com/ontop
   \includegraphics[width=0.48\linewidth]{figures/gtfs/carga_gtfs_1000.pdf}
   \label{fig:gtfsload1000}
   }
-\caption{\textbf{Loading Time of Tabular Datasets in GTFS.} Loading time in seconds of the tabular datasets from the Madrid-GTFS-Bench with scale values 1, 10, 100 and 1000. The baseline approach (blue columns) is constant for each dataset and query while Morph-CSV (orange columns) depends on the query and number of constraints to be applied over the selected sources.}
+\caption[Loading Time of Tabular Datasets in GTFS]{\textbf{Loading Time of Tabular Datasets in GTFS.} Loading time in seconds of the tabular datasets from the Madrid-GTFS-Bench with scale values 1, 10, 100 and 1000. The baseline approach (blue columns) is constant for each dataset and query while Morph-CSV (orange columns) depends on the query and number of constraints to be applied over the selected sources.}
 \label{fig:gtfsload}
 \end{figure}
 
@@ -437,7 +437,7 @@ As mentioned in the Ontop repository page\footnote{\url{https://github.com/ontop
   \includegraphics[width=0.48\linewidth]{figures/gtfs/execution_gtfs_morph_1000.pdf}
   \label{fig:morphgtfs1000}
   }
-\caption{\textbf{Query execution Time of Tabular Datasets in GTFS with Morph-RDB.} Execution time in seconds of the tabular datasets from the Madrid-GTFS-Bench with scale values 1, 10, 100 and 1000. The baseline Morph-RDB approach (blue columns) is compared with the combination of Morph-CSV together with Morph-RDB (orange columns). Red marks on the top of the columns mean a timeout (72000 seconds) in  query execution.}
+\caption[Query execution Time in GTFS with Morph-RDB]{\textbf{Query execution Time of Tabular Datasets in GTFS with Morph-RDB.} Execution time in seconds of the tabular datasets from the Madrid-GTFS-Bench with scale values 1, 10, 100 and 1000. The baseline Morph-RDB approach (blue columns) is compared with the combination of Morph-CSV together with Morph-RDB (orange columns). Red marks on the top of the columns mean a timeout (72000 seconds) in  query execution.}
 \label{fig:morphgtfs}
 \end{figure}
 
@@ -461,7 +461,7 @@ As mentioned in the Ontop repository page\footnote{\url{https://github.com/ontop
   \includegraphics[width=0.48\linewidth]{figures/gtfs/execution_gtfs_ontop_1000.pdf}
   \label{fig:ontop1000}
   }
-\caption{\textbf{Query execution Time of Tabular Datasets in GTFS with Ontop.} Execution time in seconds of the tabular datasets from the Madrid-GTFS-Bench with scale values 1, 10, 100 and 1000. The baseline Ontop approach (blue columns) is compared with the combination of Morph-CSV together with Ontop (orange columns). 
+\caption[Query execution Time in GTFS with Ontop]{\textbf{Query execution Time of Tabular Datasets in GTFS with Ontop.} Execution time in seconds of the tabular datasets from the Madrid-GTFS-Bench with scale values 1, 10, 100 and 1000. The baseline Ontop approach (blue columns) is compared with the combination of Morph-CSV together with Ontop (orange columns). 
 Red marks on the top of the columns mean a timeout (72000 seconds) in query execution.}
 \label{fig:ontopgtfs}
 \end{figure}
@@ -493,6 +493,7 @@ The experimental evaluation of the query execution in Ontop as the back-end OBDA
     \includegraphics[width=0.48\linewidth]{figures/bio2rdf/execution_bio2rdf_ontop.pdf}
     \label{fig:bio2rdfontop}
     }
+    \caption[Query execution Time of Tabular Datasets in Bio2RDF]{Query execution Time of Tabular Datasets in Bio2RDF}
 \end{figure}
 
 

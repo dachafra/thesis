@@ -176,12 +176,12 @@ Frequency& \begin{tabular}[c]{@{}l@{}} Frequency of a trip.
 In general, all of the ontology classes have been populated except for {\tt gtfs:FareClass} and {\tt gtfs:FareRule} because the Madrid GTFS data does not contain information on these two entities. The {\tt gtfs:RouteType} class is not considered because the data covers only the Metro system.
 
 
-\begin{figure*}
+\begin{figure}
     \centering
     \includegraphics[width=0.8\linewidth]{figures/GTFSontology.png}
-    \caption{\textbf{LinkedGTFS Ontology.} Subset of the LinkedGTFS ontology used in the GTFS-Madrid-Bench for virtual knowledge graph access. There are eleven object property relations among the classes, and two subClassOf relations.}
+    \caption[The LinkedGTFS Ontology]{\textbf{LinkedGTFS Ontology.} Subset of the LinkedGTFS ontology used in the GTFS-Madrid-Bench for virtual knowledge graph access. There are eleven object property relations among the classes, and two subClassOf relations.}
     \label{fig:gtfsOntology}
-\end{figure*}
+\end{figure}
 
 \subsection{Dataset Generation}
 
@@ -221,7 +221,7 @@ The GTFS-Madrid-Bench proposes an extended workflow using VIG as the Dataset Gen
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.85\linewidth]{figures/best-dist.pdf}
-    \caption{\textbf{Example of Best Dataset}. Best dataset distributes the formats over the data sources ensuring that at least there is one source per each format and the joins among different formats are minimised. \textit{extjoin} means that there is a relation between sources in different formats and \textit{internjoin} means that the joins are between sources in the same format.}
+    \caption[Example of best dataset]{\textbf{Example of Best Dataset}. Best dataset distributes the formats over the data sources ensuring that at least there is one source per each format and the joins among different formats are minimised. \textit{extjoin} means that there is a relation between sources in different formats and \textit{internjoin} means that the joins are between sources in the same format.}
     \label{fig:best}
 \end{figure}
 
@@ -229,14 +229,14 @@ The GTFS-Madrid-Bench proposes an extended workflow using VIG as the Dataset Gen
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.85\linewidth]{figures/worst-dist.pdf}
-    \caption{\textbf{Example of Worst Dataset}. Worst dataset distributes the formats over the data sources ensuring that at least there is one source per each format and the joins among different formats are maximised. \textit{extjoin} means that there is a relation between sources in different formats.}
+    \caption[Example of worst dataset]{\textbf{Example of Worst Dataset}. Worst dataset distributes the formats over the data sources ensuring that at least there is one source per each format and the joins among different formats are maximised. \textit{extjoin} means that there is a relation between sources in different formats.}
     \label{fig:worst}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=0.7\linewidth]{figures/gprocess.pdf}
-    \caption{\textbf{GTFS-Madrid-Bench Generation Workflow with scale value 10}. From the original 10 CSV files of Madrid Metro GTFS we use (i) Morph-CSV to generate the corresponding RDB instance and an R2RML mapping that are the required inputs for (ii) scaling up the data using VIG and (iii) distributing the generated CSV dataset to the different formats.}
+    \caption[Generation workflow for scale value 10]{\textbf{GTFS-Madrid-Bench Generation Workflow with scale value 10}. From the original 10 CSV files of Madrid Metro GTFS we use (i) Morph-CSV to generate the corresponding RDB instance and an R2RML mapping that are the required inputs for (ii) scaling up the data using VIG and (iii) distributing the generated CSV dataset to the different formats.}
     \label{fig:generation}
 \end{figure}
 

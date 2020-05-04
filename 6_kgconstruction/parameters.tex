@@ -23,7 +23,7 @@ We first describe a scenario where na\"ive parameters (size and format) leads to
 \begin{figure}[t!]
 	\centering
 	\includegraphics[width=\columnwidth]{figures/TripleMap.jpg}
-	\caption{{\bf Motivating Example.} RML triple maps to transform two CSV files into RDF. TripleMap1 is composed of two predicate-object, i.e., Two POM. TripleMap2 has a join to TripleMap1; Observation.csv (outer relation) is joined to  Sensor.csv (inner relation) and the result, SensorID, is used as an object value.}
+	\caption[RML Mapping example]{{\bf Motivating Example.} RML triple maps to transform two CSV files into RDF. TripleMap1 is composed of two predicate-object, i.e., Two POM. TripleMap2 has a join to TripleMap1; Observation.csv (outer relation) is joined to  Sensor.csv (inner relation) and the result, SensorID, is used as an object value.}
 	\label{fig:mappingRule}
 \end{figure}
 
@@ -275,7 +275,7 @@ During the experiments, we only considered the CSV file format to represent the 
 \begin{figure}[!tb]
     \centering
     \includegraphics[width=0.8\columnwidth]{figures/naive_allk_bubble.png}
-    \caption{\textbf{Comparison of Knowledge Graph Creation Tool on Different Dataset Sizes (Na{\"i}ve).} The first three configurations, i.e. 1, 2, and 3 in x-axis and y-axis, correspond to SDM-RDFizer on datasets 1K, 10K, and 50K, respectively. The last three configurations, i.e. 4, 5, and 6 on x-axis and y-axis, correspond to RMLMapper 1K, 10K, and 50K, respectively. Grey bubbles correspond to correlation value of $1.0$; blue bubbles show a positive correlation. The number of blue bubbles suggests that both systems exhibit similar behaviour.}
+    \caption[Knowledge Graph Creation Tool on Different Dataset Sizes (Na{\"i}ve)]{\textbf{Comparison of Knowledge Graph Creation Tool on Different Dataset Sizes (Na{\"i}ve).} The first three configurations, i.e. 1, 2, and 3 in x-axis and y-axis, correspond to SDM-RDFizer on datasets 1K, 10K, and 50K, respectively. The last three configurations, i.e. 4, 5, and 6 on x-axis and y-axis, correspond to RMLMapper 1K, 10K, and 50K, respectively. Grey bubbles correspond to correlation value of $1.0$; blue bubbles show a positive correlation. The number of blue bubbles suggests that both systems exhibit similar behaviour.}
     \label{fig:naive_bubble}
 \end{figure}
 
@@ -318,7 +318,7 @@ The SDM-RDFizer and the testbeds are implemented in Python 3.6; the SDM-RDFizer 
       \includegraphics[width=0.48\columnwidth]{figures/relation_type_allk_bubble.png}
       \label{fig:rt_all}
     }
-    \caption{\textbf{Comparison of Knowledge Graph Creation Tools on Different Types of Relations.} The first four (4) configurations, i.e. 1-4 in both x-axis and y-axis, represent results of SDM-RDFizer on \textit{1-N}, \textit{N-1}, \textit{N-M}, and combination of all relations types, respectively. The later configurations, 5-8 both in x-axis and y-axis, shows results of RMLMapper on \textit{1-N}, \textit{N-1}, \textit{N-M}, and combination of all relations types, respectively. Grey bubbles correspond to correlation value of $1.0$; blue bubbles show a positive correlation while red bubbles show a negative correlation. The plots reveal that both type of relations and size of the dataset need to be taken into account to uncover patterns in the behaviour of the engines. 
+    \caption[Knowledge Graph Creation Tools on Different Types of Relations]{\textbf{Comparison of Knowledge Graph Creation Tools on Different Types of Relations.} The first four (4) configurations, i.e. 1-4 in both x-axis and y-axis, represent results of SDM-RDFizer on \textit{1-N}, \textit{N-1}, \textit{N-M}, and combination of all relations types, respectively. The later configurations, 5-8 both in x-axis and y-axis, shows results of RMLMapper on \textit{1-N}, \textit{N-1}, \textit{N-M}, and combination of all relations types, respectively. Grey bubbles correspond to correlation value of $1.0$; blue bubbles show a positive correlation while red bubbles show a negative correlation. The plots reveal that both type of relations and size of the dataset need to be taken into account to uncover patterns in the behaviour of the engines. 
     }
     \label{fig:relation_type_bubble}
 \end{figure}
@@ -357,7 +357,7 @@ Using this parameter, the correlation analysis suggests that both RDFizers behav
       \includegraphics[width=0.48\columnwidth]{figures/duplicate_joins_allk_bubble.png}
       \label{fig:js1}
     }
-    \caption{\textbf{Comparison of Knowledge Graph Creation Tools on Duplicates during Join.} The first two (2) configurations, i.e., 1-2 on x-axis and y-axis, represent results of SDM-RDFizer on datasets with \textit{low} (5\%-20\% of data) number of duplicates and \textit{high} (30\%-50\% of data) number of duplicates generated during joins, respectively. The last two configurations, i.e., 3-4 on x-axis and y-axis, represent results of RMLMapper on datasets with \textit{low} number of duplicates and \textit{high} number of duplicates generated during joins, respectively. Grey bubbles correspond to correlation value of $1.0$; blue bubbles show a positive correlation while red bubbles show a negative correlation. Results evidence that both join duplicates and dataset size are needed for characterising an engine performance.}
+    \caption[Knowledge Graph Creation Tools on Duplicates during Join]{\textbf{Comparison of Knowledge Graph Creation Tools on Duplicates during Join.} The first two (2) configurations, i.e., 1-2 on x-axis and y-axis, represent results of SDM-RDFizer on datasets with \textit{low} (5\%-20\% of data) number of duplicates and \textit{high} (30\%-50\% of data) number of duplicates generated during joins, respectively. The last two configurations, i.e., 3-4 on x-axis and y-axis, represent results of RMLMapper on datasets with \textit{low} number of duplicates and \textit{high} number of duplicates generated during joins, respectively. Grey bubbles correspond to correlation value of $1.0$; blue bubbles show a positive correlation while red bubbles show a negative correlation. Results evidence that both join duplicates and dataset size are needed for characterising an engine performance.}
     \label{fig:duplicates_bubble}
 \end{figure}
 
@@ -381,7 +381,7 @@ Using this parameter, the correlation analysis suggests that both RDFizers behav
       \includegraphics[width=0.48\columnwidth]{figures/join_selectivity_allk_bubble.png}
       \label{fig:js4}
     }
-    \caption{\textbf{Comparison of Knowledge Graph Tools on Join Selectivity.} The first two configurations, i.e., 1-2 on x- and y-axis represent SDM-RDFizer on joins with \textit{high} selectivity (5\%-20\% of data) and joins with \textit{low} selectivity (60\%-100\% of data), respectively.  Configurations 3 and 4 represent RMLMapper on joins with \textit{high} selectivity (5\%-20\% of data) and joins with \textit{low} selectivity (60\%-100\% of data), respectively. Grey bubbles correspond to correlation value of $1.0$; blue bubbles show a positive correlation while red bubbles show a negative correlation. Dataset size and join selectivity affect both engines differently.}
+    \caption[Knowledge Graph Tools on Join Selectivity]{\textbf{Comparison of Knowledge Graph Tools on Join Selectivity.} The first two configurations, i.e., 1-2 on x- and y-axis represent SDM-RDFizer on joins with \textit{high} selectivity (5\%-20\% of data) and joins with \textit{low} selectivity (60\%-100\% of data), respectively.  Configurations 3 and 4 represent RMLMapper on joins with \textit{high} selectivity (5\%-20\% of data) and joins with \textit{low} selectivity (60\%-100\% of data), respectively. Grey bubbles correspond to correlation value of $1.0$; blue bubbles show a positive correlation while red bubbles show a negative correlation. Dataset size and join selectivity affect both engines differently.}
     \label{fig:joinselectivity_bubble}
 \end{figure}
 
