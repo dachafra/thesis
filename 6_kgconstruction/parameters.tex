@@ -41,7 +41,7 @@ In this example, we execute a testbed where three different configurations of an
 Both RDFizers exhibit a similar behaviour while the number of predicate-object maps varies from two to five POMs, as shown in Table~\ref{tab:trivial}. However, when more complex mapping rules with more POMs are considered, the behaviour of the SDM-RDFizer and RMLMapper is not impacted equally. Moreover, the results suggest that RMLMapper execution time increases with the number of POMs, while the SDM-RDFizer seems to be slightly affected. 
 \begin{table}[ht!]
 \centering
-\caption{\textbf{Impact of Number of Predicate-Object Maps.} Various predicate object maps (POM) specified in the mapping rules. The behaviour of the two RDFizers is similar when the mapping rules are simple (less than 5 POM) but it is different when more complex mappings are running (10 POM); time in seconds.
+\caption[Impact of number of POMs on KGC engines]{\textbf{Impact of Number of Predicate-Object Maps.} Various predicate object maps (POM) specified in the mapping rules. The behaviour of the two RDFizers is similar when the mapping rules are simple (less than 5 POM) but it is different when more complex mappings are running (10 POM); time in seconds.
 }
 \label{tab:trivial}
 \begin{tabular}{|l|c|c|}
@@ -65,7 +65,7 @@ On the other hand, the RMLMapper execution time increases by $1.83$ (from $38.6$
 
 \begin{table}[ht!]
 \centering
-\caption{\textbf{Impact of Join Selectivity.} Impact of the join selectivity variable over the RDFizers with high, medium and low percentage of selectivity. While RMLMapper engine behaviour increases in terms of execution time when the selectivity decreases, the SDM-RDFizer behaviour is maintained, i.e. this variable affects to the first engine but it does not impact equality to the second one.}
+\caption[Impact of join selectivity on KGC engines]{\textbf{Impact of Join Selectivity.} Impact of the join selectivity variable over the RDFizers with high, medium and low percentage of selectivity. While RMLMapper engine behaviour increases in terms of execution time when the selectivity decreases, the SDM-RDFizer behaviour is maintained, i.e. this variable affects to the first engine but it does not impact equality to the second one.}
 \label{tab:joinSelectivity}
 \begin{tabular}{|l|c|c|}
 \hline
@@ -89,7 +89,7 @@ The uncorrelated behaviour of studied RDFizers shows clearly the need to conside
 
 {\small
 \ctable[
-	cap     = {\textbf{Variables and Configurations}. Set of variables and configurations that impact on the behaviour of the tools for knowledge graph creation. Independent variables are divided into five groups and the impact on the observed variables is depicted. },
+	cap     = Variables and configurations that impact on KGC engines,
 	caption =  \textbf{Variables and Configurations}. Set of variables and configurations that impact on the behaviour of the tools for knowledge graph creation. Independent variables are divided into five groups and the impact on the observed variables is depicted., topcap,
 	label   = {table:variables},
 	maxwidth= 1.0\textwidth,
@@ -166,7 +166,7 @@ This dimension involves the variables that characterise the mappings in terms of
 % \usepackage{multirow}
 \begin{table}[ht!]
 \centering
-\caption{\textbf{Impact of Relation types.} Various relation types in a join specified in the mapping rules. N corresponds to 15 values in the case of 1-N and N-1 relations, N and M has 10 values in the last case. RMLMapper execution time is not affected by 1-N and N-1 relation types while it is affected by  N-M relations. SDM-RDFizer performs better in N-1 than 1-N but the time increases in N-M.}
+\caption[Impact of relation types on KGC engines]{\textbf{Impact of Relation types.} Various relation types in a join specified in the mapping rules. N corresponds to 15 values in the case of 1-N and N-1 relations, N and M has 10 values in the last case. RMLMapper execution time is not affected by 1-N and N-1 relation types while it is affected by  N-M relations. SDM-RDFizer performs better in N-1 than 1-N but the time increases in N-M.}
 \label{tab:relationType}
 \begin{tabular}{|l|c|c|}
 \hline
@@ -191,7 +191,7 @@ This dimension involves the variables that characterise the mappings in terms of
 
 \begin{table}[!tb]
 \centering
-\caption{\textbf{Impact of duplicates generation during join evaluation.} Various configurations of duplicates generated during the evaluation of a join between two triple maps. While the complexity of the configuration increases (more percentage of duplicates), the RMLmapper decreases its performance. Surprisingly, the SDM-RDFizer seems not to be affected by the complexity of the testbeds, and improves its performance even when the complexity of testbeds increases.}
+\caption[Impact of duplicates on KGC engines]{\textbf{Impact of duplicates generation during join evaluation.} Various configurations of duplicates generated during the evaluation of a join between two triple maps. While the complexity of the configuration increases (more percentage of duplicates), the RMLmapper decreases its performance. Surprisingly, the SDM-RDFizer seems not to be affected by the complexity of the testbeds, and improves its performance even when the complexity of testbeds increases.}
 \label{tab:duplicates}
 \begin{tabular}{|l|c|c|}
 \hline
@@ -217,7 +217,7 @@ We describe the independent variables related with the original data that are re
 % \usepackage{multirow}
 \begin{table}[!tb]
 \centering
-\caption{\textbf{Impact of Partitioning}: Various configurations of vertical and horizontal partitioning with and without duplicates. The two engines perform similar with the two cases of the horizontal partitioning but they have different behaviours in vertical partitioning.}
+\caption[Impact of partitioning on KGC engines]{\textbf{Impact of Partitioning}: Various configurations of vertical and horizontal partitioning with and without duplicates. The two engines perform similar with the two cases of the horizontal partitioning but they have different behaviours in vertical partitioning.}
 \label{tab:partitioning}
 \begin{tabular}{|l|c|c|}
 \hline
@@ -259,7 +259,7 @@ For this evaluation, we generated three different datasets with 1,000 (1K), 10,0
 For the \textit{Dataset Size (N{\"a}ive)} parameter, we generated the same number of rows as in~\autoref{tab:datasets}, but with $30$ columns.
 \begin{table}[!tb]
     \centering
-    \caption{\textbf{Datasets.} Properties of Datasets used in the Empirical Evaluations.}
+    \caption[Evaluated datasets]{\textbf{Datasets.} Properties of Datasets used in the Empirical Evaluations.}
     \label{tab:datasets}
     \begin{tabular}{|c|c|c|c|}
     \hline

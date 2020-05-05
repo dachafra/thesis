@@ -11,7 +11,7 @@ Features like functions in mappings~\citep{de2017declarative,junior2016funul} an
 Traditional virtual OBDA approaches, usually, rely on loading the tabular data into SQL-based systems\footnote{\url{https://github.com/oeg-upm/morph-rdb/wiki/Usage\#csv-files}}$^,$\footnote{\url{https://github.com/ontop/ontop/wiki/MappingDesignTips\#database-tips}}(e.g., MySQL, Apache Drill, Spark SQL, Presto) to perform the query translation techniques. However, the correctness and optimization of these techniques are supported by the main assumption about the existence of constraints over the source data (i.e., a good physical design of the relational database instance). Their absence during a virtual OBDA process over tabular data directly impacts over completeness and performance of these techniques. Completeness is affected because of heterogeneity issues in data sources (e.g., datatype CSV columns are simply treated as string-type SQL columns). Furthermore, performance is impacted because indexes are not created based on basic relational constraints, i.e., primary and foreign key constraints are not defined in the schema. As a consequence, query translation optimization techniques that normally exploit indexes (e.g., ~\citep{rodriguez2015efficient,priyatna2014formalisation}) do not produce the expected results.
 \begin{table}[t]
 \centering
-\caption{Most commonly used formats and percentage over the total number of datasets to expose data in mature EU open data portals in October 2019. Each dataset may be shared in different formats.}
+\caption[Formast and percentage of data portal in EU]{Most commonly used formats and percentage over the total number of datasets to expose data in mature EU open data portals in October 2019. Each dataset may be shared in different formats.}
 \label{tab:odp}
 \begin{tabular}{c|c|c|c}
 \hline
@@ -70,7 +70,7 @@ Although some of the aforementioned challenges are not only specific to tabular 
 
 \begin{table}[]
 \centering
-\caption{Properties of CSVW and RML+FnO that can be used to address the challenges of dealing with tabular data in a virtual OBDA approach}
+\caption[CSVW and RML+FnO properties for virtual OBDA]{Properties of CSVW and RML+FnO that can be used to address the challenges of dealing with tabular data in a virtual OBDA approach}
 \label{tab:features}
 \begin{tabular}{l|l}
 \hline
@@ -182,7 +182,7 @@ Based on the preliminaries and assumptions made over the OBDA framework, we now 
 
 \begin{table}[h]
 \centering
-\caption{Summary of constraints, corresponding functions and OBDA annotations applied by Morph-CSV}
+\caption[Morph-CSV functions]{Summary of constraints, corresponding functions and OBDA annotations applied by Morph-CSV}
 \label{tab:summary}
 \resizebox{0.9\textwidth}{!}{%
 \begin{tabular}{l|l|l|l|l}

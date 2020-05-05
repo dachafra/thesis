@@ -124,7 +124,7 @@ Due to high volume and variability of data, the transformation from tabular to S
 In an ad-hoc approach \citep{corcho2017publishing}, a processor which is the main component responsible for the transformation process, is developed for a specific purpose. Those processors are not commonly used for other solutions. The SKG resulting from the transformation process is stored in a triple store and there is a need for repeating the transformation process whenever the original statistics data changes to ensure that generated SKG is synchronised with the original statistics data. On the other hand, using R2RML to generate SKG brings several benefits in comparison to the ad-hoc approach. There are many R2RML processors \citep{priyatna2014formalisation,calvanese2017ontop} available which means that one is not restricted to use a particular processor and may easily use another if necessary. Furthermore, many of those processors have incorporated techniques for keeping the desired SKG virtual, thus eliminating the need of synchronization between the tabular data and SKG. A virtualization process is highly recommended when the data published is volatile because it ensures that the retrieved data is updated. This is achieved by translating SPARQL queries posed to the virtual SKG into another query supported by the underlying data source and evaluated on the original dataset \citep{poggi2008linking}. Table \ref{table:compare} summarizes our discussion regarding the approaches on transforming statistics data into SKG.
 
 \begin{table}[tbp]
-\caption{Comparison of Approaches for Transforming Statistics Data to SKG}
+\caption[Transforming approaches for SKG]{Comparison of Approaches for Transforming Statistics Data to SKG}
 \label{table:compare}
 \begin{tabular}{c|c|c}
 \hline
@@ -260,7 +260,7 @@ The R2RML mapping document generated using the naive approach described in the p
 On the contrary, the corresponding RMLC mappings, either with \texttt{rmlc:column} property or with \texttt{rmlc:range} property have only 74 lines in total with 1 TriplesMap and 5 PredicateObject mappings. The Table \ref{table:compare1} summarizes the characteristics of the mappings.
 
 \begin{table}[tbp]
-\caption{Comparison between R2RML and RMLC mappings used in the Sri Lanka Tourism dataset example.}
+\caption[R2RML vs RMLC in Sri Lanka dataset]{Comparison between R2RML and RMLC mappings used in the Sri Lanka Tourism dataset example.}
 \label{table:compare1}
 \begin{tabular}{c|c|c}
 \hline
@@ -285,7 +285,7 @@ Generating the naive mapping described in the first approach is not feasible in 
 
 The RMLC mapping document (either version) contains only 1 TriplesMap and 4 PredicateObjectMap mappings, totalling less than 70 lines. On the contrary, the generated R2RML mapping document has more than 40 TriplesMap, more than 170 PredicateObjectMap mappings, totalling more than 2800 lines. The Table \ref{table:compare2} summarizes the characteristics of the mappings.
 \begin{table}[tbp]
-\caption{Comparison between R2RML and RMLC mappings used in the Eurostat Immigration dataset example.}
+\caption[R2RML vs RMLC in Eurostat dataset]{Comparison between R2RML and RMLC mappings used in the Eurostat Immigration dataset example.}
 \label{table:compare2}
 \begin{tabular}{c|c|c}
 \hline
