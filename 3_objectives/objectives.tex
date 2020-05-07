@@ -9,41 +9,41 @@ In order to achieve the first objective of this thesis, the open research proble
 
 \begin{itemize}
     \item The construction of knowledge graphs (virtual or materialized) from heterogeneous data sources using declarative mapping rules is still an open issue in the state of the art. Based on the W3C recommendation R2RML~\citep{R2RML}, and with the aim of providing support to other format beyond relational databases, many new declarative mapping languages are proposed such as RML~\citep{dimou2014rml}, xR2RML~\citep{michel2015translation}, KR2RML~\citep{slepicka2015kr2rml}, CSVW~\citep{tennison2015model}, or D2RML~\citep{chortaras2018mapping}. 
-    % PC: Rephrase: instead of _many_ I would say that “One of the motivations to build such declarative mapping languae, is to ...
-    Many of these extensions are proposed with the aim of solving specific heterogeneity issues of the input data, hence, they start to lose their generalization and the benefit of the declarative approach of the rules. To deal with these problems, we propose the possibility of the translation among these different languages, covering at least those common characteristics that are shared across languages, introducing one of the main ideas about a new generation of knowledge graph construction approaches.
+    One of the motivations to create such declarative mapping specifications is to solve specific heterogeneity issues of the input data, hence, they start to lose their generalization and the benefit of the declarative approach of the rules. To deal with these problems, we propose the possibility of the translation among these different languages, covering at least those common characteristics that are shared across languages, introducing one of the main ideas about a new generation of knowledge graph construction approaches.
     \item The construction of virtualized knowledge graphs from raw data (e.g., CSV, JSON or XML) has been tackled as an engineering process delegating the management of these data sources to databases such as Apache Drill\footnote{\url{https://drill.apache.org/}} and Spark-SQL\footnote{\url{https://spark.apache.org/sql/}}. These systems allow the generation of a simple relational database layer over the input data sources. However, in order to tackle the advantage of proposed SPARQL-to-SQL optimization techniques~\citep{priyatna2014formalisation,calvanese2017ontop}, a well-formed RDB is required, including its corresponding constraints. Focused on the specific case of tabular data, we propose a framework that exploits and translates mapping rules and metadata annotations to deal with the typical heterogeneity issues for querying these datasets under an OBDA environment. Its main aim is to improve query evaluation performance, as well as query completeness.
-    \item Multiple types of query interfaces have been proposed to query heterogeneous data on the web. One of the most recent and relevant incorporation is GraphQL~\citep{graphql}. This technology aims to solve problems such as under/over fetching~\citep{bryant2017graphql,vogel2017experiences,mukhiya2019graphql} of other common used interfaces 
-    %PC: “REST APIs” here is way too broad. The idea of LDF also solves this problem, yet it does follow the REST architectural style. https://speakerdeck.com/pietercolpaert/graphql-vs-rest -- I would thus rephrase REST APIs to something like: subject page-style HTTP APIs?
-    (e.g., REST APIs). This specification has been included by multiple organizations in their systems as an integrating query layer over multiple data sources, hence, creating a bridge between GraphQL and knowledge graph construction technologies is relevant. Although most of the proposed approaches are focused on understand how to translate GraphQL to SPARQL queries, we propose a framework that translates declarative mapping rules to functional programmed GraphQL data wrappers (known as GraphQL resolvers) help in their creation and ensuring that the target data model uses common and shared vocabularies.
+    \item Multiple types of query interfaces have been proposed to query heterogeneous data on the web. One of the most recent and relevant incorporation is GraphQL~\citep{graphql}. This technology aims to solve problems such as under/over fetching~\citep{bryant2017graphql,vogel2017experiences,mukhiya2019graphql} of other common used methods for publishing data on the web (e.g., subject-guide HTTP APIs). This specification has been included by multiple organizations in their systems as an integrating query layer over multiple data sources, hence, create a bridge between GraphQL and knowledge graph technologies is relevant. We propose a framework that translates declarative mapping rules to programmed GraphQL data wrappers (known as GraphQL resolvers) helping in their creation and ensuring that their model uses common and shared vocabularies.
 \end{itemize}
 
 The previous methodological goals have two associated technological goals. The first one is the implementation of a virtual knowledge graph creation system over tabular data (Morph-CSV). The second one is implemented by Morph-GraphQL, that translates R2RML mapping rules to programmed GraphQL resolvers for accessing legacy relational database instances.
 The second goal is focused on proposing evaluations of knowledge graph construction systems to understand what are their main current limits, and it has the following open research problems:
 \begin{itemize}
     \item There is currently no way to obtain objective information about the conformance of knowledge graph construction engines with specifications of declarative mapping languages that go beyond relational databases. Based on the main extension of R2RML, RML~\citep{dimou2014rml}, we proposed a set of representative test cases covering other types of data formats such as JSON, CSV and XML.
-    \item There is no analysis of what the parameters are that affect the process of constructing a knowledge graph from heterogeneous data sources. Previous evaluations have only took into account data size as a relevant parameter~\citep{lefranccois2017sparql,csimcsek2019rocketrml}. We identify the set of parameters, most of them extracted from the mapping rules, that can also affect to the behaviour of these engines.
-    \item Finally, the current knowledge graph construction benchmarks~\citep{lanti2015npd,bizer2009berlin} that mainly focused on relational databases, are not enough to test the capabilities of the new generation of engines that are able to query (??) materialized or virtualized data in several formats. A representative benchmark to test the capabilities of these approaches with objective and useful information is defined.
+    \item There is no analysis of what the parameters are that affect the process of constructing a knowledge graph from heterogeneous data sources. Previous evaluations have only took into account data size as a relevant parameter~\citep{lefranccois2017sparql,csimcsek2019rocketrml}. We identify the set of parameters, most of them extracted from the mapping rules, that can also affect to the behavior of these engines.
+    \item Finally, the current knowledge graph construction benchmarks~\citep{lanti2015npd,bizer2009berlin} that mainly focused on relational databases, are not enough to test the capabilities of the new generation of engines that are able to integrate or run SPARQL queries over data in several formats. A representative benchmark to test the capabilities of these approaches with objective and useful information is defined.
 \end{itemize}
 
 
 
 \section{Contributions to the State of the Art}
-
+In this work, we aim to provide solutions to the identify open research problems. Chapter \ref{chapter:mappig-translation} describes the mapping translation concept and its property, while Chapter \ref{chapter:virtual} provides the solutions to enhance virtual knowledge graph access over heterogeneous data exploiting the aforementioned concept. Chapter \ref{chapter:eval1} describe the previous steps to be performed before define a representative benchmark (Chapter \ref{chapter:eval2}) for KGC engines. The contributions for solving the first research problem are:
 
 \begin{enumerate}
-    \item[\textbf{C1.1.}] Mapping Translation: concept and properties
-    \item[\textbf{C1.2.}] Morph-CSV 
-    \item[\textbf{C1.3.}] Morph-GraphQL
+    \item[\textbf{C1.1.}] The concept of \textit{Mapping Translation} and its main properties. 
+    \item[\textbf{C1.2.}] The formalization and application of constraints extracted from annotations (mappings and metadata) over tabular data to enhance OBDA approaches. 
+    \item[\textbf{C1.3.}] The exploitation of standard declarative mapping rules to automatize the generated of programmed GraphQL servers. 
+\end{enumerate}
+With regard to the second objective, this work presents new contributions in the following aspects:
+\begin{enumerate}
     \item[\textbf{C2.1.}] Definition of a set of test cases to test the conformance of KG construction engines in RML.
-    \item[\textbf{C2.2.}] Identification and experimental evaluation of what are the parameters
-    \item[\textbf{C2.3.}] Complete benchmark for evaluating
+    \item[\textbf{C2.2.}] Identification and experimental evaluation of the parameters that affect the behavior of the KGC engines. 
+    \item[\textbf{C2.3.}] Complete and representative benchmark for evaluating KGC engines based on open data from the transport domain.
 \end{enumerate}
 
 \section{Assumptions}
-
+The work described in this document is based on a set of assumptions 
 \begin{enumerate}[label=\textbf{A{\arabic*}}]
     \item Mapping rules and annotations are declarative and following W3C standards (or extend them). 
-    \item The target schema for integrating the source data is already created.
+    \item The target schema (ontology) for integrating the source data is available.
     \item Mapping rules and metadata annotations are available.
     \item Data are represented in different formats but not in RDF.
 \end{enumerate}
@@ -62,5 +62,5 @@ The second goal is focused on proposing evaluations of knowledge graph construct
 \begin{enumerate}[label=\textbf{R{\arabic*}}]
     \item Data are located in the same physical place.
     \item We restrict declarative mapping rules following RML+FnO~\citep{de2017declarative} specification and metadata annotations in CSVW for Morph-CSV and R2RML for Morph-GraphQL.
-    \item The source data for evaluating KG construction systems do not need to be transformed.
+    \item The source data generated at scale for evaluating KG construction systems do not need cleaning or preparation functions.
 \end{enumerate}
