@@ -1,5 +1,5 @@
 
-\chapter{GTFS-Madrid-Bench: Evaluation of Virtual Knowledge Graph Access}
+\section{GTFS-Madrid-Bench: Evaluation of Virtual Knowledge Graph Access}
 \label{chapter:eval2}
 
 Over the last few years, a growing number of datasets have been made available in various open data portals. For example, the European Data Portal\footnote{https://www.europeandataportal.eu/catalogue-statistics/CurrentState} aggregates, at the time of writing, approximately 500K datasets from EU countries in a diversity of domains. In this context, RDF has been proposed as a standard format for data interchange on the Web, and RDF Schema and OWL ontologies have begun to appear so as to provide shared models in some domains. However, the amount of non-RDF data (e.g., CSV, JSON, XML) that is published in these open data portals continues to dominate the scene (see Table \ref{tab:odp}) and interoperability issues hinder their (re)use and consumption. 
@@ -56,7 +56,7 @@ In summary, the main contributions of this work are:
 \end{enumerate}
 
 
-\section{Preliminaries}
+\subsection{Preliminaries}
 
 In this section, we introduce the main concepts and definitions that are later used to explain our work. Besides this, well-known concepts from the literature such as SPARQL queries and result sets~\citep{w3c2013sparql}, or ontologies~\citep{mcguinness2004owl} will be used throughout the paper.
 
@@ -84,7 +84,7 @@ Internally, the processor translates the SPARQL query $q$ into one or more queri
 
 
 
-\section{Benchmark Proposal}
+\subsection{Benchmark Proposal}
 
 % Introduction
 %The General Transit Feed Specification (GTFS) is a \textit{de-facto standard} developed by Google for the description of public transport schedules, routes, fares, etc. Recently, it has become popular due to its simplicity, and due to the fact that it has been adopted not only by Google Maps, but also by other route planning systems such as \textit{Open Trip Planner}, or \textit{Navita.io}. The specification defines the headers of 13 types of CSV files and a set of rules. Each file, as well as their headers, can be mandatory or optional and they have relations among them.
@@ -114,7 +114,7 @@ The GTFS-Madrid Benchmark consists of an ontology, an initial dataset of the met
 
 
 
-\subsection{The Linked GTFS Ontology} %edna
+\subsubsection{The Linked GTFS Ontology} %edna
 GTFS is a \textit{de-facto standard} developed by Google for the description of public transport schedules, routes, fares, etc. %Recently, it has become popular due to its simplicity, and to the fact that it has been adopted not only by Google Maps, but also by other route planning systems such as \textit{Open Trip Planner}, or \textit{Navita.io}.
 The specification defines the headers of 13 types of CSV files and a set of rules. Each file, as well as their headers, can be mandatory or optional and they have relations among them.
 
@@ -183,7 +183,7 @@ In general, all of the ontology classes have been populated except for {\tt gtfs
     \label{fig:gtfsOntology}
 \end{figure}
 
-\subsection{Dataset Generation}
+\subsubsection{Dataset Generation}
 
 Dataset generation for a virtual knowledge graph access benchmark should be focused on the two main variables that allow testing the capabilities of the engines: (i) data size, and (ii) formats in which data can be expressed. In the context of data generation for OBDA, VIG~\citep{lantivig} proposes the use of R2RML mappings for an efficient scale up of the size of an instance of an RDB dataset. In this case, only one data format (SQL) is involved in the process. 
 
@@ -270,7 +270,7 @@ service2 & calendar\_dates       & gtfs:Service                               & 
 
 \end{table}
 
-\subsection{Mappings} 
+\subsubsection{Mappings} 
 Mappings play one of the most important roles in the benchmark since they are the main element used for the query translation process. In the state of the art there are multiple engines and tools that use different mapping languages. We select a set of the most relevant declarative mapping languages in the state of the art and we generate the corresponding mapping rules. In more detail, the GTFS-Madrid-Bench provides:
 \begin{itemize}
     \item One R2RML mapping document for accessing SQL datasets.
@@ -283,7 +283,7 @@ Conceptually, all the mappings represent the same relations among the concepts o
 More in detail, each source of the GTFS feed has one associated TriplesMap with a rule to associate the generated entities to the class defined in the ontology, and a set of rules for the object and data properties. Additionally, there is a (virtual) entity, Service, in the data model with no corresponding source, what implies the definition of a set of mapping rules to generate the instances of the corresponding class (\texttt{gtfs:Service}). Following the GTFS specification, the identifier of Service can be found either in calendar or calendar\_dates sources. This means that to be aligned with standard declarative mapping specifications (e.g. RML and R2RML only allow one source per TriplesMap), the mapping document needs to define two TriplesMap, one for calendar (service1) and another for calendar\_dates (service2). This also implies that the trips TriplesMap has one predicate (\texttt{gtfs:service}) with two associated refObjectMaps, where the parentTriplesMap are service1 and service2; this allows generating all \texttt{gtfs:Service} defined in the original data source. Because the instances of \texttt{gtfs:WheelchairBoardingStatus} class are only objects in \texttt{gtfs:Trips} and \texttt{gtfs:Stops} triples, they are generated using the template property in trips and stops TriplesMap. In summary, the mapping contains rules to generate instances of 12 classes, 71 PredicateObjectMaps and Predicates, 60 Objects and 11 RefObjectMaps, covering the main features defined in state-of-the-art mapping specifications for OBDA/OBDI. All of the GTFS mappings are detailed in Appendix \ref{sec:appendix2} using the YARRRML~\citep{Heyvaert2018Declarative} serialisation.
 
 % Queries
-\subsection{Queries}
+\subsubsection{Queries}
 Table \ref{tab:queries} presents all the variables considered for the 18 queries in our benchmark. We have developed queries that are based on the Linked GTFS ontology, and are aligned with user stories in Madrid's transport domain, together with different combinations of values for the variables. It should be mentioned that the queries cover all of the data sources that were generated by the Madrid's transport authority as GTFS data from the metro system. These include agencies, routes, stops, trips, frequencies, shapes, calendar, and calendar dates. Although in the benchmark we have defined mappings to translate queries into the underlying query language of the source, these are independent from the queries (we have used these mappings to generate the materialized knowledge graph in the data generation step).
 
 We have defined two sets of 18 queries with identical templates but differences in the constants that appear in subjects or objects of bounded triple patterns: (1) Baseline que\-ries with constants that belong to Madrid's GTFS Linked Data, and (2) VIG queries with constants that belong to the datasets generated by the tool; these queries are executed in the evaluation described in Section \ref{sec:evaluation}. 
@@ -331,7 +331,7 @@ q18 & All routes that have trips on Sunday  & 8 & 5 &   &  & UNION &  &  & 4 & 1
 \end{sidewaystable*}
 
 
-\subsection{Metrics}
+\subsubsection{Metrics}
 In this section we define the metrics that are used to evaluate the performance of Virtual Knowledge Graph access engines. The metrics consider the workflow followed by Virtual Knowledge Graph systems, and for each of the steps identified in the workflow we introduce a set of metrics to be measured and reported.
 \begin{table}[]
 \caption[Metrics VS dimensions]{Relation between each relevant metric for the Madrid-GTFS-Bench and the dimensions that can impact over that metric. In the Dimension column, Q means query, M mappings and D data.}
