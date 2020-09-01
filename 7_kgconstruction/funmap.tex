@@ -1,0 +1,205 @@
+\definecolor{powderBlue}{RGB}{147, 207, 207}
+\definecolor{blueGreen}{RGB}{89, 189, 192}
+\definecolor{metallicSeaweed}{RGB}{6, 134, 146}
+\definecolor{viridianGreen}{RGB}{1, 146, 150}
+\definecolor{burntSienna}{RGB}{220, 120, 85}
+\definecolor{melon}{RGB}{246, 183, 161}
+\definecolor{rust}{RGB}{190, 51, 2}
+\definecolor{grey}{RGB}{183, 183, 183}
+
+\section{FunMap: Efficient Execution of Functional Mappings for Knowledge Graph Creation}
+
+Knowledge graphs (KGs) have gained momentum due to the explosion of available data and the demand for expressive formalisms to integrate factual knowledge spread across various data sources~\cite{abs-2003-02320}.
+KG creation requires the description of schema alignments among data sources and an ontology, as well as the specification of methods to curate and transform data collected from the input sources into a unified format. A rich spectrum of mapping languages has been proposed to specify schema-ontology alignments across data sources implemented in a variety of semi-structured and structured formats; exemplar approaches include R2RML~\cite{R2RML}, RML~\cite{dimou2014rml}, and xR2RML~\cite{michel2015translation}. Furthermore, function-based mapping languages \cite{de2017declarative,debruyne2016r2rml,junior2016funul,vu2019d} are equipped with abstractions that enable interoperable and reusable specifications of data transformations by means of user-defined functions. Moreover, formalisms like RML+FnO~\cite{de2017declarative} combine the Function ontology and RML, enabling declarative specification of the schema-ontology alignments and data transformations that define the process of KG creation. Albeit expressive, existing mapping languages lack efficient interpreters able to scale up to complex KG creation scenarios. The incoming data avalanche urges KG creation approaches capable of integrating large and diverse data, and efficiently transforming this data to comply with application-specific KG formats.   
+
+\noindent \textbf{Problem and Objectives:} We tackle the problem of scaled-up KG creation from functional mapping rules and study the impact of functions when applied to large data sources with a high data duplication rate. A KG creation process is defined as a data integration system~\cite{Lenzerini02}. Mappings among data sources and the system ontology are expressed using the RDF mapping language (RML) \cite{de2017declarative} and the Function Ontology (FnO); they define how the ontology concepts are populated with data from the sources in the resulting KG. We aim at transforming complex data integration systems composed of large data sources and mappings with functions into equivalent ones that generates the same KG but in less time.
+
+\noindent \textbf{Our Proposed Approach:} We present FunMap, an interpreter of RML+FnO, that converts a data integration system defined using RML+FnO into an equivalent one where RML mappings are function-free. FunMap resembles existing mapping translation proposals (e.g., \cite{AliW19,corcho2019towards,junior2016funul}) and empowers a KG creation process with optimization techniques to reduce execution time. Transformations of data sources include the projection of the attributes used in the RML+FnO mappings. They are supported on well-known properties of the relational algebra, e.g., the pushing down of projections and selections into the data sources, and enable not only the reduction of the size of data sources but also the elimination of duplicates. Additionally, FunMap materializes functions --expressed in FnO-- and represents the results as data sources of the generated data integration system; the translation of RML+FnO into RML mappings that integrate the materialization of functions is performed using joins between the generated RML mappings. The combination of data source and function transformations results in data integration systems where only the data required to execute the RML mappings are retained. The computation of the functions used in the original data integration system is performed once. As a result, the new data integration system's execution is sped up while the same knowledge graph is generated. 
+
+\noindent\textbf{Contributions.} i) FunMap, an interpreter of RML+FnO that resorts to syntax-based translation~\cite{aho1986compilers} to push down projections and selections, and materialize functions. ii) Empirical evaluations of the performance of FunMap in real-world testbeds with data of various formats (CSV and Relational), sizes, and degrees of duplication that show reductions in KG creation time by up to a factor of 18.
+
+\subsection{Preliminaries and Motivating Example}
+\label{sec:example}
+\begin{figure}[t!]
+\centering
+\includegraphics[width=\textwidth]{figures/motivating_example.png}
+\caption{\textbf{Motivating example.} Knowledge graph construction using RML+FnO mapping rules for the biomedical domain. The input source in the top is transformed to RDF output (at the bottom) through the processing of the mapping (middle) where the transformation functions are defined. Repeated computations of a function negatively impacts on the performance of an RML engine.} 
+\label{fig:motivatingExample}
+\end{figure}
+
+\subsubsection{Preliminaries}
+\label{sec:preliminaries}
+The RDF Mapping Language (RML) extends the W3C-standard mapping language R2RML with logical sources (a.k.a. \verb|logicalSource|) in heterogeneous formats (e.g., CSV, Relational, JSON, and XML). As the W3C-standard R2RML, \verb|TriplesMap| corresponds to mapping rules where the resources (a.k.a. \verb|subjectM|-\verb|ap|) of an RDF class and their properties (a.k.a. \verb|predicateMap|) are assigned to values (a.k.a. \verb|objectMap|) based on logical data sources. An \verb|objectMap| can be also defined as a reference or a join with the \verb|subjectMap| in another \verb|TriplesMap| (a.k.a. \verb|RefObjectMap| and \verb|joinCondition|, respectively). \verb|subjectMap|, \verb|predica|-\verb|teMap|, and \verb|objectMap| are also referred as \verb|TermMap| in general; they generate RDF terms. FnO is an ontology for describing transformation functions declaratively; FnO and RML relationship is described in \cite{de2017declarative}. Accordingly, the \verb|FunctionMap| class is introduced in RML; it defines transformation functions in any part of the \verb|TriplesMap| (\verb|subjectMap|, \verb|predicateMap|, or \verb|objectMap|). These concepts are illustrated in the next example and highlighted in \autoref{fig:motivatingExample}.
+
+\subsubsection{A Real-World Example from the Biomedical Domain}
+Our work is motivated by the challenges revealed during genomic variant reconciliation while creating a biomedical knowledge graph. 
+Although the vast majority of the single variations in the genome of a person causes no disease, benign variants can appear in sequenced genomic data repeatedly. In addition to the large heterogeneous volumes generated during genome sequencing and analysis, high-frequency of genomic variants impose data integration challenges while collecting genomic data from different sources. 
+Additionally, genomic variants are expressed in diverse standard formats~\cite{den2016hgvs} and reported at DNA, RNA, or protein level. Moreover, this representation can be done according to any of the accepted terminologies and genomic reference versions. Unified representations for variants are required
+to semantically recognize and integrate equivalent variants residing in different data sources. Variant representations can result from a composition of several factors, such as gene name, genomic position, and residue alteration. 
+Pre-processing functions (e.g., FnO functions) are needed to extract and compose values from different attributes from each data source and generate such a combined representation of variants.
+These functions are part of the data integration system's mapping rules that define the KG creation process. 
+
+\autoref{fig:motivatingExample} depicts a mapping rule in  RML+FnO where the \verb|FunctionMap| class is utilized. Consider that according to the \verb|LogicalSource| provided in this example, a \verb|FunctionMap| is defined in the mapping rules to create a unified representation for a variant by extracting the values of ``gene name'' (e.g., BCR) from the attribute \verb|gene| and 
+``coding alteration'' (e.g., c.1001C\textgreater T)  from the attribute named \verb|hgvs| and combine them (e.g., BCR\textunderscore1001C\textasciitilde T). Current approaches evaluate \verb|FunctionMap| for each \verb|variant|, which can be expensive in presence of large data sources. Nevertheless, the large number of redundant values leaves room for the scalable transformations to execute functional mappings. 
+
+
+\subsection{The FunMap Approach}
+\label{sec:approach}
+
+\begin{table}[h!]
+\normalsize
+\centering
+\caption{Summary of the notation used for defining FunMap}
+\label{tab:notations}
+\resizebox{1.0\textwidth}{!}{%
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Notation} & \textbf{Explanation} \\ \hline
+$DIS_G=\langle O,S,M \rangle$ & Data Integration System which creates a KG $G$ \\ \hline
+$O$ & Unified Ontology of $DIS_G=\langle O,S,M \rangle$\\ \hline
+$S$ & Finite set of Data Sources $S_i$ of $DIS_G=\langle O,S,M \rangle$\\ \hline
+$M$ & Finite set of \texttt{TriplesMap}s $T_i$ in $DIS_G=\langle O,S,M \rangle$\\ \hline
+$\emph{RDFize}(.)$ & A function producing RDF triples from a data integration system\\ \hline
+$T'_i$ and $T'_k$ & \texttt{TriplesMap}s resulting of applying MTRs \\ \hline
+$F_i$ & A Transformation Function in a \texttt{TriplesMap} in $M$ \\ \hline
+$S'$ & Finite set of Data Sources $S'_i$ resulting of applying DTRs\\ \hline
+$M'$ & Finite set of Mapping Rules $M'_i$ resulting of applying MTRs\\ \hline
+$S_i^{output}$ & Data source resulting of applying DTR1, with attributes $o'_i$ and $a'_i$ \\ 
+& representing the materialization of a transformation function $F_i$ \\ \hline
+$S_i^{project}$ &  Data source resulting of applying DTR2 \\ \hline
+\end{tabular}%
+}
+\end{table}
+FunMap is an interpreter of data integration systems $DIS_G = \langle O,S,M \rangle$, where $O$ stands for a unified ontology, and $S$ and $M$ represent sets of sources and mapping rules, respectively \cite{Lenzerini02}. The evaluation of $DIS_G$ (a.k.a. $\emph{RDFize}(DIS_G)$) results into a knowledge graph $G$ that integrates data from $S$ according to the mapping rules in $M$; entities and properties in $G$ are described in terms of $O$. A complex data integration system $DIS_G$ consists of large data sources with high-duplicated data and mapping rules including functions for both schema-ontology alignments and data transformations. FunMap converts $DIS_G$ into an equivalent data integration system that creates the same knowledge graph but in less time. \autoref{tab:notations} summarizes the notation utilized in the FunMap approach.
+
+
+\noindent\textbf{Problem Statement:} 
+Given a data integration system $DIS_G$=$\langle O,S,M\rangle$, the problem of scaled-up knowledge graph creation from functional mappings requires the generation of a data integration system 
+$DIS'_G$=$\langle O,S',M' \rangle$:
+\begin{itemize}
+\renewcommand{\labelitemi}{$\bullet$}
+\item The knowledge graphs resulting of the evaluations of both data integration systems are the same, i.e., $\emph{RDFize}(DIS'_G = \langle O,S',M' \rangle)$=$\emph{RDFize}(DIS_G = \langle O,S,M \rangle)$ where $RDFize(.)$ is a function producing RDF triples utilizing the input data integration system.
+%\item The execution time of evaluating $\emph{RDFize}(DIS'_G = \langle O,S',M' \rangle)$ is \emph{less} than $\emph{RDFize}(DIS'_G = \langle O,S',M' \rangle)$.
+\item The execution time of $\emph{RDFize}(DIS'_G=\langle O,S',M' \rangle)$ is \emph{less than} the execution time of $\emph{RDFize}(DIS_G=\langle O,S,M \rangle)$.
+\end{itemize}
+
+\noindent \textbf{Solution:} FunMap implements a heuristic-based approach; it relies on the assumption that eliminating duplicates, maintaining in the data sources only the attributes mentioned in the mappings, and materializing the functions in the mappings, reduces the execution time of knowledge graph creation process. 
+FunMap receives a data integration system $DIS_G$=$\langle O,S,M \rangle$ where the mappings $M$ are expressed in RML+FnO. FunMap interprets the mappings in $M$ and converts $DIS$ into the data integration system $DIS'_G$ in which the mappings $M'$ are function free and duplicates in the data sources $S'$ are reduced. \autoref{approach} depicts the FunMap approach; it performs a syntax-based translation of the mappings in $M$ and ensures that each redundant function is evaluated exactly once on the same data values. 
+FunMap transforms $S$ to $S'$ by means of data transformation rules (DTR1 and DTR2). For each $F_i$ over a given $S_i$, DTR1 creates a temporal source $S'_i$ that includes the attributes from $S_i$ that correspond to the input of $F_i$; it also generates a source $S_i^{output}$ that contains the attributes in $S'_i$ and attributes representing the output of $F_i$. For each \verb|FunctionMap| defined over a source $S_i$, DTR2 creates a source $S_i^{project}$ that includes all attributes of $S_i$ used in the \verb|FunctionMap|. Additionally, FunMap converts mapping rules that include functions by using mapping transformation rules (MTRs); a \verb|FunctionMap| is transformed into \verb|FunctionMap|s without functions while connected by \verb|joinCondition|s; initially, $S'$ and $S$ are equal, as well as $M'$ and $M$. Properties \ref{property:p1}, \ref{property:p2}, and \ref{property:p3} state the pre- and post-conditions of DTRs and MTRs.
+
+\begin{figure}[t!]
+\includegraphics[width=\textwidth]{figures/Architecture.png}
+\caption{\textbf{The FunMap approach}} 
+\label{approach}
+\end{figure}
+
+
+\subsubsection{Transformation Rules in FunMap}
+\label{subsec:transformation}
+\begin{figure}[b!]
+\includegraphics[width=\textwidth]{figures/MTR_objectBased.png}
+\caption{\textbf{Example of DTR and Object-based MTR.} On the left, an exemplary mapping including two TriplesMaps and a FunctionMap provided by the original data integration system. On the right side, the mappings are transformed by FunMap including two new TriplesMaps and one new TriplesMap.} 
+\label{fig:objectBased}
+\end{figure}
+The FunMap syntax-based translation component parses \verb|FunctionMap|s exactly once, i.e., \verb|FunctionMap|s repeated in various mappings are not evaluated more than once. Given \verb|FunctionMap|s, original data sources, and mappings, FunMap executes transformation rules on data sources and mappings, accordingly. Meanwhile, given the transformed data sources, FunMap detects that a \verb|FunctionMap| has been computed for a given value and avoids repeating this computation. As an outcome, FunMap provides: a) a new set of data sources $S'$ consisting of the original ones in conjunction with transformed data sources,  and b) a set $M'$ of transformed function-free mappings. FunMap is loyal to the formats of data sources and mappings. Thus, any RDF mapping language is compatible with the process implemented in FunMap, as far as the language enables the definition of joins between mapping rules. Next, we present the transformation rules. 
+
+\noindent\textbf{Data Source Transformation Rules (DTRs):}
+Considering the fact that a \verb|TriplesMap| may only be used some attributes of a dataset, FunMap relies on the properties of the relational algebra and performs DTRs to project only the attributes mentioned in the \verb|TriplesMap|. DTRs are followed by transformation rules (MTRs) that update mappings defined over the transformed data sources. 
+
+\noindent\textbf{DTR1: Projection of Functional Attributes:}
+For each transformation function $F_i$ over a given source $S_i$ in the set of data sources $S$, FunMap projects all attributes $a'_i$ in $S_i$ that are input attributes of $F_i$, into a temporal data source $S'_i$ followed by duplicate removal. Subsequently, it evaluates $F_i$ over $S'_i$ and stores the results into the attribute $o_i$. Lastly, it creates a new data source $S_{i}^{output}$ with the attributes $a'_i$ and $o_i$; $S_{i}^{output}$ is added to $S'$. 
+\begin{figure}[t!]
+\includegraphics[width=\textwidth]{figures/OriginalDatasource.png}
+\caption{\textbf{Original data source for KG creation.} The data source includes many attributes among which only a few are required by the transformation function or function-free mappings in the process of knowledge graph creation.} 
+\label{fig:OriginalDatasource}
+\end{figure}
+\begin{figure}[t!]
+ \centering
+ \subfloat[Projected1]{
+      \includegraphics[width=0.32\columnwidth]{figures/DTR-projected1.png}
+    \label{fig:projected1}}
+  \subfloat[Projected2]{
+\includegraphics[width=0.32\columnwidth]{figures/DTR-projected2.png}
+    \label{fig:projected2}}
+  \subfloat[Output1]{
+\includegraphics[width=0.32\columnwidth]{figures/DTR-output1.png}
+    \label{fig:output1}}
+    \caption{{\bf Transformed sources generated by FunMap.} The DTR2 generates a new source by projecting attributes for each TripleMap (Figures a and b) while DTR1 projects input and output attributes of each FunctionMap into a new source (Figure c). Both remove the generated duplicates.}
+    \label{fig:DTR}
+\end{figure}
+
+\noindent\textbf{DTR2: Projection of Non-Functional Attributes:}
+FunMap provides an additional DTR to further optimize the knowledge graph creation process. Exploiting transformation rules that are proposed in~\cite{jozashoori2019mapsdi}, FunMap projects all attributes in $S_i$ that are needed by \verb|TriplesMap| including those that are received by \verb|FunctionMap| as input into a new data source $S_i^{project}$ which is added to $S'$. 
+To better conceive DTRs, consider the original mappings in \autoref{fig:objectBased} (left-side) and corresponding data source \verb|source1.csv| that can be seen in \autoref{fig:OriginalDatasource}. As shown in \autoref{fig:objectBased}, \verb|FunctionMap1| receives \verb|Mutation genome position| as input. According to DTR1, FunMap projects \verb|Mutation genome position| from \verb|source1| into a new data source named \verb|output1.csv| which is shown in \autoref{fig:DTR}.c. The rows number 2 and 4 have the same value for attribute \verb|Mutation genome posit|-\verb|ion| which leads FunMap to remove the duplicated value from \verb|output1.csv|. Afterwards, \verb|FunctionMap1| is evaluated given \verb|output1.csv| as input and the output values are inserted as a new attribute named \verb|functionOutput| into the \verb|output1.csv| data source. Moreover, attributes \verb|GENOMIC_MUTATION_ID| and \verb|Primary site| from \verb|source1.csv| that are in \verb|TriplesMap1| are projected into the new data source that is shown in \autoref{fig:DTR}.a and duplicated values are removed. Similarly, \verb|Projected2.csv| is created based on the attributes of \verb|TriplesMap2|.
+\begin{figure}[t!]
+\includegraphics[width=\textwidth]{figures/MTR_subjectBased.png}
+\caption{\textbf{Example of Subject-based MTR.} An example of mappings including a TriplesMaps and FunctionMap are illustrated on the left and their transformed version including three TriplesMap are shown on the right side.} 
+\label{fig:subjectBased}
+\end{figure}
+\noindent\textbf{Mapping Transformation Rules (MTRs)}
+Mappings are transformed to create the same knowledge graph utilizing the transformed data sources. MTRs are defined considering the role of a transformation function $F_i$ in each \verb|TriplesMap| $T_i$.
+I) $F_i$ as an \verb|ObjectMap|: 
+We refer to the MTRs that are required in this case as \verb|Object-based|. First of all, for each $F_i$, a new \verb|TriplesMap| $T'_i$ is created; it refers to the data source generated as the outcome of $F_i$, i.e., $S_i^{output}$. Accordingly, the \verb|SubjectMap| of $T'_i$ refers to the output attributes $o_i$ in $S_i^{output}$. Afterwards, in \verb|TriplesMap| $T_i$ where $F_i$ is presented as an \verb|ObjectMap|, $F_i$ is replaced by a \verb|joinCondition| which joins $T_i$ and $T'_i$ over attributes $a'_i$, i.e., the input attributes of $F_i$. Moreover, the \verb|logicalSource| of $T_i$ is changed to $S_i
+^{project}$, i.e., the corresponding projected data source provided as an outcome of DTR2. 
+II) $F_i$ as a \verb|SubjectMap|: Contrary to the \verb|Object-based|, in this set of MTR - we refer to as \verb|Subject-based|- for each \verb|predicateObjectMap| that follows a $F_i$ of the type \verb|SubjectMap|, a new \verb|TriplesMap| $T'_i$ refers to the data source $S_i^{project}$ which is generated as an outcome of DTR2 by projecting the attribute $a'_i$ from $S_i$ that are referenced as \verb|objectMap| in the original \verb|predicateObjectMap|. The \verb|subjectMap| of $T'_k$ --the transformed $T_i$  -- refers to the $o_i$ and its \verb|logicalSource| is $S_i^{output}$.   
+Note that \verb|subjectMap| of $T'_i$ is by definition a \verb|TermMap|, which means that its value can be any RDF term according to the RML specification.
+
+Each \verb|objectMap| in $T_i$ that is a \verb|FunctionMap| is replaced by a \verb|joinCondition| between $T_i$ and corresponding $T'_i$ over input attributes $a'_i$ of $F_i$. 
+In both cases, the transformed $T_i$-- denoted as $T'_k$-- and $T'_i$ are added to $M'$ and $T_i$ is removed from $M'$. \\     
+Figures \ref{fig:objectBased} and \ref{fig:subjectBased} illustrate two examples of rewritten mappings based on DTRs and MTRs. In the left side of both figures, the original mappings are presented while the transformed mappings are depicted on the right side. In the transformed mappings in \autoref{fig:objectBased}, \verb|TriplesMap3| is created for \verb|FunctionMap1|; it refers to the attribute \verb|functionOutput| in the projected data source \verb|output1.csv|-- shown in \autoref{fig:DTR}.c. Then, \verb|FunctionMap1| is replaced in both \verb|TriplesMap1| and \verb|TriplesMap2| by a join condition over the attribute \verb|Mutation genome position| which is the input attribute of \verb|FunctionMap| in the original mapping file as it is highlighted by the same \textcolor{metallicSeaweed}{\textbf{color}}. Accordingly, data sources -\textcolor{powderBlue}{\textbf{highlighted}}- of \verb|TriplesMap|s are also transformed to refer to the projected data sources. 
+Consider \autoref{fig:subjectBased} where \verb|FunctionMap| is a \verb|subjectMap|. In both \verb|predicateObjectMa|-\verb|p|s of \verb|TriplesMap1|, \verb|FunctionMap1| is replaced by a \verb|joinCondition| over the attribute \verb|Mutation genome position| that is the input of \verb|FunctionMap1|. To better clarify the performed transformation, consider the first \verb|predicateObjectMap| in \verb|TripleMap1| in the original mappings; the \verb|predicate| is \textcolor{burntSienna}{\textbf{represents}} and the \verb|ObjectMap| refers to the attribute \textcolor{metallicSeaweed}{\textbf{Mutation}}. After the transformation, the first \verb|predicateObjectMap| has the same \verb|predicate| \textcolor{burntSienna}{\textbf{represents}} and through the \verb|joinCondition| refers to the same attribute \textcolor{metallicSeaweed}{\textbf{Mutation}} in \verb|projected1.csv|. 
+
+\subsubsection{Lossless Transformation Rules}
+\label{subsec:formalEval}
+We validated the correctness of the transformations that are performed by FunMap, by proving that the RDF triples produced by $DIS'_G$ are identical to the ones generated by $DIS_G$.
+
+Consider:
+\begin{itemize}
+    \item The Ontology $O$ is defined as a triple, $O=(C,P,Axioms)$ where $C$ and $P$ represent the classes and properties of $O$ respectively. The $Axioms$ stands for a set of statements expressing the characteristics of the properties of $O$.  
+    \item The data sources of $DIS_G$ are defined as a set of $S_j^{A_j}$ where $S_j$ stands for a data source and $A_j$ represents attributes of $S_j$ that are utilized by $M$.
+    \item The $M$ describing the classes $C$ and properties $P$ in $O$ in terms of sources in $S$ comprises a set of mapping rule $r_i$ that is defined as:
+        \[r_i :  c_j(X,\overline{X}) : - S_1(\overline{X_1}), S_2(\overline{X_2}),\dots, S_m(\overline{X_m}) \]
+    Where $c_j$ is a class in $C$, $X$ is a variable, and $\overline{X}$ is a set of pairs , and $X_{i,j}$ is a variable. The predicate $S_z(\overline{X_z})$ represents a source $S_z$ in $S$ and $\overline{X_z}$ is a set of pairs $(a_{i,z},X_{i,z})$ where $X_{i,z}$ is a variable and $att_{i,z}$ is an attribute of $S_z$. 
+\end{itemize}
+For each mapping rule in $M$ with sources $S_z(\overline{X_z})$ and a set of utilized attributes as $\prod_{att}S_z$, DTR1 and DTR2 add new sources $S_y(\overline{X_y})$ and $S_w(\overline{X_w})$ in the way that $\prod_{att}S_y$ + $\prod_{att}S_w$ equals $\prod_{att}S_z$. Accordingly, for each mapping rule in $M$:
+\begin{itemize}
+    \item If a mapping includes \verb|FunctionMap| in \verb|ObjectMap|:\\
+    $(att_{A,z},X_{sub,z})+(att_{f(B),z},X_{obj,z})$ =? 
+    $(att_{A,w},X_{sub,w})+(att_{B,w},X_{join,w})+(att_{B,y
+    },X_{join,y})+(att_{f(B),y},X_{obj,y})$
+\end{itemize}
+
+
+Pre- and post-conditions of Data Source Transformation Rules (DTRs) and Mapping Transformation Rules (MTRs) are stated in the following properties:
+\noindent\textit{Property 1.}(Lossless Function)
+\label{property:p1}
+Given data integration systems $DIS_G$=$\langle O,S,M \rangle$ and  $DIS_G'$=$\langle O,S',M \rangle$ such that $DIS_G'$ is the result of applying one DTR1 transformation to $DIS_G$. Then, there are data sources $S_i$ and 
+$S_i^{output}$ in $S$ and $S'$, respectively, and the following statements hold:
+\begin{itemize}
+    \item $S'- S=\{S_i^{output}\}$, there is a mapping $T_i$ in $M$ with a function $F_i$, and \textit{Attrs} contains the attributes $a'_i$ of $F_i$ in $S_i$ and the output attributes $o_i$ of $F_i$. 
+    \item  $S_i^{output}$ comprises the attributes \textit{Attrs} and $\pi_{a'_i}(S_i^{output})$=$\pi_{a'_i}(S_i)$.  
+    \item For each tuple $t_{i,j}$ in $S_i^{output}$, the values of the attributes $o_i$ in $t_{i,j}$ correspond to the result of $F_i$ over the values of $a'_i$ in $t_{i,j}$, i.e., $t_{i,j}.o_i$=$F_i(t_{i,j}.a'_i)$. 
+    
+\end{itemize}
+
+
+\noindent\textit{Property 2.}(Lossless Projection)
+\label{property:p2}
+Given data integration systems $DIS_G$=$\langle O,S,M \rangle$ and  $DIS_G'$=$\langle O,S',M \rangle$ such that $DIS_G'$ is the result of applying one DTR2 transformation to $DIS_G$. Then, there are data sources $S_i$ 
+and $S_i^{project}$ in $S$ and $S'$, respectively, and the following statements hold:
+\begin{itemize}
+    \item $S'- S=\{S_i^{project}\}$, and there is a mapping $T_i$ in $M$ defined over the attributes \textit{Attrs} from $S_i$, and $S_i^{project}=\pi_{\textit{Attrs}}(S_i)$. 
+\end{itemize}
+
+
+\noindent\textit{Property 3.} (Lossless Schema-Ontology Alignments)\footnote{Similarly, this property can be stated for the result of applying MTR over the subject position of a property in a mapping of a data integration system.}
+\label{property:p3}
+Given data integration systems $DIS_G$=$\langle O,S,M\rangle$ and  $DIS_G'$=$\langle O,S,M'\rangle$ such that $DIS_G'$ is the result of applying one MTR transformation to $DIS_G$. Then, there are \verb|TriplesMap|s $T_i$ in $M$, 
+and  $T'_i$ and $T'_k$ in $M'$, and the following statements hold:
+\begin{itemize}
+    \item $M - M'=\{T_i\}$ and $M'- M=\{T'_i,T'_k\}$. 
+    \item There is a function $F_i$ in $T_i$ as the \verb|ObjectMap| of a  \verb|PredicateMap| $p$, and there is a data source $S_i^{output}$ in $S$ which is the \verb|LogicalSource| of $T_i$. The attributes of $S_i^{output}$ are the union of $a'_i$ and $o_i$, while $a'_i$ and $o_i$ are input and output attributes of $F_i$, respectively.
+    \item $T_i$ and $T'_k$ are defined over the same \verb|LogicalSource|  $S_i^{project}$. $S_i^{output}$ is the \verb|LogicalSource| of $T'_i$ and $o_i$ is the \verb|SubjectMap| of $T'_i$.  
+    \item $T_i$ and $T'_k$ only differ on the \verb|ObjectMap| $p$. In $T_i$, \verb|ObjectMap| of $p$ is defined as $F_i$, while in $T'_k$, a \verb|joinCondition| to $T'_i$ on $a'_i$ defines the \verb|ObjectMap| of $p$. 
+\end{itemize}
+
