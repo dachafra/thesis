@@ -203,3 +203,81 @@ and  $T'_i$ and $T'_k$ in $M'$, and the following statements hold:
     \item $T_i$ and $T'_k$ only differ on the \verb|ObjectMap| $p$. In $T_i$, \verb|ObjectMap| of $p$ is defined as $F_i$, while in $T'_k$, a \verb|joinCondition| to $T'_i$ on $a'_i$ defines the \verb|ObjectMap| of $p$. 
 \end{itemize}
 
+
+\subsection{Experimental Evaluation}
+\label{sec:eval}
+We evaluate FunMap\footnote{\url{https://doi.org/10.5281/zenodo.3993657}} in comparison to current approaches that create a knowledge graph using the specified data sources and RML+FnO mappings. We aim to answer the following research questions: 
+Q1) What is the impact of data duplication rate in the execution time of a knowledge graph creation approach?; Q2) What is the impact of different types of complexity over transformation functions during a knowledge graph creation process?; Q3) How does the repetition of a same function in different mappings affect the existing RML engines?; Q4) What is the impact of relational data sources in the knowledge graph creation process?
+All the resources used to perform this evaluation are available in our Github repository\footnote{\url{https://github.com/SDM-TIB/FunMap}}. The experimental configuration is as follows:
+
+\noindent\textbf{Datasets and Mappings.}
+To the best of our knowledge, there are no testbeds to evaluate the performance of a knowledge graph construction approach that applies functional mappings. Consequently, following the real-world scenario that initially motivated this research, we create our testbed from the biomedical domain. We generate a baseline dataset by randomly selecting 20,000 records from the coding point mutation dataset in COSMIC\footnote{\url{https://cancer.sanger.ac.uk/cosmic} GRCh37, version90, released August 2019} database. We keep all 39 attributes of the original dataset in the baseline dataset, while only five to seven of them are utilized in mappings. In total, four different mapping files are generated consisting of one \verb|FunctionMap| and four, six, eight, or ten \verb|TriplesMap|s with a \verb|predicateObjectMap| linked to the function. To additionally validate FunMap in case of large-sized data, we create another dataset following the same criteria, with 4,000,000 records and the size of about 1.3GB.
+
+\noindent\textbf{Engines.}
+The baselines of our study are three different open source RML-complaint engines that are able to execute RML+FnO mappings and have been extensively utilized in multiple applications and tested by the community: SDM-RDFizer v3.0\cite{IJC20}, RMLMapper\footnote{\url{https://github.com/RMLio/rmlmapper-java}} v4.7, and RocketRML\footnote{\url{https://github.com/semantifyit/RocketRML/}} v1.6. \footnote{We name them SDM-RDFizer**(RML+FnO), RMLMapper**(RML+FnO), and RocketRML**(RML+FnO).}. In order to evaluate the impact of transformation rules, we implement FunMap v1.0 on the top of the aforementioned engines with DTR2 optimization as an optional parameter. We refer to the approach which applies FunMap excluding DTR2 as FunMap$^-$\footnote{We name these combined engines as follows: a) FunMap: FunMap+SDM-RDFizer, FunMap+RMLMapper, and FunMap+RocketRML; b) FunMap$^-$: FunMap$^-$+SDM-RDFizer, FunMap$^-$+RMLMapper, and FunMap$^-$+RocketRML.}. We created a docker image per tested engine for reproducibility.  
+
+\noindent\textbf{Metrics.} \textit{Execution time:} Elapsed time spent by an engine to complete the creation of a knowledge graph and also counts FunMap pre-processing; it is measured as the absolute wall-clock system time as reported by the \verb|time| command of the Linux operating system. Each experiment was executed five times and average is reported. The experiments were executed on an Ubuntu 16.04 machine with Intel(R) Xeon(R) Platinum 8160, CPU 2.10GHz and 700Gb RAM. 
+
+\noindent\textbf{Experimental setups.} Based on our research questions, we set up in overall 198 experiments as the combinations of the following scenarios. We create two datasets from our baseline with 25\% and 75\% duplicates which means in the 25\% duplicate dataset, 25\% and in the 75\% duplicate dataset, 75\% of the records are duplicated. Additionally, two functions with different levels of complexity are created. We describe the complexity level of the functions based on the number of required input attributes and operations to be performed. Accordingly, ``simple'' function is defined to receive one input attribute and perform one operation, while a ``complex'' function receives two input attributes and completes five operations. In total, we create eight mapping files including four, six, eight, and ten \verb|TriplesMap| and one \verb|FunctionMap| to be either ``simple'' or  ``complex''. Additionally, six experiments using 75\% duplicate datasets of 20,000 and 4,000,000 records and a mapping file including ten complex functions are set up in order to be run over a relational database (RDB) implemented in MySQL 8.0 \footnote{https://www.mysql.com/}.   
+
+ \begin{figure}[t!]
+ \centering
+    \subfloat[SDM-RDFizer - 25\% of duplicates]{
+        \includegraphics[width=0.46\columnwidth]{figures/veracity25_sdmrdfizer_simple.png}
+            \label{fig:vera25_sdmrdfizer}}
+    \subfloat[SDM-RDFizer - 75\% of duplicates]{
+        \includegraphics[width=0.45\columnwidth]{figures/veracity75_sdmrdfizer_simple.png}
+            \label{fig:vera75_sdmrdfizer}}
+\\            
+    \subfloat[RMLMapper - 25\% of duplicates]{
+        \includegraphics[width=0.45\columnwidth]{figures/veracity25_rmlmapper_simple.png}
+            \label{fig:vera25_rmlmapper}}  
+    \subfloat[RMLMapper - 75\% of duplicates]{
+        \includegraphics[width=0.45\columnwidth]{figures/veracity75_rmlmapper_simple.png}
+            \label{fig:vera75_rmlmapper}} 
+\\
+    \subfloat[RocketRML - 25\% of duplicates]{
+        \includegraphics[width=0.45\columnwidth]{figures/veracity25_rocketrml.png}
+            \label{fig:vera25_rocketrml}}
+    \subfloat[RocketRML - 75\% of duplicates]{
+        \includegraphics[width=0.45\columnwidth]{figures/veracity75_rocketrml.png}
+            \label{fig:vera75_rocketrml}}
+\caption{{\bf Total execution time of experiments with simple functions 25-75\% of duplicates.} SDM-RDFizer, RMLMapper and RocketRML executing simple functions in RML+FnO mappings and with FunMap and FunMap$^-$.}
+    \label{fig:exp-simple}
+\end{figure}
+
+\subsubsection{Discussion of Observed Results}
+In this section, we describe the outcomes of our experimental evaluation. Figure \ref{fig:exp-simple} reports on the execution time of the different testbeds in which the functions are considered to be ``simple'' whereas Figure \ref{fig:exp-complex} shows the experiments involving ``complex'' functions. Both figures represent the total execution time for constructing the knowledge graph applying selected engines (i.e., SDM-RDFizer, RMLMapper, and RocketRML) in three different configurations: a) the current version of the engine that is able to directly interpret RML+FnO mappings in the engine (e.g., RMLMapper**(RML+FnO)); b) FunMap$^-$ in conjunction with the engine (e.g., FunMap$^-$+RMLMapper); and c) FunMap together with the engine (e.g., FunMap+RMLMapper). In the case of all the configuration of RocketRML, we only provide the results for the execution of simple functions because the engine does not execute joins with multiple conditions\footnote{Check an example in the zip file of the supplementary material.} correctly, hence, the proposed optimizations cannot be applied. For the rest of the experiments, we have verified that the results are the same for all the approaches in terms of cardinality and correctness. 
+\begin{figure}[t!]
+ \centering
+    \subfloat[SDM-RDFizer - 25\% of duplicates]{
+        \includegraphics[width=0.45\columnwidth]{figures/veracity25_sdmrdfizer_complex.png}
+            \label{fig:vera25_sdmrdfizer_mapsdi}}
+    \subfloat[SDM-RDFizer - 75\% of duplicates]{
+        \includegraphics[width=0.45\columnwidth]{figures/veracity75_sdmrdfizer_complex.png}
+            \label{fig:vera75_sdmrdfizer_MapSDI}}
+\\            
+    \subfloat[RMLMapper - 25\% of duplicates]{
+        \includegraphics[width=0.45\columnwidth]{figures/veracity25_rmlmapper_complex.png}
+            \label{fig:vera25_rmlmapper_MapSDI}}  
+    \subfloat[RMLMapper - 75\% of duplicates]{
+        \includegraphics[width=0.45\columnwidth]{figures/veracity75_rmlmapper_complex.png}
+            \label{fig:vera75_rmlmapper_MapSDI}} 
+\caption{{\bf Total execution time for complex functions 25-75\% of duplicates.} SDM-RDFizer and RMLMapper executing complex functions in RML+FnO mappings and with FunMap and FunMap$^-$.}
+    \label{fig:exp-complex}
+\end{figure}
+The results obtained by the application of SDM-RDFizer with the repetition of simple functions (Figures \ref{fig:vera25_sdmrdfizer} and \ref{fig:vera75_sdmrdfizer}) reflect an improvement of the execution time when FunMap is applied in the process. With the growth of number of duplicates and repeated functions, the difference between the performance of SDM-RDFizer**(RML+FnO) and FunMap+SDM-RDFizer increases. Using this engine, FunMap$^-$ shows the same behavior as FunMap, however, in the case of having a large number of duplicates and a few repeated functions FunMap$^-$ does not improve the performance of SDM-RDFizer**(RML+FnO). 
+In the case of using RMLMapper (Figures \ref{fig:vera25_rmlmapper} and \ref{fig:vera75_rmlmapper}), we observe that the results obtained together with FunMap$^-$ (i.e., DTR1 optimization) do not show better performance than RMLMapper**(RML+FnO). DTR1 which only focuses on transforming functions, delegates the removal of the duplicates to the engine which is not accomplished efficiently by RMLMapper. However, in FunMap+RMLMapper, that includes DTR1 and DTR2 optimizations, duplicates are removed before the execution of the RML mappings and leads to obtain the results that clearly show improvements with respect to the baseline. In the same manner as the SDM-RDFizer, the number of repetitions of the functions affects the execution time of the RMLMapper**(RML+FnO), while FunMap maintains similar execution times. Finally, RocketRML (Figures \ref{fig:vera25_rocketrml} and \ref{fig:vera75_rocketrml}) seems not to be affected by the number of duplicates over the input data, obtaining similar execution times for 25\% and 75\% rate for RocketRML**(RML+FnO). However, the number of repetitions over functions impacts the performance of RocketRML**(RML+FnO), increasing the total execution time. The incorporation of DTR1 (i.e., FunMap$^-$+RocketRML) and DTR2 (i.e., FunMap + RocketRML) enhances the performance and scalability during the construction of the knowledge graph, obtaining a similar behavior as the other two tested engines. 
+
+The effect of function complexity over SDM-RDFizer can be observed in Figures \ref{fig:vera25_sdmrdfizer_mapsdi} and \ref{fig:vera75_sdmrdfizer_MapSDI}. Whenever the number of repetitions is low (4-6), the join with multiple conditions affects FunMap$^-$ + SDM-RDFizer, obtaining worse results than SDM-RDFizer**(RML+FnO). However, if repetitions increase (8-10), DTR1 empowers SDM-RDFizer**(RML+FnO) due the reduction of repeated operations during the evaluation of the mappings. Conversely, FunMap+SDM-RDFizer exhibits better results than SDM-RDFizer**(RML+FnO) in all the testbeds. Finally, the behavior of RMLMapper -- when it has to execute complex transformation functions (Figures \ref{fig:vera25_rmlmapper_MapSDI} and \ref{fig:vera75_rmlmapper_MapSDI})-- is affected in terms of execution time for the configuration FunMap$^-$+RMLMapper in comparison to the case of simple functions. As similar as SDM-RDFizer, the join with several conditions is impacting the performance. However, together with data transformation optimizations, FunMap+RMLMapper outperforms the baseline. 
+
+The experimental results on RDBs show even more significant improvement in the performance of both RMLMapper and SDM-RDFizer in the presence of FunMap. In FunMap+RMLMapper, applying \verb|join|s in the SQL queries that define the \verb|logicalSource|s instead of using \verb|joinCondition|s reduces execution time by up to a factor of 18. These results evidence that \verb|joinCondition|s are not efficiently implemented by RMLMapper, and explain why FunMap+RMLMapper is showing less improvement compared to FunMap+SDM-RDFizer in \autoref{fig:exp-complex}. Moreover, FunMap+SDM-RDFizer successfully performs on the large-sized relational dataset of 1.3GB in 5,670.67 seconds, while SDM-RDFizer**(RML+FnO) cannot create the KG and times out after 10,000 seconds.
+
+In overall, we observe that the configurations that interpret RML+FnO mappings directly are affected by the repetition of the functions and the degree of data duplicates, i.e., execution time monotonically increases with number of functions and data duplication degree. In contrast, the incorporation of FunMap to the engines shows less fluctuated behavior when the data duplication rate increases. Additionally, the studied engines handle the repetition of the functions during the construction of the knowledge graph thanks to the pushing down of the execution of the functions directly over the dataset.
+In summary, the observed results indicate that the FunMap heuristics improve the performance of data integration systems and generate solutions to the problem of scaled-up knowledge graph construction. The effectiveness of the proposed transformations has been empirically demonstrated on various RML+FnO and RML-compliant engines. However, we observe that there are cases where the application of DTR1 alone is not enough (i.e., FunMap$^-$), being required the applications of all the transformations (i.e., DTRs and MTRs) to provide an effective solution. 
+
+
+\subsection{Conclusions and Future Work}
+\label{sec:conclusions}
+We addressed the problem of scaled-up KG creation in complex data integration systems, i.e., systems with large data sources, high data duplication rate, and functional mappings. 
+We presented a heuristic-based approach for efficiently evaluating data integration systems with data sources in diverse formats (e.g., CSV or relational). The proposed heuristics are implemented in FunMap, an interpreter of RML+FnO, that converts data integration systems in RML+FnO into equivalent data integration systems specified in RML. Besides shaping an RML-engine independent interpreter of RML+FnO, FunMap generates data integration systems that enhance RML-compliant engines whenever transformation functions are repeatedly used, and data sources are large and have highly-duplicated data. Empirical evaluations of the combination of FunMap with RML-compliant engines suggest that the execution time of RML+FnO can be reduced by up to a factor of 18. Thus, FunMap widens the repertory of tools to scale up knowledge graphs to the enormous increase of incoming data and ease the development of real-world KG applications. As the main limitation, FunMap can only be applied with an RML-compliant engine which supports either \verb|joinCondition| or RDB on the backend. We plan to devise cost-based optimization approaches that, together with the proposed heuristics, allow for the generation of the best solution for a complex data integration system in RML+FnO. 
