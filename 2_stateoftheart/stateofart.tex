@@ -4,30 +4,48 @@
 In this chapter, we introduce the current state of the art in knowledge graph construction using declarative mapping rules. We provide an overview of approaches, techniques and methodologies for constructing and querying (virtual) knowledge graphs based on semantic web technologies. We describe the declarative annotations and mapping languages specifications that have been proposed to construct these kind of data models together with their main benefits. Finally, we present the current methodologies to evaluate the quality of knowledge graph construction engines such as benchmarkings and test-cases.
 
 
-\section{RDF: Resource Description Framework}
+\section{Ontology-Based Data Access and Integration}
+
+
+\section{Representation and Query Language for the Semantic Web}
+
+\subsection{RDF: Resource Description Framework}
 
 \subsection{SPARQL}
 
-\section{Data Integration in the Semantic Web}
-
-\section{KGC Annotations: Mapping Rules and Metadata}
-
-\subsection{R2RML: W3C Recommendation}
-
-\subsection{RML: Extending R2RML for Heterogeneous Data}
-
-\subsection{Transformation Functions in Mappings}
-
-\subsection{Metadata for data on the web}
 
 
-\section{KGC from Heterogeneous Data Sources}
 
-\section{Evaluation of KGC approaches}
+\section{Annotations in Knowledge Graph Construction}
+One of the main components for the construction of knowledge graphs are the annotations. Additionally to the mapping rules, that relate the target model with the input sources in a typical data integration system definition, we include in the annotations set the constraints concept. In a DIS, the constrains property allows to: i) define ad-hoc transformation functions that permit the cleaning and preparation of the input data; ii) definition of metadata annotations to describe the content of the input source. This property is essential during a knowledge graph construction process as it is able to deal with the typical features of heterogeneous data sources such as the absence of a well-defined and fixed data schema, a normalized database instance or the non-explicit declarations of relations among the sources. We start this section discussing existing approaches for the design of mappings. Then, we describe the current mapping language specifications and their standardization through the W3C. Finally, we present approaches to define, declaratively, constraints over a DIS.
+
+\subsection{Mapping Rules}
+The mapping layer contains information about how the input sources are related with the target model. There are two basic approaches for defining mapping rules in a data integration system: Local as a View (LAV) and Global as a View (GAV). In semantic web, the usual followed approach to define this rules is the Global as View one. We now provide a description of each proposals more in deatil.
+
+\subsubsection{Local as a View Mapping rules (LAV)}
+In \citep{ullman1997information}
+
+\subsubsection{Global as a View Mapping Rules (GAV)}
+
+
+\subsubsection{R2RML: W3C Recommendation}
+
+\subsubsection{RML: Extending R2RML for Heterogeneous Data}
+
+\subsection{Declarative Constraints: Transformation Functions and Metadata}
+
+\subsubsection{Transformation Functions in Mappings}
+
+\subsubsection{Metadata for data on the web}
+
+
+\section{Knowledge Graph Construction Engines}
+
+\section{Evaluation of Knowledge Graph Construction}
 
 \subsection{Test-Cases}
 \subsection{Benchmarks}
 
 
 
-\section{Summary}
+\section{Conclusions}
