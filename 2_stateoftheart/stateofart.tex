@@ -20,12 +20,16 @@ In this chapter, we introduce the current state of the art in knowledge graph co
 One of the main components for the construction of knowledge graphs are the annotations. Additionally to the mapping rules, that relate the target model with the input sources in a typical data integration system definition, we include in the annotations set the constraints concept. In a DIS, the constrains property allows to: i) define ad-hoc transformation functions that permit the cleaning and preparation of the input data; ii) definition of metadata annotations to describe the content of the input source. This property is essential during a knowledge graph construction process as it is able to deal with the typical features of heterogeneous data sources such as the absence of a well-defined and fixed data schema, a normalized database instance or the non-explicit declarations of relations among the sources. We start this section discussing existing approaches for the design of mappings. Then, we describe the current mapping language specifications and their standardization through the W3C. Finally, we present approaches to define, declaratively, constraints over a DIS.
 
 \subsection{Mapping Rules}
-The mapping layer contains information about how the input sources are related with the target model. There are two basic approaches for defining mapping rules in a data integration system: Local as a View (LAV) and Global as a View (GAV). In semantic web, the usual followed approach to define this rules is the Global as View one. We now provide a description of each proposals more in deatil.
+The mapping layer contains information about how the input sources are related with the target model. There are two basic approaches for defining mapping rules in a data integration system: Local as a View (LAV) and Global as a View (GAV). In semantic web, the usual followed approach to define this rules is the Global as View one. We now provide a description of each proposals more in detail.
 
 \subsubsection{Local as a View Mapping rules (LAV)}
-In \citep{ullman1997information}
+In \citep{ullman1997information} the elements of the source schema $S$ are mapped  to a query $Q_G$ over the target schema $G$. The main benefits of this approach is that it supports continuous changes of the source schema (e.g., adding new sources or modify their underlying representation) since there is no need to change the query processing component. Thus, LAV is usually useful when the global schema $G$ is stable but the local schema $S$ may suffer modifications over the time.
+
+
+ToDo: ADD EXAMPLE
 
 \subsubsection{Global as a View Mapping Rules (GAV)}
+In \citep{halevy2001answering} each element of the global schema $G$ is mapped to a query over $Q_S$ the source schema $S$. 
 
 
 \subsubsection{R2RML: W3C Recommendation}
