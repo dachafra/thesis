@@ -1,10 +1,13 @@
 \chapter{State of the Art}
 \label{chap:soa}
 
-In this chapter, we introduce the current state of the art in knowledge graph construction using declarative mapping rules. We provide an overview of approaches, techniques and methodologies for constructing and querying (virtual) knowledge graphs based on semantic web technologies. We describe the declarative annotations and mapping languages specifications that have been proposed to construct these kind of data models together with their main benefits. Finally, we present the current methodologies to evaluate the quality of knowledge graph construction engines such as benchmarkings and test-cases.
+In this chapter, we introduce the current state of the art in knowledge graph construction using declarative mapping rules. We provide an overview of approaches, techniques and methodologies for constructing and querying (virtual) knowledge graphs based on semantic web technologies. We describe the declarative annotations and mapping languages specifications that have been proposed to construct these kind of data models together with their main features. We also present the current methodologies to evaluate the quality of knowledge graph construction engines such as benchmarkings and test-cases. 
+
+More in detail, in Section \ref{sec:soa_integration} we describe the foundations of data integration concept and its relation with the theoretical contributions where the global schema is defined by an ontology. Section \ref{sec:soa_representation} summarizes the semantic web technologies used for representing and querying data (i.e., the RDF model and the SPARQL query language). Section \ref{sec:soa_annotations} presents an overview of the most important contributions for representing declarative annotations using semantic web technologies, where we are focused on the representations of mapping rules and data constraints. Additionally, Section \ref{sec:soa_engines} presents knowledge graph construction systems and their corresponding optimizations while Section \ref{sec:soa_evaluations} finally, describes the evaluation methodologies for these approaches. We conclude in Section \ref{sec:soa_conclusions} with a set of motivations and gaps that will help to understand the contributions of this thesis.
 
 
 \section{Data Integration and OBDA}
+\label{sec:soa_integration}
 A data integration system (DIS) is defined as the process of making available a set of different sources through a common view~\citep{Lenzerini02}. Formally, it is described as $DIS$ = $\langle \mathcal{G}, \mathcal{S}, \mathcal{M} \rangle$, where:
 \begin{itemize}
     \item $\mathcal{G}$ is the \textit{global schema}, expressed in a language $\mathcal{L_G}$ over an alphabet $\mathcal{A_G}$.
@@ -19,7 +22,7 @@ Different types of data integration systems have been proposed. Data warehouses~
 Ontology based data access (OBDA) and integration (OBDI) are data integration systems where the global schema is defined by an ontology~\citep{poggi2008linking}. The formal framework presented in~\citep{xiao2018obdasurvey} defines an OBDA specification as a tuple $P$ = $\langle O,S,M\rangle$ where $O$ is an ontology, $S$ is the source schema, and $M$ a set of mappings. Additionally, an OBDA instance is defined as a tuple $PI$ = $\langle P,D\rangle$ where P is an OBDA specification and $D$ is a data instance conforming to $S$. The main difference between OBDA and OBDI systems is that in OBDA $D$ is fixed to an specific data format, while OBDI extends $D$ to cover heterogeneous data sources and formats. In both ontology-based approaches, two different alternatives exist to enable data access: (1) those where data are materialized taking into account the mappings and the ontologies which can be seen as a ontology-based ETL process, and (2) those where the transformation is done on the queries, which can then be evaluated on the original data sources, so, it can be defined as a new kind of mediator system. In this work we refer to the first alternative as   a materialized knowledge graph construction process, while the second alternative is defined as a virtual knowledge graph construction one. As we are focused on creating KG from heterogeneous data sources, both alternatives can be described as an OBDI approach.
 
 \section{Representation and Query Language for the Semantic Web}
-
+\label{sec:soa_representation}
 \subsection{RDF: Resource Description Framework}
 
 \subsection{SPARQL}
@@ -28,6 +31,7 @@ Ontology based data access (OBDA) and integration (OBDI) are data integration sy
 
 
 \section{Annotations in Knowledge Graph Construction}
+\label{sec:soa_annotations}
 One of the main components for the construction of knowledge graphs are the annotations. Additionally to the mapping rules, that relate the target model with the input sources in a typical data integration system definition, we include in the annotations set the constraints concept. In a DIS, the constrains property allows to: i) define ad-hoc transformation functions that permit the cleaning and preparation of the input data; ii) definition of metadata annotations to describe the content of the input source. This property is essential during a knowledge graph construction process as it is able to deal with the typical features of heterogeneous data sources such as the absence of a well-defined and fixed data schema, a normalized database instance or the non-explicit declarations of relations among the sources. We start this section discussing existing approaches for the design of mappings. Then, we describe the current mapping language specifications and their standardization through the W3C. Finally, we present approaches to define, declaratively, constraints over a DIS.
 
 \subsection{Mapping Rules}
@@ -44,7 +48,20 @@ Global as view are defined in \citep{halevy2001answering}, where each element of
 ToDO: ADD EXAMPLE
 
 \subsubsection{R2RML: W3C Recommendation}
-Since 2012, R2RML 
+Since 2012, R2RML is a W3C recommendation to declarative declare mapping rules between RDF and RDB. These rules are defined in an R2RML mapping document, which is formed by a set of Triples Maps (\texttt{rr:TriplesMap}). Usually, each Triple Map defines the rules for generating the entities and their properties of a defined class in the ontology and are defined as:
+\begin{itemize}
+    \item one logical table (\texttt{rr:LogicalTable}) that specifies the source relational table/view
+    \item one subject map (\texttt{rr:SubjectMap}) that specifies how to generate the subjects of the triples and the corresponding class.
+    \item from zero to multiple predicate-object maps (\texttt{rr:PredicateObjectMap}). Predicate-object map is formed by one or many predicate maps (\texttt{rr:PredicateMap}), and one to many object maps (\texttt{rr:ObjectMap}) or reference-object maps (\texttt{rr:RefObjectMap}). This last one is used when joins among logical sources are defined.
+\end{itemize}
+
+Figure \ref{fig:r2rml-structure} shows the basic structure of an R2RML Triples Map, with the relations between its main properties and their cardinalities. 
+\begin{figure}[!h]
+\centering
+\includegraphics[width=\textwidth]{figures/state-of-the-art/R2RML-structure.pdf}
+\caption{R2RML structure with its relevant properties}
+\label{fig:r2rml-structure}
+\end{figure}
 
 \subsubsection{RML: Extending R2RML for Heterogeneous Data}
 
@@ -92,8 +109,10 @@ ToDo: add FnO examples
 
 
 \section{Knowledge Graph Construction Engines}
+\label{sec:soa_engines}
 
 \section{Evaluation of Knowledge Graph Construction}
+\label{sec:soa_evaluations}
 
 \subsection{Test-Cases}
 \subsection{Benchmarks}
@@ -101,3 +120,4 @@ ToDo: add FnO examples
 
 
 \section{Conclusions}
+\label{sec:soa_conclusions}
