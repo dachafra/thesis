@@ -48,7 +48,7 @@ Global as view are defined in \citep{halevy2001answering}, where each element of
 ToDO: ADD EXAMPLE
 
 \subsubsection{R2RML: W3C Recommendation}
-Since 2012, R2RML is a W3C recommendation to declarative declare mapping rules between RDF and RDB. These rules are defined in an R2RML mapping document, which is formed by a set of Triples Maps (\texttt{rr:TriplesMap}). Usually, each Triple Map defines the rules for generating the entities and their properties of a defined class in the ontology and are defined as:
+Since 2012, R2RML is a W3C recommendation to declarative declare mapping rules between RDF and RDB~\citep{R2RML}. These rules are defined in an R2RML mapping document, which is formed by a set of Triples Maps (\texttt{rr:TriplesMap}). Usually, each Triple Map defines the rules for generating the entities and their properties of a defined class in the ontology and are defined as:
 \begin{itemize}
     \item one logical table (\texttt{rr:LogicalTable}) that specifies the source relational table/view
     \item one subject map (\texttt{rr:SubjectMap}) that specifies how to generate the subjects of the triples and the corresponding class.
@@ -72,7 +72,7 @@ Figure \ref{fig:soa_r2rml-structure} shows the basic structure of an R2RML Tripl
 \label{fig:soa_termmap-structure}
 \end{figure}
 
-We provide a complete example of the construction of a knowledge graph through an R2RML mapping. The input table (Figure \ref{fig:soa_csv}) represents information about the stop times for a giving trip of the Madrid's metro system. It provides the corresponding identifier for the trip and each stop together with the pickup time and type. Figure \ref{fig:soa_r2rml} shows the R2RML mapping for transforming the input table to a RDF dataset following the LinkedGTFS\footnote{\url{https://lov.linkeddata.es/dataset/lov/vocabs/gtfs}} ontology. We can observe that the subject map uses a \texttt{rr:template} with reference to three different columns of the table to generate unique identifiers for the IRIs. The set of \texttt{rr:PredicateObjectMap} (POM) defines the rules to generate three different properties of the \texttt{gtfs:StopTime} class. The \texttt{gtfs:arrivalTime} POM uses the \texttt{rr:dataType} property to declare the type of the input data, \texttt{gtfs:pickupType} uses the \texttt{rr:template} to generate an uri-based literal in the output dataset, and finally, \texttt{gtfs:trip} predicate has a \texttt{rr:RefObjectMap} to generate its corresponding object, referencing to the corresponding IRI trip defined in antoher TriplesMap. Finally, the output RDF dataset is shown in \ref{fig:soa_rdf}.
+We provide a complete example of the construction of a knowledge graph through an R2RML mapping. The input table (Figure \ref{fig:soa_csv}) represents information about the stop times for a giving trip of the Madrid's metro system. It provides the corresponding identifier for the trip and each stop together with the pickup time and type. Figure \ref{fig:soa_r2rml} shows the R2RML mapping for transforming the input table to a RDF dataset following the LinkedGTFS\footnote{\url{https://lov.linkeddata.es/dataset/lov/vocabs/gtfs}} ontology. We can observe that the subject map uses a \texttt{rr:template} with reference to three different columns of the table to generate unique identifiers for the IRIs. The set of \texttt{rr:PredicateObjectMap} (POM) defines the rules to generate three different properties of the \texttt{gtfs:StopTime} class. The \texttt{gtfs:arrivalTime} POM uses the \texttt{rr:dataType} property to declare the type of the input data, \texttt{gtfs:pickupType} uses the \texttt{rr:template} to generate an uri-based literal in the output dataset, and finally, \texttt{gtfs:trip} predicate has a \texttt{rr:RefObjectMap} to generate its corresponding object, referencing to the corresponding IRI trip defined in antoher TriplesMap. Finally, the output RDF dataset is shown in Figure \ref{fig:soa_rdf}.
 
 \begin{figure}[!h]
 \centering
@@ -99,12 +99,13 @@ We provide a complete example of the construction of a knowledge graph through a
 
 
 \subsubsection{RML: Extending R2RML for Heterogeneous Data}
-
+The RDF Mapping Language (RML)~\citep{dimou2014rml} proposes to extend the R2RML mapping specification to cover other kinds of data formats such as CSV, XML or JSON, hence, this specification is one of the most used for constructing knowledge graph from heterogeneous data sources. In this section we first explain the main differences between RML and R2RML and then we describe other mapping specifications or approaches that are able to construct KGs from heterogeneous data sources.
 
 
 \begin{table}[h]
 \centering
-\caption{\label{tab:rmlvsr2rml} The differences between R2RML and RML}
+\caption{The differences between R2RML and RML}
+\label{tab:soa_rmlvsr2rml}
 \begin{tabular}{l|c|c}
                                           & \textbf{R2RML}                      & \textbf{RML}                         \\
 \hline                                          
@@ -123,6 +124,7 @@ We provide a complete example of the construction of a knowledge graph through a
 \end{table}
 
 
+\noindent Summarized in Table \ref{tab:soa_rmlvsr2rml}, the main differences between R2RML and RML are:
 
 \noindent\textbf{{Logical Source.}} A Logical Source extends R2RML's Logical Table and describes the input data source used to generate the RDF. The Logical Table is only able to describe relational databases,whereas the Logical Source defines different heterogeneous data sources, including relational databases.
 
