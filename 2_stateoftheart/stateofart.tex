@@ -55,19 +55,54 @@ Since 2012, R2RML is a W3C recommendation to declarative declare mapping rules b
     \item from zero to multiple predicate-object maps (\texttt{rr:PredicateObjectMap}). Predicate-object map is formed by one or many predicate maps (\texttt{rr:PredicateMap}), and one to many object maps (\texttt{rr:ObjectMap}) or reference-object maps (\texttt{rr:RefObjectMap}). This last one is used when joins among logical sources are defined.
 \end{itemize}
 
-Figure \ref{fig:r2rml-structure} shows the basic structure of an R2RML Triples Map, with the relations between its main properties and their cardinalities. 
 \begin{figure}[!h]
 \centering
 \includegraphics[width=\textwidth]{figures/state-of-the-art/R2RML-structure.pdf}
 \caption{R2RML structure with its relevant properties}
-\label{fig:r2rml-structure}
+\label{fig:soa_r2rml-structure}
 \end{figure}
+
+Figure \ref{fig:soa_r2rml-structure} shows the basic structure of an R2RML Triples Map, with the relations between its main properties and their cardinalities. \texttt{rr:SubjectMap}, \texttt{rr:PredicateMap} and \texttt{rr:ObjectMap} are defined as term maps (\texttt{rr:TerMap}. This property is used to generate the desirable RDF terms, either as IRIs (\texttt{rr:IRI}) Blank Nodes (\texttt{rr:BlankNode}) or literal (\texttt{rr:Literal}). The values of the term maps can be specify using the following properties: \texttt{rr:Constant} for constant values, \texttt{rr:Column} for values obtained directly from a column of a table or \texttt{rr:Template} for the ones that are a concatenation between a string and a column reference, for example, to generate subject IRIs. Furthermore, additional information can be provided such as the language of a literal, using the \texttt{rr:Language} property, or its corresponding datatype with \texttt{rr:Datatype}. Figure \ref{fig:soa_termmap-structure} gives an overview of the R2RML term map.
+
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.7\textwidth]{figures/state-of-the-art/term-map.png}
+\caption{R2RML \texttt{rr:TermMap} overview}
+\label{fig:soa_termmap-structure}
+\end{figure}
+
+We provide a complete example of the construction of a knowledge graph through an R2RML mapping. The input table (Figure \ref{fig:soa_csv}) represents information about the stop times for a giving trip of the Madrid's metro system. It provides the corresponding identifier for the trip and each stop together with the pickup time and type. Figure \ref{fig:soa_r2rml} shows the R2RML mapping for transforming the input table to a RDF dataset following the LinkedGTFS\footnote{\url{https://lov.linkeddata.es/dataset/lov/vocabs/gtfs}} ontology. We can observe that the subject map uses a \texttt{rr:template} with reference to three different columns of the table to generate unique identifiers for the IRIs. The set of \texttt{rr:PredicateObjectMap} (POM) defines the rules to generate three different properties of the \texttt{gtfs:StopTime} class. The \texttt{gtfs:arrivalTime} POM uses the \texttt{rr:dataType} property to declare the type of the input data, \texttt{gtfs:pickupType} uses the \texttt{rr:template} to generate an uri-based literal in the output dataset, and finally, \texttt{gtfs:trip} predicate has a \texttt{rr:RefObjectMap} to generate its corresponding object, referencing to the corresponding IRI trip defined in antoher TriplesMap. Finally, the output RDF dataset is shown in \ref{fig:soa_rdf}.
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/state-of-the-art/Stop_times CSV.pdf}
+\caption{Excerpt of a Stop-times table}
+\label{fig:soa_csv}
+\end{figure}
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/state-of-the-art/R2RML-example.pdf}
+\caption{R2RML mapping for stop-times table}
+\label{fig:soa_r2rml}
+\end{figure}
+
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/state-of-the-art/RDF from Stop_times.pdf}
+\caption{Output RDF dataset after parsing the R2RML document}
+\label{fig:soa_rdf}
+\end{figure}
+
+
 
 \subsubsection{RML: Extending R2RML for Heterogeneous Data}
 
 
 
-\begin{table}[]
+\begin{table}[h]
 \centering
 \caption{\label{tab:rmlvsr2rml} The differences between R2RML and RML}
 \begin{tabular}{l|c|c}
