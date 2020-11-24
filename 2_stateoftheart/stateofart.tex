@@ -157,9 +157,9 @@ There are a set of mapping languages for constructing knowledge graphs that incl
     \item \textbf{RDF lists and containers.} In formats such as JSON is very common to have values that are modeled as arrays of data. This kind of data structures are also allowed in RDF using \texttt{rdfs:Container} with its corresponding subclasses \texttt{rdf:Bag}, \texttt{rdf:Seq} and \texttt{rdf:Alt} when there is not order, and the \texttt{rdf:List} class is used when there is an order. xR2RML extends the term map types including \texttt{xrr:RdfList}, \texttt{xrr:RdfBag}, \texttt{xrr:RdfSeq} and \texttt{xrr:RdfAlt} that allow the construction of these data structures in RDF.
 \end{itemize}
 
-\noindent\textbf{SPARQL-Generate.} 
+\noindent\textbf{SPARQL-Generate.} The solution proposed in~\citep{lefranccois2017sparql} presents a template-based language to construct knowledge graphs extending SPARQL 1.1. It exploits the representation capabilities from SPARQL to declare the transformation rules inside the query. The approach of using SPARQL to define the transformation rules has been also proposed in previous approaches focused on specific data formats such as Tarql for CSV files\footnote{\url{https://tarql.github.io/}}. The target users for SPARQL-Generate are knowledge graph engineers who already know SAPRQL and the target ontologies, so they do not have to learn a mapping language to perform the data integration process. However, this kind of solutions follow a procedural approach instead of a declarative one, to define the rules. Therefore, and in comparison with the rest of proposals, they cannot exploit the benefits of declarative definition of rules such as the maintainability, reproducibility and understandability.
 
-\noindent\textbf{ShExML.}
+\noindent\textbf{ShExML.} 
 
 
 
