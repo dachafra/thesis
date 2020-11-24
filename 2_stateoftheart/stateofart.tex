@@ -23,7 +23,36 @@ Ontology based data access (OBDA) and integration (OBDI) are data integration sy
 
 \section{Representation and Query Language for the Semantic Web}
 \label{sec:soa_representation}
+In this section, we provide a overview of the core semantic web technologies that have a relevant role during a knowledge graph construction process. We discuss in detail the Resource Description Framework (RDF)~\citep{RDF}, used for modeled the target data model in the DIS (i.e., the ontology), but also usually used for declaring the mapping rules~\citep{R2RML,dimou2014rml,michel2015translation}. We also provide a detailed explanation of the SPARQL query language~\citep{SPARQL} as it is an essential input for the virtual knowledge graph construction techniques (e.g., translating SPARQL to SQL).
+
 \subsection{RDF: Resource Description Framework}
+The Resource Description Framework (RDF)~\citep{RDF} is the basic data model used in the semantic web. Basically, RDF is defined by a set of \textit{triples}, where each triple is represented in the form of $<s,p,o>$ where $s$ is the subject, $p$ the predicate and $o$ the object. One of the main features of RDF is the used of URIs to represent concepts and the relationships between them. This idea allows to have unique identifiers across the web for each resource. Assuming that there are a pairwise disjoint infinite $I$, $B$ and $L$ (IRIs, blank nodes and literals respectively), we can formally defined an RDF triple as $(s,p,o) \in (I \cup B) \times I \times (I \cup B \cup L)$. Additionally, we can defined $G$ as an RDF graph composed by a set of RDF triples.
+
+Listing \ref{list:soa_rdf_example} shows an example of an RDF graph with a set of triples in the transport domain (shown in its graphical representation in Figure \ref{fig:soa_rdf_example}). As we can observe, there are, in total, 4 different triples (or statements), all of them with the same subject, defined using the URI \textit{http://transport.org/trip/1}. We can also observe that all the predicates of the triples (e.g., http://vocab.gtfs.org/terms\#stop) are also defined by an URI. More in detail, the first triple declares that \textit{http://transport.org/trip/1} is a trip defined in the LinkedGTFS vocabulary\footnote{\url{http://vocab.gtfs.org/terms}}. The predicate \texttt{rdf:type} is used in the RDF data model for classify the resources. Then, predicates \texttt{gtfs:shortName} and \texttt{gtfs:wheelchair} represent the information about the name of the trip and if it is accessible or not using a wheelchair. The objects of these two triples are literals in RDF that can be either simple string (``Puerta del Sur'') or typed literal (``false''$\hat{\;}\hat{\;}$xsd:boolean). The typed literals contain data values with a tag for representing its data type. Finally, \texttt{gtfs:stop} indicates one of the trips stops, using and URI, which means that the stop is also a resource. 
+
+
+\begin{lstlisting}[float,caption=Example of RDF graph,frame=tlrb,label={list:soa_rdf_example}, columns=fullflexible]
+@prefix gtfs: <http://vocab.gtfs.org/terms#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://transport.org/trip/1> rdf:type gtfs:Trip .
+<http://transport.org/trip/1> gtfs:stop <http://transport.org/stop/360> .
+<http://transport.org/trip/1> gtfs:shortName "Puerta del Sur" .
+<http://transport.org/trip/1> gtfs:wheelchair "false"^^xsd:boolean .
+\end{lstlisting}
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=\textwidth]{figures/state-of-the-art/RDF.pdf}
+\caption{Graphical representation of an RDF Graph}
+\label{fig:soa_rdf_example}
+\end{figure}
+
+
+The W3C provide several formats to serialize an RDF graph. RDF/XML\footnote{\url{https://www.w3.org/TR/rdf-syntax-grammar/}} is the first serialization proposed and it is supported by XML. Notation 3 (N3) provides a human readable serialization. N-Triples\footnote{\url{https://www.w3.org/TR/n-triples/}} and Turtle\footnote{\url{https://www.w3.org/TR/turtle/}} are subsets of N3, widely adopted in the semantic web. Finally, the last serialization that has been incorporated as W3C recommendation is JSON-LD\footnote{\url{https://www.w3.org/TR/json-ld11/}}. Since it is based on JSON, it facilitates the consumption of RDF data to developers and practitioners as it encapsulates the RDF in a standard JSON document. There are other serialization of RDF that are not recommended by W3C but are highly adopted for specific purposes. For example, HDT~\cite{fernandez2013binary} is a binary serialization of RDF for publishing and exchanging RDF data at large scale.
+
+
+
 
 \subsection{SPARQL}
 
@@ -35,7 +64,7 @@ Ontology based data access (OBDA) and integration (OBDI) are data integration sy
 One of the main components for the construction of knowledge graphs are the annotations. Additionally to the mapping rules, that relate the target model with the input sources in a typical data integration system definition, we include in the annotations set the constraints concept. In a DIS, the constrains property allows to: i) define ad-hoc transformation functions that permit the cleaning and preparation of the input data; ii) definition of metadata annotations to describe the content of the input source. This property is essential during a knowledge graph construction process as it is able to deal with the typical features of heterogeneous data sources such as the absence of a well-defined and fixed data schema, a normalized database instance or the non-explicit declarations of relations among the sources. We start this section discussing existing approaches for the design of mappings. Then, we describe the current mapping language specifications and their standardization through the W3C. Finally, we present approaches to define, declaratively, constraints over a DIS.
 
 \subsection{Mapping Rules}
-The mapping layer contains information about how the input sources are related with the target model. There are two basic approaches for defining mapping rules in a data integration system: Local as a View (LAV) and Global as a View (GAV). In semantic web, the usual followed approach to define this rules is the Global as View one. We now provide a description of each proposals more in detail.
+The mapping layer contains information about how the input sources are related with the target model. There are two basic approaches for defining mapping rules in a data integration system: Local as a View (LAV) and Global as a View (GAV). In semantic web, the usual approach followed to define this rules is the Global as View one. We now provide a description of each proposals more in detail.
 
 \subsubsection{Local as a View Mapping rules (LAV)}
 In \citep{ullman1997information} the elements of the source schema $S$ are mapped  to a query $Q_G$ over the target schema $G$. The main benefits of this approach is that it supports continuous changes of the source schema (e.g., adding new sources or modify their underlying representation) since there is no need to change the query processing component. Thus, LAV is usually useful when the global schema $G$ is stable but the local schema $S$ may suffer modifications over the time. However, one of its main disadvantages is that cannot represent source $S$ information if it is not modeled in the global schema, hence, the approach usually provides partial answers for a query $Q_G$. Query translation following this approach is not a trivial process, as the $Q_G$ has to be translated to an equivalent query over the source schema $S$. These techniques are usually known as query translation using views~\citep{halevy2001answering}.
@@ -159,7 +188,7 @@ There are a set of mapping languages for constructing knowledge graphs that incl
 
 \noindent\textbf{SPARQL-Generate.} The solution proposed in~\citep{lefranccois2017sparql} presents a template-based language to construct knowledge graphs extending SPARQL 1.1. It exploits the representation capabilities from SPARQL to declare the transformation rules inside the query. The approach of using SPARQL to define the transformation rules has been also proposed in previous approaches focused on specific data formats such as Tarql for CSV files\footnote{\url{https://tarql.github.io/}}. The target users for SPARQL-Generate are knowledge graph engineers who already know SAPRQL and the target ontologies, so they do not have to learn a mapping language to perform the data integration process. However, this kind of solutions follow a procedural approach instead of a declarative one, to define the rules. Therefore, and in comparison with the rest of proposals, they cannot exploit the benefits of declarative definition of rules such as the maintainability, reproducibility and understandability.
 
-\noindent\textbf{ShExML.} In~\citep{garcia2020shexml}, the authors proposes a solution based on the validation language for knowledge graphs, ShEx~\cite{prud2014shape}. Although it is based on this specification it uses its own syntax and grammar. In comparison to R2RML-based proposals, ShExML separates the declaration, how to extract the data from the input sources, to the shapes, transformation rules. The main objective of this proposal is to help users to create the rules, and it also provides a translation engine to transform ShExML rules to RML mappings.
+\noindent\textbf{ShExML.} In~\citep{garcia2020shexml}, the authors proposes a solution based on the validation language for knowledge graphs, ShEx~\citep{prud2014shape}. Although it is based on this specification it uses its own syntax and grammar. In comparison to R2RML-based proposals, ShExML separates the declaration, how to extract the data from the input sources, from the shapes, how to generate the desirable RDF graph. The main objective of this proposal is to help users to create the rules, and it also provides a translation engine to transform ShExML rules to RML mappings.
 
 
 \subsection{Declarative Constraints: Transformation Functions and Metadata}
