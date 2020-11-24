@@ -147,13 +147,17 @@ YARRRML~\citep{Heyvaert2018Declarative} is a serialization of the RML mappings b
 \label{fig:soa_yarrrml}
 \end{figure}
 
-\subsubsection{Other mapping rules for Knowledge Graph Construction}
+\subsubsection{Mapping rules with specific features}
+There are a set of mapping languages for constructing knowledge graphs that include a set of particular features. Instated of being a general solution to be applied in declarative manner to any kind of data format, there are some proposals that are focusing on providing support to concrete issues that can appear in some data formats or they extend other semantic web technologies for defining these rules such as SPARQL~\citep{SPARQL} or ShExML~\citep{prud2014shape}.  
 
-\noindent\textbf{Ontop Mappings.}
+\noindent\textbf{xR2RML.} The xR2RML proposal~\citep{michel2015translation} extends R2RML to describe mappings from common databases to RDB, focusing on NoSQL databases such as MongoDB. It also includes some of the properties from RML such as the \texttt{rml:iterator}. It contains three distinctive features to deal with issues that usually appear when hierarchical documents (XML or JSON) have to be mapped to an RDF model:
+\begin{itemize}
+    \item \textbf{Access to outer fields.} When a hierarchical structure has to parse to RDF, sometimes it is necessary to combine data from different levels of the tree. xR2RML incorporates the \texttt{xrr:pushDown} property with that aim. It allows the declaration of an external field outside the iterator defined, so it can be used in any part of the mapping. It is declared inside the logical source object with two properties. \texttt{xrr:reference} which defines the data reference of the value and \texttt{xrr:as} which declare the alias to be used within the mapping.  
+    \item \textbf{Dynamic language tag.} xR2RML extends the \texttt{rr:language} property from R2RML and replaces it by \texttt{xrr:languageReference}. This property allows to define the language of an object dynamically, using a reference that can get the value from the database.
+    \item \textbf{RDF lists and containers.} In formats such as JSON is very common to have values that are modeled as arrays of data. This kind of data structures are also allowed in RDF using \texttt{rdfs:Container} with its corresponding subclasses \texttt{rdf:Bag}, \texttt{rdf:Seq} and \texttt{rdf:Alt} when there is not order, and the \texttt{rdf:List} class is used when there is an order. xR2RML extends the term map types including \texttt{xrr:RdfList}, \texttt{xrr:RdfBag}, \texttt{xrr:RdfSeq} and \texttt{xrr:RdfAlt} that allow the construction of these data structures in RDF.
+\end{itemize}
 
-\noindent\textbf{xR2RML.}
-
-\noindent\textbf{SPARQL-Generate.}
+\noindent\textbf{SPARQL-Generate.} 
 
 \noindent\textbf{ShExML.}
 
