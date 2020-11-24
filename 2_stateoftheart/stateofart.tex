@@ -159,8 +159,7 @@ There are a set of mapping languages for constructing knowledge graphs that incl
 
 \noindent\textbf{SPARQL-Generate.} The solution proposed in~\citep{lefranccois2017sparql} presents a template-based language to construct knowledge graphs extending SPARQL 1.1. It exploits the representation capabilities from SPARQL to declare the transformation rules inside the query. The approach of using SPARQL to define the transformation rules has been also proposed in previous approaches focused on specific data formats such as Tarql for CSV files\footnote{\url{https://tarql.github.io/}}. The target users for SPARQL-Generate are knowledge graph engineers who already know SAPRQL and the target ontologies, so they do not have to learn a mapping language to perform the data integration process. However, this kind of solutions follow a procedural approach instead of a declarative one, to define the rules. Therefore, and in comparison with the rest of proposals, they cannot exploit the benefits of declarative definition of rules such as the maintainability, reproducibility and understandability.
 
-\noindent\textbf{ShExML.} 
-
+\noindent\textbf{ShExML.} In~\citep{garcia2020shexml}, the authors proposes a solution based on the validation language for knowledge graphs, ShEx~\cite{prud2014shape}. Although it is based on this specification it uses its own syntax and grammar. In comparison to R2RML-based proposals, ShExML separates the declaration, how to extract the data from the input sources, to the shapes, transformation rules. The main objective of this proposal is to help users to create the rules, and it also provides a translation engine to transform ShExML rules to RML mappings.
 
 
 \subsection{Declarative Constraints: Transformation Functions and Metadata}
