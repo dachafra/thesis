@@ -49,13 +49,46 @@ Listing \ref{list:soa_rdf_example} shows an example of an RDF graph with a set o
 \end{figure}
 
 
-The W3C provide several formats to serialize an RDF graph. RDF/XML\footnote{\url{https://www.w3.org/TR/rdf-syntax-grammar/}} is the first serialization proposed and it is supported by XML. Notation 3 (N3) provides a human readable serialization. N-Triples\footnote{\url{https://www.w3.org/TR/n-triples/}} and Turtle\footnote{\url{https://www.w3.org/TR/turtle/}} are subsets of N3, widely adopted in the semantic web. Finally, the last serialization that has been incorporated as W3C recommendation is JSON-LD\footnote{\url{https://www.w3.org/TR/json-ld11/}}. Since it is based on JSON, it facilitates the consumption of RDF data to developers and practitioners as it encapsulates the RDF in a standard JSON document. There are other serialization of RDF that are not recommended by W3C but are highly adopted for specific purposes. For example, HDT~\cite{fernandez2013binary} is a binary serialization of RDF for publishing and exchanging RDF data at large scale.
+The W3C provide several formats to serialize an RDF graph. RDF/XML\footnote{\url{https://www.w3.org/TR/rdf-syntax-grammar/}} is the first serialization proposed and it is supported by XML. Notation 3 (N3) provides a human readable serialization. N-Triples\footnote{\url{https://www.w3.org/TR/n-triples/}} and Turtle\footnote{\url{https://www.w3.org/TR/turtle/}} are subsets of N3, widely adopted in the semantic web. Finally, the last serialization that has been incorporated as W3C recommendation is JSON-LD\footnote{\url{https://www.w3.org/TR/json-ld11/}}. Since it is based on JSON, it facilitates the consumption of RDF data to developers and practitioners as it encapsulates the RDF in a standard JSON document. There are other serialization of RDF that are not recommended by W3C but are highly adopted for specific purposes. For example, HDT~\citep{fernandez2013binary} is a binary serialization of RDF for publishing and exchanging RDF data at large scale.
 
+\begin{lstlisting}[float,caption=Example of SPARQL query,frame=tlrb,label={list:soa_sparql_example}, columns=fullflexible]
+PREFIX gtfs: <http://vocab.gtfs.org/terms#> .
 
-
-
+SELECT ?name WHERE {
+    ?trip rdf:type gtfs:Trip .
+    ?trip gtfs:shortName ?name .
+}
+\end{lstlisting}
 \subsection{SPARQL}
+SPARQL is the W3C recommendation graph matching query language for RDF graphs. For defining the syntax of the query language we use the work presented in~\citep{perez2009semantics}, which defines the SPARQL graph patterns recursively as follows:
+\begin{itemize}
+    \item A tuple $(I \cup V) \times (I \cup V) \times (I \cup L \cup V)$ is a graph pattern (triple pattern if it is single), where $I$ is an IRI, $V$ is a variable and $L$ a literal.
+    \item If $P_1$ and $P_2$ are graph patterns, then expression ($P_1$ AND $P_2$), ($P_1$ OPT $P_2$) and ($P_1$ UNION $P_2$) are also graph patterns.
+    \item If $P$ is a graph pattern and $R$ is a SPARQL built-in condition, then ($P$ FILTER $R$) is also a graph pattern.
+    \item If $P$ is a graph pattern and $T$ is a finite set of variables, then (SELECT $T$ WHERE $P$) is a graph pattern.
+\end{itemize}
 
+Given the RDF graph shown in Figure \ref{fig:soa_rdf_example}, we might be interested in obtained the name of the trips of our graph. In Listing \ref{list:soa_sparql_example} we depict the SPARQL query used for obtaining the desirable result-set. The first part of the query defines the prefixes that can be used in the query. Then, the SELECT operator indicates the set of variables that will be projected from the graph pattern in query result-set (?name). Variables in SPARQL are represented using the question mark before the variable name (in the example ?name or ?trip are variables). During the query evaluation process, the variables are bound to the different values of the RDF graph that match with the triples pattern (formal definition described in~\citep{perez2009semantics}). In the example, the variable ?trip is bound to \textit{http://transport.org/trip/1 } as there are two facts in the graph that match with the two triple patterns defined in the query. Then, variable ?name is bound to ``Puerta del Sur'' and retrieved in the SPARQL result-set, usually represented in the form of a table where each column contains the values of each projected variable (see Table \ref{tab:soa_result_set}).
+
+
+
+
+% Please add the following required packages to your document preamble:
+% \usepackage{graphicx}
+\begin{table}[h]
+\centering
+\caption{SPARQL result-set example}
+\label{tab:soa_result_set}
+\resizebox{0.2\textwidth}{!}{%
+\begin{tabular}{|c|}
+\hline
+\textbf{?name} \\ \hline
+``Puerta del Sur'' \\ \hline
+\end{tabular}%
+}
+\end{table}
+
+The SPARQL built-in conditions are constructed using the elements of the set ($I \cup U$) and constants. These constants can take different values such as logical connectives ($\neg,\wedge,\vee $), inequality or equality symbols ($\leq,\geq,<,>,= $) and unary predicates such as bound, isBlank, isIRI, etc.~\citep{SPARQL}.
 
 
 
@@ -222,7 +255,10 @@ The Semantic Web community has also actively worked on the definition of several
 \subsection{Benchmarks}
 Several benchmarks have been developed to measure the performance of SPARQL to SQL query translation of OBDA engine techniques. The main two proposals in this field are the Berlin SPARQL Benchmark (BSBM)~\citep{bizer2009berlin} and the Norwegian Petroleum Directorate Benchmark (NPD)~\cite{lanti2015npd}. The BSBM benchmark sets its context in the e-commerce domain, and provides a configurable data generator and a set of SPARQL queries together with their equivalent SQL queries. This benchmark has been used to compare the query performance of native RDF stores with the performance of OBDA engines that execute virtualized SPARQL access against relational databases.
 
-Similar to BSBM, GTFS-Madrid-Bench uses a data generator to scale up the size of the dataset used during experimentation. Unlike BSBM, GTFS-Madrid-Bench is based on real data, using Madrid subway network data to be more specific, and this data is aligned with an established data model. Furthermore, BSBM does not measure specific requirements of OBDA systems, as it has been developed with the aim of comparing OBDA engines with  native RDF triple stores. Also, it considers only OBDA engines that access relational data sources. GTFS-Bench-Madrid considers data sources in multiple formats, thus it is tailored to evaluate and compare an assortment of OBDA engines and OBDI engines as well. Specific OBDA requirements have been analyzed by the authors of the NPD benchmark in the setting of a real-world scenario from the oil industry. The nine proposed requirements are related to the datasets, query sets, mappings and query languages. The benchmark includes a data ge~\citep{lantivig}, to generate scaled RDB instances that obtain a number of expected triples from a SPARQL query, using as inputs an ontology, an R2RML mapping document, and the schema of the RDB together with its corresponding instance. In our work we extend the workflow defined in NPD from OBDA to OBDI and hence define the requirements of an OBDI benchmark. Additionally, we extend VIG in order to transform the RDB scaled instances to the different data source representations handled by the engines.
+%To define BSBM and NPD
+
+
+Specific OBDA requirements have been analyzed by the authors of the NPD benchmark in the setting of a real-world scenario from the oil industry. The nine proposed requirements are related to the datasets, query sets, mappings and query languages. The benchmark includes a data generator, VIG~\citep{lantivig}, to generate scaled RDB instances that obtain a number of expected triples from a SPARQL query, using as inputs an ontology, an R2RML mapping document, and the schema of the RDB together with its corresponding instance. 
 
 Simple queries defined in LSLOD~\citep{hasnain2017biofed} have been used in order to evaluate the performance of the Ontario~\citep{endris2019ontario} engine. In this work, all of the original RDF datasets were translated into RDB tables. The idea was to evaluate an heterogeneous setup consisting of RDF and RDB sources, focused on the source selection problem, and the generation of the corresponding optimized query plan. Additionally, the simple queries from LSLOD are focused on the evaluation of the distribution of star-shaped groups that do not exploit some of the features of the SPARQL language, such as FILTER, ORDER BY, GROUP BY and NOT EXISTS, which are relevant in the context of  real-life use cases.
 
