@@ -102,12 +102,25 @@ The mapping layer contains information about how the input sources are related w
 \subsubsection{Local as a View Mapping rules (LAV)}
 In \citep{ullman1997information} the elements of the source schema $S$ are mapped  to a query $Q_G$ over the target schema $G$. The main benefits of this approach is that it supports continuous changes of the source schema (e.g., adding new sources or modify their underlying representation) since there is no need to change the query processing component. Thus, LAV is usually useful when the global schema $G$ is stable but the local schema $S$ may suffer modifications over the time. However, one of its main disadvantages is that cannot represent source $S$ information if it is not modeled in the global schema, hence, the approach usually provides partial answers for a query $Q_G$. Query translation following this approach is not a trivial process, as the $Q_G$ has to be translated to an equivalent query over the source schema $S$. These techniques are usually known as query translation using views~\citep{halevy2001answering}.
 
-ToDo: ADD EXAMPLE
+Consider the following example of a LAV mapping:
+\begin{itemize}
+    \item The global schema $G$ is defined by a class Player(ID) with two properties: name(ID, playerName) and sport(ID,sportName)
+    \item The source schema $S$ is defined by two relations: BasketballPlayer (BID, BName) and TenisPlayer (TID, TName)
+    \item The LAV mapping between $G$ and $S$ is defined as:\\
+    $BasketballPlayer(BID,BName) \rightsquigarrow \{<x,y>|Player(x)\wedge name(x,y) \wedge sport(x,''basketball'')\}$\\
+    $TenisPlayer(TID,TName) \rightsquigarrow \{<x,y>|Player(x)\wedge name(x,y) \wedge sport(x,''tenis'')\}$
+\end{itemize}
 
 \subsubsection{Global as a View Mapping Rules (GAV)}
 Global as view are defined in \citep{halevy2001answering}, where each element of the global schema $G$ is mapped to a query over $Q_S$ the source schema $S$. Opposed to LAV approach, the benefits of following a GAV approach is that it supports changes over the global schema $G$, as the queries are defined following the source schema $S$. Although there are no theoretical limitations to provide access to other data formats, ontology-based data integration processes have been traditionally focused on allowing the integration of relational databases as source schema, based on SPARQL-to-SQL translation techniques. Due to the aforementioned limitations in these techniques for LAV approaches, most of the semantic web mapping rules specifications following the GAV approach (e.g., R$_2$O, DR2Q, R2RML). 
 
-ToDO: ADD EXAMPLE
+Consider the following example of a GAV mapping:
+\begin{itemize}
+    \item The global schema $G$ is defined by a class AmateurTenisPlayer(ID)
+    \item The source schema $S$ is defined by the relation TenisPlayer(ID,Name,Level)
+    \item The GAV mapping between $G$ and $S$ is defined as:\\
+    $AmateurTenisPlayer(ID) \rightsquigarrow \{<x> | TenisPlayer(x,y,''Amateur'')\}$
+\end{itemize}
 
 \subsubsection{R2RML: W3C Recommendation}
 Since 2012, R2RML is a W3C recommendation to declarative declare mapping rules between RDF and RDB~\citep{R2RML}. These rules are defined in an R2RML mapping document, which is formed by a set of Triples Maps (\texttt{rr:TriplesMap}). Usually, each Triple Map defines the rules for generating the entities and their properties of a defined class in the ontology and are defined as:
