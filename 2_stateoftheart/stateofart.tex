@@ -88,9 +88,9 @@ Given the RDF graph shown in Figure \ref{fig:soa_rdf_example}, we might be inter
 }
 \end{table}
 
-The SPARQL built-in conditions are constructed using the elements of the set ($I \cup U$) and constants. These constants can take different values such as logical connectives ($\neg,\wedge,\vee $), inequality or equality symbols ($\leq,\geq,<,>,= $) and unary predicates such as bound, isBlank, isIRI, etc.~\citep{SPARQL}.
+The SPARQL built-in conditions are constructed using the elements of the set ($I \cup U$) and constants. These constants can take different values such as logical connectives ($\neg,\wedge,\vee $), inequality or equality symbols ($\leq,\geq,<,>,= $) and unary predicates such as bound, isBlank, isIRI, etc.~\citep{SPARQL}. The can be combined with the aforementioned SPARQL operator such as UNION, FILTER or OPTIONAL. For example, the OPTIONAL operator has been attract many attention from the virtual knowledge graph construction field over relational databases due the difficulties to on its efficient translation to SQL~\citep{xiao2018efficient}.
 
-
+In SPARQL there are many type of query forms based on graph pattern matching that allow to evaluate several query types. As we shown in Listing \ref{list:soa_sparql_example} the SELECT clause is used to select elements from the data. DESCRIBE query returns information about the resources that match a graph pattern in form of another RDF graph. CONSTRUCT is used to construct a new RDF graph based on the graph pattern indicated in the WHERE clause. Finally, ASK is a boolean-based query that retrieves true if there is at least one solution for the provided pattern.
 
 \section{Annotations in Knowledge Graph Construction}
 \label{sec:soa_annotations}
