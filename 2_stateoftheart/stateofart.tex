@@ -19,7 +19,7 @@ A data integration system (DIS) is defined as the process of making available a 
 
 Different types of data integration systems have been proposed. Data warehouses~\citep{vassiliadis2009survey} are proposed to integrate multiple and heterogeneous data sources in a centralized place, which is usually known in enterprises ecosystems as an \textit{extract-transform-load} process (ETL). In contrast, mediators~\citep{wiederhold1992mediators} have been proposed as another data integration approach where the data remains in the data sources. For accessing the data, queries defined over the global schema are translated to the source schema and executed. There are multiple systems that implement these ideas with their corresponding optimizations~\citep{tsimmis1994,rajaraman1996querying,roth1997don}.
 
-Ontology based data access (OBDA) and integration (OBDI) are data integration systems where the global schema is defined by an ontology~\citep{poggi2008linking}. The formal framework presented in~\citep{xiao2018obdasurvey} defines an OBDA specification as a tuple $P$ = $\langle O,S,M\rangle$ where $O$ is an ontology, $S$ is the source schema, and $M$ a set of mappings. Additionally, an OBDA instance is defined as a tuple $PI$ = $\langle P,D\rangle$ where P is an OBDA specification and $D$ is a data instance conforming to $S$. The main difference between OBDA and OBDI systems is that in OBDA $D$ is fixed to an specific data format, while OBDI extends $D$ to cover heterogeneous data sources and formats. In both ontology-based approaches, two different alternatives exist to enable data access: (1) those where data are materialized taking into account the mappings and the ontologies which can be seen as a ontology-based ETL process, and (2) those where the transformation is done on the queries, which can then be evaluated on the original data sources, so, it can be defined as a new kind of mediator system. In this work we refer to the first alternative as   a materialized knowledge graph construction process, while the second alternative is defined as a virtual knowledge graph construction one. As we are focused on creating KG from heterogeneous data sources, both alternatives can be described as an OBDI approach.
+Ontology based data access (OBDA) and integration (OBDI) are data integration systems where the global schema is defined by an ontology~\citep{poggi2008linking}. The formal framework presented in~\citep{xiao2018obdasurvey} defines an OBDA specification as a tuple $P$ = $\langle O,S,M\rangle$ where $O$ is an ontology, $S$ is the source schema, and $M$ a set of mappings. Additionally, an OBDA instance is defined as a tuple $PI$ = $\langle P,D\rangle$ where P is an OBDA specification and $D$ is a data instance conforming to $S$. The main difference between OBDA and OBDI systems is that in OBDA $D$ is fixed to an specific data format, while OBDI extends $D$ to cover heterogeneous data sources and formats. In both ontology-based approaches, two different alternatives exist to enable data access: (1) those where data are materialized taking into account the mappings and the ontologies which can be seen as a ontology-based ETL process, and (2) those where the transformation is done on the queries, which can then be evaluated on the original data sources, so, it can be defined as a new kind of mediator system. In this work we refer to the first alternative as a materialized knowledge graph construction process, while the second alternative is defined as a virtual knowledge graph construction one. As we are focused on creating KG from heterogeneous data sources, both alternatives can be described as an OBDI approach.
 
 \section{Representation and Query Language for the Semantic Web}
 \label{sec:soa_representation}
@@ -241,12 +241,12 @@ There are a set of mapping languages for constructing knowledge graphs that incl
 % \usepackage{graphicx}
 \begin{table}[]
 \centering
-\caption{Summarize of Mapping Languages specifications}
+\caption{Summary of Mapping Languages specifications}
 \label{tab:soa_sum_mappings}
 \resizebox{0.85\textwidth}{!}{%
 \begin{tabular}{|l|c|c|c|c|c|}
 \hline
- & \textbf{R2RML} & \textbf{RML} & \textbf{xR2RML} & \textbf{SPARQ-Generate} & \textbf{ShExML} \\ \hline
+\textbf{Features/Mappings} & \textbf{R2RML} & \textbf{RML} & \textbf{xR2RML} & \textbf{SPARQ-Generate} & \textbf{ShExML} \\ \hline
 Format & RDB & \begin{tabular}[c]{@{}c@{}}Heterogeneous\\ Datasources\end{tabular} & Tree-based formats & \begin{tabular}[c]{@{}c@{}}Heterogeneous\\ Datasources\end{tabular} & \begin{tabular}[c]{@{}c@{}}Heterogeneous\\ Datasources\end{tabular} \\ \hline
 Type & Declarative & Declarative & Declarative & Procedural & Declarative \\ \hline
 \begin{tabular}[c]{@{}l@{}}Special\\ Features\end{tabular} & \begin{tabular}[c]{@{}c@{}}W3C\\ Recommendation\end{tabular} & \begin{tabular}[c]{@{}c@{}}Integration with\\ CSVW and FnO\end{tabular} & \begin{tabular}[c]{@{}c@{}}Access outer fields\\ Dynamic Language\\ RDF Lists\end{tabular} & \begin{tabular}[c]{@{}c@{}}Native support for\\ streaming data\end{tabular} & - \\ \hline
@@ -288,11 +288,30 @@ Figure \ref{fig:soa_yarrrml_fno} shows an example of the integration between RML
 
 CSV on the Web (CSVW)\footnote{https://www.w3.org/TR/tabular-data-primer/} is a W3C proposal for the definition of metadata on CSV files such as datatypes, valid values, data transformations, and primary and foreign key constraints. A related W3C proposal\footnote{https://www.w3.org/TR/csv2rdf/} defines a procedure and rules for the generation of RDF from tabular data and a few implementations that refer to this proposal are already available. 
 
+
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/state-of-the-art/csvw-model.png}
+\caption{The CSV on the Web model}
+\label{fig:soa_csvw}
+\end{figure}
 \section{Knowledge Graph Construction Engines}
 \label{sec:soa_engines}
 
 
-The CSV2RDF tool is presented in~\citep{Mahmud2018}, the authors define algorithms to transform CSV data into RDF using CSVW metadata annotations, and their experimental study uses datasets from the CSVW Implementation Report\footnote{https://w3c.github.io/csvw/tests/reports/index.html}. Another tool, COW: Converter for CSV on the Web\footnote{https://csvw-converter.readthedocs.io/en/latest/} allows the conversion of datasets in CSV format and uses a JSON schema expressed in an extended version of the CSVW standard. Both are focused on RDF materialization.
+
+\subsection{Materialization Knowledge Graph Construction Engines}
+
+
+
+The CSV2RDF tool is presented in~\citep{Mahmud2018}, the authors define algorithms to transform CSV data into RDF using CSVW metadata annotations, and their experimental study uses datasets from the CSVW Implementation Report\footnote{https://w3c.github.io/csvw/tests/reports/index.html}. Another tool, COW: Converter for CSV on the Web\footnote{https://csvw-converter.readthedocs.io/en/latest/} allows the conversion of datasets in CSV format and uses a JSON schema expressed in an extended version of the CSVW standard. 
+
+\subsection{Virtual Knowledge Graph Construction Engines}
+
+
+
+
 
 
 \section{Evaluation of Knowledge Graph Construction}
