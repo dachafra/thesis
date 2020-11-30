@@ -285,10 +285,8 @@ Figure \ref{fig:soa_yarrrml_fno} shows an example of the integration between RML
 \end{lstlisting}
 
 \subsubsection{Metadata for data on the web}
-
-CSV on the Web (CSVW)\footnote{https://www.w3.org/TR/tabular-data-primer/} is a W3C proposal for the definition of metadata on CSV files such as datatypes, valid values, data transformations, and primary and foreign key constraints. A related W3C proposal\footnote{https://www.w3.org/TR/csv2rdf/} defines a procedure and rules for the generation of RDF from tabular data and a few implementations that refer to this proposal are already available. 
-
-
+Metadata describe the available information about or within a dataset(s). Providing metadata for describing the content of the data on the web it is an useful manner to obtain relevant information of an specific dataset. For example, DCAT~\citep{maali2018data} is a W3C recommendation to describe metadata from data catalogs. This standard is used in most of the open data portals across EU to describe the content of their datasets. Another relevant W3C recommendation for describing the content of data in the web is CSV on the Web~\citep{tennison2015model}.   
+The recommendation\footnote{http://www.w3.org/TR/tabular-metadata/} defines a model for providing metadata on CSV files and tabular data such as datatypes, valid values, data transformations, and primary and foreign key constraints. A related W3C proposal\footnote{https://www.w3.org/TR/csv2rdf/} defines a procedure and rules for the generation of RDF from tabular data and a few implementations that refer to this proposal are already available. Indeed, there are data organizations that have generated guidelines and documentations to help in the creation of these annotations to common users and provide the metadata through the open data portals. 
 
 \begin{figure}[!h]
 \centering
@@ -296,9 +294,28 @@ CSV on the Web (CSVW)\footnote{https://www.w3.org/TR/tabular-data-primer/} is a 
 \caption{The CSV on the Web model}
 \label{fig:soa_csvw}
 \end{figure}
+
+
+Taking into account the information during the process of KG construction from tabular dataset can help to enhance the process in terms of completeness and performance. It also allows to declarative deal with the typical heterogeneity issues that appear when these kind of data want to be integrated such as data may not be normalized, information about relationships or column names are not always descriptive or homogeneous, missing (meta)data, etc. Figure \ref{fig:soa_csvw} shows the complete data model for describing tabular content on the web. It has been splinted in several parts that can describe the schema of the dataset, dialect annotations (e.g., delimiter value or the prefix used for comments) and information about datatype and related properties such as \texttt{csvw:null} (for null values) and \texttt{csvw:lang} (for the language). Each of these properties can be defined as a array, link, URI template, column reference or atomic value among others. The data model is materialized as a specific dialect of JSON-LD created for it, which means that the metadata annotations can be also expressed as an RDF graph, facilitating the interoperability of this proposals with other such as RML or R2RML. In Figure \ref{fig:soa_csvw_example} we show an example of CSVW annotations following the JSON-LD syntax. It provides useful information about the datatypes, name of the columns or boolean values for the trips of a GTFS feed.
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/state-of-the-art/CVSW example.pdf}
+\caption{An example of CSVW annotations over Transport Domain}
+\label{fig:soa_csvw_example}
+\end{figure}
+
+
+
+
+
 \section{Knowledge Graph Construction Engines}
 \label{sec:soa_engines}
 
+
+
+\section{Knowledge Graph Construction Engines}
+\label{sec:soa_engines}
 
 
 \subsection{Materialization Knowledge Graph Construction Engines}
