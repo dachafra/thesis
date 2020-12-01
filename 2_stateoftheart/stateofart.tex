@@ -296,11 +296,11 @@ The recommendation\footnote{http://www.w3.org/TR/tabular-metadata/} defines a mo
 \end{figure}
 
 
-Taking into account the information during the process of KG construction from tabular dataset can help to enhance the process in terms of completeness and performance. It also allows to declarative deal with the typical heterogeneity issues that appear when these kind of data want to be integrated such as data may not be normalized, information about relationships or column names are not always descriptive or homogeneous, missing (meta)data, etc. Figure \ref{fig:soa_csvw} shows the complete data model for describing tabular content on the web. It has been splinted in several parts that can describe the schema of the dataset, dialect annotations (e.g., delimiter value or the prefix used for comments) and information about datatype and related properties such as \texttt{csvw:null} (for null values) and \texttt{csvw:lang} (for the language). Each of these properties can be defined as a array, link, URI template, column reference or atomic value among others. The data model is materialized as a specific dialect of JSON-LD created for it, which means that the metadata annotations can be also expressed as an RDF graph, facilitating the interoperability of this proposals with other such as RML or R2RML. In Figure \ref{fig:soa_csvw_example} we show an example of CSVW annotations following the JSON-LD syntax. It provides useful information about the datatypes, name of the columns or boolean values for the trips of a GTFS feed.
+Taking into account the information during the process of KG construction from tabular dataset can help to enhance the process in terms of completeness and performance. It also allows to declarative deal with the typical heterogeneity issues that appear when these kind of data want to be integrated such as data may not be normalized, information about relationships or column names are not always descriptive or homogeneous, missing (meta)data, etc. Figure \ref{fig:soa_csvw} shows the complete data model for describing tabular content on the web. It has been splinted in several parts that can describe the schema of the dataset, dialect annotations (e.g., delimiter value or the prefix used for comments) and information about datatype and related properties such as \texttt{csvw:null} (for null values) and \texttt{csvw:lang} (for the language). Each of these properties can be defined as a array, link, URI template, column reference or atomic value among others. The data model is materialized in a specific dialect of JSON-LD created for it, which means that the metadata annotations can be also expressed as an RDF graph, facilitating the interoperability of this proposals with other such as RML or R2RML. In Figure \ref{fig:soa_csvw_example} we show an example of CSVW annotations following the JSON-LD syntax. It provides useful information about the datatypes, column names or boolean values for the trips of a GTFS feed.
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=0.85\textwidth]{figures/state-of-the-art/CVSW example.pdf}
+\includegraphics[width=0.5\textwidth]{figures/state-of-the-art/CVSW example.pdf}
 \caption{An example of CSVW annotations over Transport Domain}
 \label{fig:soa_csvw_example}
 \end{figure}
@@ -311,23 +311,20 @@ Taking into account the information during the process of KG construction from t
 
 \section{Knowledge Graph Construction Engines}
 \label{sec:soa_engines}
-
-
-
-\section{Knowledge Graph Construction Engines}
-\label{sec:soa_engines}
-
+Solutions provided to the problem of knowledge graph creation from structured and semi-structured data are gaining momentum in practitioners and users. Since 2012, with the appearance of the W3C recommendation of the R2RML~\citep{R2RML} mapping language for transforming relational databases to knowledge graphs, diverse proposals, and optimizations techniques have tackled this problem. We described in detail engines of both approaches, materialization and virtualization.
 
 \subsection{Materialization Knowledge Graph Construction Engines}
-
-
+With the RML~\citep{dimou2014rml} specification proposed as an extension of R2RML for describing mapping rules over diverse data formats, multiple tools have been developed for the creation of knowledge graphs. For example, CARML\footnote{\url{https://github.com/carml/carml}} executes RML rules and includes additional features like MultiTermMap (to deal with arrays) and XML namespace (to improve XPath expressions). RocketML~\citep{csimcsek2019rocketrml} is a RML engine implemented using the NodeJS framework and RMLMapper\footnote{\url{https://github.com/RMLio/rmlmapper-java}} is also a commonly used RML engine. Unfortunately, none of these engines implements efficient operators to execute mapping rules. As a result, they cannot scale up to a large volume of data, high-duplicate rate, and heterogeneity.
 
 The CSV2RDF tool is presented in~\citep{Mahmud2018}, the authors define algorithms to transform CSV data into RDF using CSVW metadata annotations, and their experimental study uses datasets from the CSVW Implementation Report\footnote{https://w3c.github.io/csvw/tests/reports/index.html}. Another tool, COW: Converter for CSV on the Web\footnote{https://csvw-converter.readthedocs.io/en/latest/} allows the conversion of datasets in CSV format and uses a JSON schema expressed in an extended version of the CSVW standard. 
 
 \subsection{Virtual Knowledge Graph Construction Engines}
+Most of the works proposed under this framework are focused on providing access to relational databases~\citep{priyatna2014formalisation,calvanese2017ontop,sequeda2013ultrawrap} and optimizations on the  SPARQL-to-SQL translation process. The first approach on the translation between these two query languages is proposed in~\citep{chebotko2009semantics}, where the authors defines an algorithm to create a equivalent SQL query based on an input SPARQL query. With the appearance of the R2RML recommendation, both Morph-RDB~\citep{priyatna2014formalisation} and Ontop~\citep{calvanese2017ontop} propose the use of these mapping rules and optimize the algorithm proposed in~\citep{chebotko2009semantics}. For example, there are recent studies and optimizations for an efficient translation of the \texttt{OPTIONAL} SPARQL operator in this process in~\citep{xiao2018efficient}. Nowadays, Morph-RDB and Ontop are the two most well known open source engines that construct virtual knowledge graph from relational databases. Ultrawrap~\citep{sequeda2013ultrawrap,sequeda2014obda} is another SPARQL-to-SQL engine that use SQL views to enhance the execution of the SQL queries after its translation from SPARQL. In~\citep{sequeda2014obda}, the authors propose a cost function that helps to decide when a SQL view should be or not physically materialize in the RDB.
+
+In this context, the term constraint has been used in~\citep{hovland2016obda}, where the authors defined two new properties extending the concept of OBDA instance. They propose a set of optimizations  during  SPARQL-to-SQL translation with techniques that take into account these constraints. However, the main assumptions made over the OBDA framework (e.g, the data source is an RDB o has an RDB wrapper, or the schema contains a set of constraints) are maintained. There are other works such as~\citep{michel2015translation,botoeva2019ontology} that apply the OBDA framework over document-based databases. For example, in Morph-xR2RML~\citep{michel2015translation}, the authors formally define the translation from SPARQL to NoSQL databases.
 
 
-
+There are two main proposals of the construction of virtual knowledge graph beyond relational databases: Ontario and Squerall. Ontario~\citep{endris2019ontario} is based on the concept of RDF molecule templates~\citep{endris2017mulder} which aims to perform efficient source selection in a data lake composed of heterogeneous data sources in their original format. It creates a set of star-shaped sub-queries that match the RDF Molecule Templates (RDF-MT), and applies optimization techniques to define the query plan that will be executed. Similarly, Squerall~\citep{mami2019querying} takes input data and mappings, and offers a middleware that is able to aggregate the intermediate results in a distributed manner. Finally, Polyweb~\cite{khan2019one} is another proposal that is able to translate and distribute queries using RML mappings over relational databases and CSV files.
 
 
 
