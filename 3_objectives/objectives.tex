@@ -18,13 +18,10 @@ In order to achieve the first objective of this thesis, we need to tackle the fo
     \item Current approaches for constructing materialized knowledge graphs do not scale-up in complex data integration scenarios (e.g., high rate of duplicates or interoperability issues over the input data sources, high data volume, etc.). The absence of engines to efficiently parse declarative mapping languages to construct materialized knowledge graphs hinders their global and industry adoption over real use cases.
 \end{itemize}
 
-The previous methodological goals have two associated technological goals. The first one is the implementation of the technological support required to create virtual knowledge graphs over tabular data (Morph-CSV). The second one is implemented by Morph-GraphQL, that translates R2RML mapping rules to programmed GraphQL resolvers for accessing legacy relational database instances.
-
 The second goal is focused on proposing evaluations of knowledge graph construction systems to understand what are their main current limits, and it has the following open research problems:
 \begin{itemize}
-    \item There is currently no way to obtain objective information about the conformance of knowledge graph construction engines with specifications of declarative mapping languages that go beyond relational databases. Based on the main extension of R2RML, RML~\citep{dimou2014rml}, we proposed a set of representative test cases covering other types of data formats such as JSON, CSV and XML.
-    \item There is no analysis of the parameters that affect the process of constructing a knowledge graph from heterogeneous data sources. Previous evaluations have only taken into account data size as a relevant parameter~\citep{lefranccois2017sparql,csimcsek2019rocketrml}. We identify the set of parameters, most of them extracted from the mapping rules, that can also affect to the behavior of these engines.
-    \item Finally, the current knowledge graph construction benchmarks~\citep{lanti2015npd,bizer2009berlin} that mainly focused on relational databases, are not enough to test the capabilities of the new generation of engines that are able to integrate or run SPARQL queries over data in several formats. A representative benchmark to test the capabilities of these approaches with objective and useful information is defined.
+    \item The evaluations performed over materialization knowledge graphs engines are not representative neither general enough to provide an overview of the current limitations of the applied techniques. Engines such as RocketRML~\citep{csimcsek2019rocketrml} and SPARQL-Generate~\citep{lefranccois2017sparql} evaluate their features using their own use cases without information about their compliance with the mapping rules or representative performance and scalability evaluations. 
+    \item The current virtual knowledge graph construction benchmarks~\citep{lanti2015npd,bizer2009berlin} are mainly focused on relational databases. Hence, they are not enough to test the capabilities of the new generation of engines that are able to run SPARQL queries over data in several formats. 
 \end{itemize}
 
 
@@ -33,9 +30,11 @@ The second goal is focused on proposing evaluations of knowledge graph construct
 In this work, we aim to provide solutions to the open research problems described in the previous section.  The contributions for solving the first research problem are:
 
 \begin{enumerate}
-    \item[\textbf{C1.1.}] The concept of \textit{Mapping Translation} and its main properties. 
-    \item[\textbf{C1.2.}] The formalization and application of constraints extracted from annotations (mappings and metadata) over tabular data to enhance OBDA approaches. 
+    \item[\textbf{C1.1.}] \textbf{The concept of \textit{Mapping Translation} and its main properties}. 
+    \item[\textbf{C1.2.}] The \textbf{formalization and application of constraints extracted from mappings rules and metadata over tabular data} to enhance virtual KG construction approaches. 
     \item[\textbf{C1.3.}] The exploitation of standard declarative mapping rules to automate the generation of functional wrappers. 
+    \item[\textbf{C1.4.}] Definition of \textbf{physical operators exploiting information from mapping rules} for constructing materialized KG at scale.
+    \item[\textbf{C1.5.}] \textbf{Heuristic-based optimizations for functional mappings} (mapping rules with transformation functions) for scaling up the construction of materialized knowledge graphs.
 \end{enumerate}
 
 With regard to the second objective, this work presents new contributions in the following aspects:
@@ -46,14 +45,14 @@ With regard to the second objective, this work presents new contributions in the
 \end{enumerate}
 
 
-Chapter \ref{chapter:mappig-translation} describes the mapping translation concept and its property, while Chapter \ref{chapter:virtual} provides the solutions to enhance virtual knowledge graph access over heterogeneous data exploiting the aforementioned concept. Chapter \ref{chapter:eval1} describe the previous steps to be performed before define a representative benchmark (Chapter \ref{chapter:eval2}) for KGC engines.
+Chapter \ref{chapter:mappig-translation} describes the mapping translation concept and its property, while Chapter \ref{chapter:virtual} provides the solutions to enhance virtual knowledge graph access over heterogeneous data exploiting the aforementioned concept. Chapter \ref{chapter:benchmark} describe a virtual knowledge graph construction benchmark in the transport domain, aligned with the second objective. Finally, Chapter \ref{chapter:construction} presents two approaches for scaling up the construction of materialized KGs together with evaluation methods for testing mapping compliance and performance in this process.
 
 \section{Assumptions}
 Our work is based on the following set of assumptions:
 \begin{enumerate}[label=\textbf{A{\arabic*}}]
-    \item Mapping rules and annotations are declarative and follow W3C standards (or their extensions). 
+    \item Mapping rules and metadata descriptions are declarative and follow W3C standards (or their extensions). 
     \item The target schema (ontology) for integrating the source data is available, and is available in OWL.
-    \item Mapping rules and metadata annotations are available.
+    \item Mapping rules and metadata descriptions are available.
     \item Data are represented in formats that are not RDF.
     \item We do not have to consider data protection nor access restrictions.
     \item The size of datasets is XXXX.
