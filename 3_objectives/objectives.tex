@@ -39,13 +39,12 @@ In this work, we aim to provide solutions to the open research problems describe
 
 With regard to the second objective, this work presents new contributions in the following aspects:
 \begin{enumerate}
-    \item[\textbf{C2.1.}] Definition of a set of test cases to test the conformance of KG construction engines in RML.
-    \item[\textbf{C2.2.}] Identification and experimental evaluation of the parameters that affect the behavior of the KGC engines. 
-    \item[\textbf{C2.3.}] A complete and representative benchmark for evaluating KGC engines, based on open data from the transport domain.
+    \item[\textbf{C2.1.}] Definition of a set of \textbf{test cases to evaluate the conformance of KG construction engines in RML}. We extend the proposed R2RML test cases during its process of standardization~\citep{R2RML_test_cases} for covering other kinds of data formats and relational databases. Executed over the RML parsers in its corresponding RML implementation report, they give an overview of the current state of the engines in terms of language conformance.
+    \item[\textbf{C2.2.}] Identification and experimental evaluation of the \textbf{parameters that affect the behavior of the KGC engines}. We analyze the typical inputs and their corresponding features in a knowledge graph construction workflow and how they can impact over the performance and completeness of the process. Additionally, we empirically demonstrate the importance of taking into account these parameters for generating representative benchmark and testbeds for these engines.
+    \item[\textbf{C2.3.}] A complete and \textbf{representative benchmark for evaluating virtual KGC engines}, based on open data from the transport domain. We create a comprehensive benchmark for virtual knowledge graph construction, which considers multiple data formats and different data scales. Several engines are evaluated with a single benchmark so as to assess the current status of virtual knowledge graph access. Additionally, all code, datasets and queries are available, following Open Science principles, to facilitate reproducibility and further extensions.
 \end{enumerate}
 
-
-Chapter \ref{chapter:mappig-translation} describes the mapping translation concept and its property, while Chapter \ref{chapter:virtual} provides the solutions to enhance virtual knowledge graph access over heterogeneous data exploiting the aforementioned concept. Chapter \ref{chapter:benchmark} describe a virtual knowledge graph construction benchmark in the transport domain, aligned with the second objective. Finally, Chapter \ref{chapter:construction} presents two approaches for scaling up the construction of materialized KGs together with evaluation methods for testing mapping compliance and performance in this process.
+Chapter \ref{chapter:mappig-translation} describes the mapping translation concept and its property, while Chapter \ref{chapter:virtual} provides the solutions to enhance virtual knowledge graph access over heterogeneous data exploiting the aforementioned concept. Chapter \ref{chapter:benchmark} describes the GTFS-Madrid-Bench, a virtual knowledge graph construction benchmark in the transport domain, aligned with the second objective. Finally, Chapter \ref{chapter:construction} presents two approaches for scaling up the construction of materialized KGs together with evaluation methods for testing mapping compliance and performance during this process.
 
 \section{Assumptions}
 Our work is based on the following set of assumptions:
