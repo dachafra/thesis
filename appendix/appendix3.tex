@@ -19,7 +19,7 @@ prefixes:
   rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
   mad: http://transport.linkeddata.es/madrid/metro/
   gtfsres: http://transport.linkeddata.es/resource/
-  wheelchair: http://transport.linkeddata.es/resource/WheelchairBoardingStatus/
+  wheelchair: gtfsres:WheelchairBoardingStatus/
   mad: http://transport.linkeddata.es/madrid/metro/
 
 \end{lstlisting}
@@ -154,7 +154,7 @@ frequencies:
             - [str1, $(trip_id)]
             - [str2, $(trip_id)]
 \end{lstlisting}
-\newpage
+
 \begin{lstlisting}[caption=Trips TripleMap, label=lst:trips, basicstyle=\small,frame=single]
 trips:
  sources:
@@ -166,7 +166,7 @@ trips:
   - [gtfs:shortName, $(trip_short_name)]
   - [gtfs:direction, $(direction_id)]
   - [gtfs:block, $(block_id)]
-  - [gtfs:wheelchairAccessible,wheelchair:$(wheelchair_accessible)~iri]
+  - [gtfs:wheelchairAccessible,wheelchair:$(wheelchair_accessible)]
   - p: gtfs:service
     o:
       - mapping: services1

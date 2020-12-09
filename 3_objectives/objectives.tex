@@ -47,15 +47,15 @@ With regard to the second objective, this work presents new contributions in the
 Chapter \ref{chapter:mappig-translation} describes the mapping translation concept and its property, while Chapter \ref{chapter:virtual} provides the solutions to enhance virtual knowledge graph access over heterogeneous data exploiting the aforementioned concept. Chapter \ref{chapter:benchmark} describes the GTFS-Madrid-Bench, a virtual knowledge graph construction benchmark in the transport domain, aligned with the second objective. Finally, Chapter \ref{chapter:construction} presents two approaches for scaling up the construction of materialized KGs together with evaluation methods for testing mapping compliance and performance during this process.
 
 \section{Assumptions}
-Our work is based on the following set of assumptions:
+Our work is based on the assumptions listed below. These assumptions provide a background to facilitate the comprehension of the decision taken during the development of this thesis.
 \begin{enumerate}[label=\textbf{A{\arabic*}}]
-    \item Mapping rules and metadata descriptions are declarative and follow W3C standards (or their extensions). 
-    \item The target schema (ontology) for integrating the source data is available, and is available in OWL.
-    \item Mapping rules and metadata descriptions are available.
-    \item Data are represented in formats that are not RDF.
-    \item We do not have to consider data protection nor access restrictions.
-    \item The size of datasets is XXXX.
-    \item We are considering static datasets and not streams or APIs.
+    \item Mapping rules and metadata descriptions are declarative and follow W3C standards (or their extensions). Although the contributions proposed in the thesis are generalized to any kind of mapping rules and metadata descriptions, we assume that these annotations are defined following best practices for describing content on the web of data, hence, using W3C standards. 
+    \item The target schema (ontology) for integrating the source data is available, and is available in OWL. We also assume that in any of the data integration systems ($DIS$) defined in this thesis, the target model used for integrating the input sources has been already created, and it is modeled using the Web Ontology Language (OWL).
+    \item Mapping rules and metadata descriptions are available. In the same manner as the ontology, the rules that provide the relations between target and source schemes and metadata that describe the content of the source input data are available. Therefore, we assume that the $DIS$ presented in the thesis are complete and no user interaction is needed.
+    \item Data are represented in formats that are not RDF. The input data sources that have to be integrated in a $DIS$ are described in formats such as RDB, CSV, XML or JSON, but we assume that none of the datasets will be described following RDF.
+    \item We do not have to consider data protection nor access restrictions. We assume that there are not limitations to access any of the input data sources of the $DIS$. The datasets are openly available through the web together with a license that allow its use.
+    \item The size of datasets is defined in terms of Gigabytes. We assume each single input data source will be no bigger than 100Gb.
+    \item We are considering static datasets and not streams. We assume that the input data sources are static, although they can have a short update time (e.g., 5 minutes), the proposals of this thesis do not provide support for data streams.
 \end{enumerate}
 
 \section{Hypothesis}
