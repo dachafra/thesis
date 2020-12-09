@@ -67,10 +67,12 @@ Our work is based on the assumptions listed below. These assumptions provide a b
     \item A benchmark blablabla is able to stress and provide a full overview of the state of different engines 
 \end{enumerate}
 
-\section{Restrictions}
+\section Restrictions
+Finally, there is a set of restrictions that describes the limitations and define the future work objectives. The restrictions are:
 
 \begin{enumerate}[label=\textbf{R{\arabic*}}]
-    \item Data must be located in the same physical place as XXXXX.
-    \item We only consider declarative mapping rules following the RML+FnO~\citep{de2017declarative} specification and metadata annotations in CSVW for Morph-CSV and R2RML for Morph-GraphQL.
-    \item The source data generated at scale for evaluating KG construction systems do not need cleaning or preparation functions.
+    \item Input data sources must be located in the same physical place as the knowledge graph construction process is run. We do not consider network latencies for data transference or other similar parameters that may have impact over a process of constructing a KG. 
+    \item We are not aware of the capabilities of SPARQL-to-SQL engines. We do not know what are the specific optimizations that each engine applies, we only are aware about the importance of indexes and integrity database constraints for the effectiveness of their translation process.
+    \item We are not aware about the features of the transformation functions performed over the input data sources. Therefore, we do not know if the transformation functions are bijective or not, which can have an impact over query translation techniques.  
+    \item The processing of evaluation over virtual KG construction engines considers that the data is clean and does not need to be further processed. The proposed benchmark does not include a pre-processing step for data management in the process of constructing the virtual KG.
 \end{enumerate}
