@@ -1,1 +1,95 @@
 \chapter{Completeness Morph-CSV}
+\label{appendix:completeness}
+% Please add the following required packages to your document preamble:
+% \usepackage{graphicx}
+\begin{table}[h]
+\centering
+\caption{Query completeness over multiple sizes of a GTFS dataset (the number indicates the scale factor: 1, 10, 100 and 100). The absence of a value means that the
+OBDA engine does not support the features of the SPARQL query.}
+\label{tab:complete-gtfs}
+\resizebox{0.9\textwidth}{!}{%
+\begin{tabular}{c|c|c|c|c|c|c|c|c|c|c|c|c|c}
+\hline
+\textbf{Engines/Queries} & \textbf{Q1} & \textbf{Q2} & \textbf{Q3} & \textbf{Q4} & \textbf{Q5} & \textbf{Q6} & \textbf{Q7} & \textbf{Q9} & \textbf{Q12} & \textbf{Q13} & \textbf{Q14} & \textbf{Q17} & \textbf{Total} \\ \hline
+\multicolumn{14}{c}{\textbf{GTFS-1}} \\ \hline
+Virtuoso & 58540 & 765 & 765 & 13 & 28 & 1 & 2 & 151439 & 6 & 734 & 2364 & 855 & 156972 \\ \hline
+Morph-RDB & 58540 & 765 & - & 13 & - & 1 & 2 & 151439 & 6 & 734 & 2364 & 855 & 156179 \\ \hline
+\begin{tabular}[c]{@{}c@{}}Morph-CSV \&\\ Morph-RDB\end{tabular} & 58540 & 765 & - & 13 & - & 1 & 2 & 151439 & 6 & 734 & 2364 & 855 & 156179 \\ \hline
+Ontop & 58540 & 0 & 765 & 13 & 0 & - & 0 & 0 & - & 734 & 2364 & 855 & 4731 \\ \hline
+\begin{tabular}[c]{@{}c@{}}Morph-CSV \&\\Ontop\end{tabular} & 58540 & 765 & 765 & 13 & 28 & - & 2 & 151439 & - & 734 & 2364 & 855 & 156965 \\ \hline
+\multicolumn{14}{c}{\textbf{GTFS-10}} \\ \hline
+Virtuoso & 353660 & 6312 & 4207 & 130 & 350 & 1 & 67 & 718317 & 130 & 2650 & 23640 & 8550 & 764354 \\ \hline
+Morph-RDB & 353660 & 6312 & - & 130 & - & 1 & 67 & \textit{timeout} & 130 & 2650 & 23640 & 8550 & 41480 \\ \hline
+\begin{tabular}[c]{@{}c@{}}Morph-CSV \&\\ Morph-RDB\end{tabular} & 353660 & 6312 & - & 130 & - & 1 & 67 & 718317 & 130 & 2650 & 23640 & 8550 & 759797 \\ \hline
+Ontop & 353660 & 0 & 4207 & 130 & 0 & - & 0 & 0 & - & 2650 & 23640 & 8550 & 39177 \\ \hline
+\begin{tabular}[c]{@{}c@{}}Morph-CSV \&\\Ontop\end{tabular} & 353660 & 6312 & 4207 & 130 & 350 & - & 67 & 718317 & - & 2650 & 23640 & 8550 & 764223 \\ \hline
+\multicolumn{14}{c}{\textbf{GTFS-100}} \\ \hline
+Virtuoso & 3536600 & 63100 & 42067 & 1300 & 3500 & 1 & 67 & 7183874 & 1300 & 26500 & 236400 & 85500 & 7643609 \\ \hline
+Morph-RDB & 3536600 & 63100 & - & 1300 & - & 1 & 67 & \textit{timeout} & 1300 & 26500 & 236400 & 85500 & 414168 \\ \hline
+\begin{tabular}[c]{@{}c@{}}Morph-CSV \&\\ Morph-RDB\end{tabular} & 3536600 & 63100 & - & 1300 & - & 1 & 67 & \textit{timeout} & 1300 & 26500 & 236400 & 85500 & 414168 \\ \hline
+Ontop & 3536600 & 0 & 42067 & 1300 & 0 & - & 0 & 0 & - & 26500 & 236400 & 85500 & 391767 \\ \hline
+\begin{tabular}[c]{@{}c@{}}Morph-CSV \&\\Ontop\end{tabular} & 3536600 & 63100 & 42067 & 1300 & \textit{timeout} & - & 67 & \textit{timeout} & - & 26500 & 236400 & 85500 & 454934 \\ \hline
+\multicolumn{14}{c}{\textbf{GTFS-1000}} \\ \hline
+Virtuoso & 35366000 & 1261368 & 420667 & 13000 & 35000 & 1 & 69 & 19077083 & 13000 & 420666 & 2364000 & 855000 & 24459854 \\ \hline
+Morph-RDB & \textit{timeout} & 1261368 & - & 13000 & - & 1 & 69 & \textit{timeout} & 13000 & 420666 & 2364000 & 855000 & 4927104 \\ \hline
+\begin{tabular}[c]{@{}c@{}}Morph-CSV \&\\ Morph-RDB\end{tabular} & 35366000 & 1261368 & - & 13000 & - & 1 & 69 & \textit{timeout} & 13000 & 420666 & 2364000 & 855000 & 4927104 \\ \hline
+Ontop & \textit{timeout} & 0 & 420667 & 13000 & 0 & - & 0 & 0 & - & 420666 & 2364000 & 855000 & 4073333 \\ \hline
+\begin{tabular}[c]{@{}c@{}}Morph-CSV \&\\Ontop\end{tabular} & \textit{timeout} & 1261368 & 420667 & 13000 & \textit{timeout} & - & 69 & \textit{timeout} & - & 420666 & 2364000 & 855000 & 5334770 \\ \hline
+\end{tabular}%
+}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{Query completeness over of Bio2RDF tabular dataset.}
+\label{tab:completness-bio2rdf}
+\resizebox{0.9\textwidth}{!}{%
+\begin{tabular}{c|c|c|c|c|c|c|c|c}
+\hline
+\textbf{Engines/Queries} & \textbf{Q1} & \textbf{Q2} & \textbf{Q3} & \textbf{Q4} & \textbf{Q5} & \textbf{Q6} & \textbf{Q7} & \textbf{Total} \\ \hline
+Morph-RDB & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ \hline
+\begin{tabular}[c]{@{}c@{}}Morph-CSV + \\ Morph-RDB\end{tabular} & 1000 & 1190181 & 10 & 102594 & 200 & 28224 & >10000 & >1422209 \\ \hline
+Ontop & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ \hline
+\begin{tabular}[c]{@{}c@{}}Morph-CSV + \\ Ontop\end{tabular} & 1000 & 1190181 & 10 & 102594 & 200 & 28224 & 13481 & 1335690 \\ \hline
+\end{tabular}%
+}
+\end{table}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{graphicx}
+\begin{table}[h]
+\centering
+\caption{Query completeness over multiple sizes of a BSBM dataset. The absence of a value means that the
+OBDA engine does not support the features of the SPARQL query.}
+\label{tab:completeness-bsbm}
+\resizebox{0.9\textwidth}{!}{%
+\begin{tabular}{c|c|c|c|c|c|c|c|c|c|c|c|c}
+\hline
+\textbf{Engines/Queries} & \textbf{Q1} & \textbf{Q2} & \textbf{Q3} & \textbf{Q4} & \textbf{Q5} & \textbf{Q6} & \textbf{Q7} & \textbf{Q8} & \textbf{Q9} & \textbf{Q10} & \textbf{Q12} & \textbf{Total} \\ \hline
+\multicolumn{13}{c}{\textbf{45K}} \\ \hline
+Virtuoso & 10 & 19672 & 10 & 10 & 5 & 3 & 580691 & 20 & 450000 & 10 & 900000 & 1950431 \\ \hline
+Morph-RDB & 10 & 19672 & 10 & 10 & 0 & 3 & 580691 & 20 & 450000 & 10 & 900000 & 1950426 \\ \hline
+\begin{tabular}[c]{@{}c@{}}Morph-CSV \&\\ Morph-RDB\end{tabular} & 10 & 19672 & 10 & 10 & 5 & 3 & 580691 & 20 & 450000 & 10 & 900000 & 1950431 \\ \hline
+Ontop & 10 & - & 10 & 10 & 0 & - & - & - & - & 0 & - & 30 \\ \hline
+\begin{tabular}[c]{@{}c@{}}Morph-CSV \& \\ Ontop\end{tabular} & 10 & - & 10 & 10 & 5 & - & - & - & - & 10 & - & 45 \\ \hline
+\multicolumn{13}{c}{\textbf{90K}} \\ \hline
+Virtuoso & 10 & 38665 & 10 & 10 & 5 & 5 & 1161448 & 20 & 900000 & 10 & 1800000 & 3900183 \\ \hline
+Morph-RDB & 10 & 38665 & 10 & 10 & 0 & 5 & 1161448 & 20 & 900000 & 10 & 1800000 & 3900178 \\ \hline
+\begin{tabular}[c]{@{}c@{}}Morph-CSV \&\\ Morph-RDB\end{tabular} & 10 & 38665 & 10 & 10 & 5 & 5 & 1161448 & 20 & 900000 & 10 & 1800000 & 3900183 \\ \hline
+Ontop & 10 & - & 10 & 10 & 0 & - & - & - & - & 0 & - & 30 \\ \hline
+\begin{tabular}[c]{@{}c@{}}Morph-CSV \& \\ Ontop\end{tabular} & 10 & - & 10 & 10 & 5 & - & - & - & - & 10 & - & 45 \\ \hline
+\multicolumn{13}{c}{\textbf{180K}} \\ \hline
+Virtuoso & 10 & 69434 & 10 & 10 & 5 & 9 & 2168792 & 20 & 1800000 & 10 & 3600000 & 7638300 \\ \hline
+Morph-RDB & 10 & \textit{timeout} & 10 & 10 & 0 & 9 & 2168792 & 20 & 1800000 & 10 & 3600000 & 7568861 \\ \hline
+\begin{tabular}[c]{@{}c@{}}Morph-CSV \&\\ Morph-RDB\end{tabular} & 10 & 69434 & 10 & 10 & 5 & 9 & 2168792 & 20 & 1800000 & 10 & 3600000 & 7638295 \\ \hline
+Ontop & \textit{timeout} & - & 10 & \textit{timeout} & 0 & - & - & - & - & 0 & - & 10 \\ \hline
+\begin{tabular}[c]{@{}c@{}}Morph-CSV \& \\ Ontop\end{tabular} & 10 & - & 10 & 10 & 5 & - & - & - & - & 10 & - & 45 \\ \hline
+\multicolumn{13}{c}{\textbf{360K}} \\ \hline
+Virtuoso & 10 & 137359 & 10 & 10 & 5 & 18 & 4337584 & 20 & 3600000 & 10 & 7200000 & 15275026 \\ \hline
+Morph-RDB & 10 & \textit{timeout} & 10 & 10 & 0 & 18 & \textit{timeout} & 20 & 3600000 & 10 & \textit{timeout} & 3600078 \\ \hline
+\begin{tabular}[c]{@{}c@{}}Morph-CSV \&\\ Morph-RDB\end{tabular} & 10 & 137359 & 10 & 10 & \textit{timeout} & 18 & \textit{timeout} & 20 & 3600000 & 10 & \textit{timeout} & 3737437 \\ \hline
+Ontop & \textit{timeout} & - & 10 & \textit{timeout} & 0 & - & - & - & - & 0 & - & 10 \\ \hline
+\begin{tabular}[c]{@{}c@{}}Morph-CSV \& \\ Ontop\end{tabular} & 10 & - & 10 & 10 & \textit{timeout} & - & - & - & - & 10 & - & 40 \\ \hline
+\end{tabular}%
+}
+\end{table}

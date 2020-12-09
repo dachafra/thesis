@@ -1,2 +1,48 @@
 \chapter{Morph-CSV Algorithm}
+\label{apppendix:algorithm}
+The Morph-CSV algorithm exploiting the mapping rules and metadata to enhance virtual ontology based data access for tabular datasets.
+\begin{algorithm}[h]
+\SetAlgoLined
+\KwResult{SPARQL query result set}
+ $M \longleftarrow mapping\_rules$\;
+ $MD \longleftarrow metadata$\;
+ $Q \longleftarrow query$\;
+ $D \longleftarrow tabular\_dataset$\;
+ $SSG \longleftarrow \emptyset$\;
+ \For{$tp\leftarrow 0$ \KwTo $Q.getTP().size()$}{
+    $SSG.add(tp)$\;
+ }
+ \For{$i\leftarrow 0$ \KwTo $SSG.size()$}{
+    $p \leftarrow SSG.getPredicates(i)$\;
+    \For{$j\leftarrow 0$ \KwTo $M.getTM().size()$}{
+        \If{$p.isContainedIn(M.getTM(j)$}{
+            $M^{'} \leftarrow M.getTM(j)$\;
+            $MD^{'} \leftarrow getMD(M.getTM(j))$\;
+        }   
+    }
+    $M \leftarrow M^{'}$\;
+    $MD \leftarrow MD^{'}$\;
+ }
+ \For{$i\leftarrow 0$ \KwTo $M.getTM().size()$}{
+    $path \leftarrow M.getTM(i).getSource()$\;
+    $ref \leftarrow M.getTM(i).getReferences()$\;
+    $ts \leftarrow D.get(path)$\;
+    $D{'}.add(TS.project(ref))$)\;
+ }
+ $D \leftarrow D^{'}$\;
+ \For{$i\leftarrow 0$ \KwTo $D.size()$}{
+    $path \leftarrow D[i].getPath()$\; 
+    $norm\_2NF(D[i],MD.getMetadata(path))$\;
+    $norm\_3NF(D[i],M)$\;
+    $duplicates(D[i])$\;
+    $substitute(D[i],MD.getMetadata(path))$\;
+    $create(D[i],M.getDeclarativeFunctionFragment(path))$\;
+ }
+ $S \leftarrow schema(D,M,MD)$\;
+ $D^{'} \leftarrow load(D,S)$\;
+ $M^{'} \leftarrow translate(M)$\;
+ $PI = (O,M^{'},S,D^{'})$\;
+ \Return{$run\_query(Q,PI)$}\;
+\caption{Morph-CSV algorithm}
+\end{algorithm}
 

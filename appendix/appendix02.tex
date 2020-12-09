@@ -1,1 +1,58 @@
 \chapter{Query complexity for Morph-CSV}
+\label{apppendix:queries}
+%Description of the queries used in the evaluation of Morph-CSV in terms of query features, relevant constraints applied by the engine and the number of Sources involved
+\begin{table}[h]
+\centering
+\caption{\textbf{Query features of the evaluation of Morph-CSV.} Domain constraints are described based on the function performed by Morph-CSV and reflect the number of the columns where that functions has been applied. Improvement functions (duplicates, source selection) are always applied.}
+\label{tab:queries-gtfs}
+\resizebox{0.728\textwidth}{!}{%
+\begin{tabular}{c|c|c|c|c}
+\hline
+\multirow{2}{*}{\textbf{Query}} & \multirow{2}{*}{\textbf{Query characteristics}} & \multicolumn{2}{c|}{\textbf{Constraints}} & \multirow{2}{*}{\textbf{\# Sources}} \\ \cline{3-4}
+ &  & \textbf{Integrity} & \textbf{Domain} &  \\ \hline
+\multicolumn{5}{c}{\textbf{Madrid-GTFS-Bench}} \\ \hline
+Q1 & 4 TP & - & 3 DataType, 4 Sub & 1 \\ \hline
+Q2 & 5 TP, 2 OPT, 1 Filter & 1 INDEX & 3 DataType, 5 Sub & 1 \\ \hline
+Q3 & 5 TP, 3 OPT, 1 Filter & 1 INDEX & 4 DataType, 5 Sub & 1 \\ \hline
+Q4 & 9 TP, 1 Join, 4 OPT & 2 PK, 1 FK & 7 Sub & 2 \\ \hline
+Q5 & 5 TP, 2 Join, 1 Filter & 2 PK & 2 DataType, 2 Sub & 2 \\ \hline
+Q6 & 3 TP, 1 Join, 1 Filter & 2 PK, 1 FK & - & 2 \\ \hline
+Q7 & 15 TP, 5 Join, 5 OPT, 1 Filter & 6 PK, 5 FK & 3 DataType, 8 Sub & 6 \\ \hline
+Q8 & 14 TP, 4 Join, 3 OPT & 6 PK, 5 FK & 3 DataType, 8 Sub & 6 \\ \hline
+Q9 & 7 TP, 5 Join, 1 OPT, 1 Filter & 5 PK, 3 FK & 2 DataType, 3 Sub & 5 \\ \hline
+Q10 & 4 TP, 1 Join, 1 Filter & 2 PK, 1 FK & 2 Sub & 2 \\ \hline
+Q11 & 10 TP, 3 Join, 3 Filter (1 not exists) & 3 PK, 2 FK & 2 DataType, 2 Sub & 3 \\ \hline
+Q12 & 10 TP, 3 Joins & 4 PK, 3 FK & 1 DataType, 4 Sub & 4 \\ \hline
+Q13 & 6 TP, 1 Join, 1 OPT & 1 PK, 1 FK & 1 DataType, 3 Sub & 1 \\ \hline
+Q14 & 8 TP, 3 Join, 1 OPT & 4 PK, 3 FK & 1 DataType, 3 Sub & 3 \\ \hline
+Q15 & 3 TP, 1 Filter & 1 PK, 1 FK & 4 DataType, 11 Sub & 1 \\ \hline
+Q16 & 8 TP, 3 Join, 2 Filter & 4 PK, 2 FK & 2 DataType, 2 Sub & 3 \\ \hline
+Q17 & 9 TP, 2 Join & 3 PK, 2 FK & 1 DataType, 4 Sub & 3 \\ \hline
+Q18 & 8 TP, 1Union, 3 Join & 4 PK, 3 FK & 1 DataType, 3 Sub & 4 \\ \hline
+\multicolumn{5}{c}{\textbf{Bio2RDF}} \\ \hline
+Q1 & 4 TP & - & 3 Sub & 1 \\ \hline
+Q2 & 4 TP, 1 Join, 1 Filter & 1 PK, 1 INDEX & 7 Sub & 2 \\ \hline
+%Q3 & 2 TP & - & 4 Sub, 1 Create & 1 \\ \hline
+Q3 & 4 TP, 1 Join & 1 PK, 3 INDEX & 5 Sub & 3 \\ \hline
+Q4 & 4 TP, 1 Join & 1 PK, 1 INDEX & 7 Sub & 2 \\ \hline
+%Q6 & 7 TP, 2 Join, 1 Filter &  &  & 1 \\ \hline
+Q5 & 5 TP, 1 Join & 1 PK, 2 INDEX & 6 Sub & 2 \\ \hline
+Q6 & 4 TP & - & 2 Sub & 1 \\ \hline
+%Q9 & 5 TP, 1 Filter & - & 4 Sub, 1 Create & 1 \\ \hline
+Q7 & 6 TP, 1 Join, 2 Filter & 1 PK & 1 DataType, 4 Sub, 1 Create & 1 \\ \hline
+\multicolumn{5}{c}{\textbf{BSBM}} \\ \hline
+Q1 & 5 TP, 3 Join, 1 Filter & 3 PK, 2FK & 7 DataType, 1 Sub & 3 \\ \hline
+Q2 & 15 TP, 3 Join, 3 OPT & 4 PK, 3 FK & 10 DataType, 12 Sub & 4 \\ \hline
+Q3 & 7 TP, 3 Join, 2 Filter, 1 OPT & 3 PK, 2FK & 8 DataType, 3 Sub & 3 \\ \hline
+Q4 & 12 TP, 1 Union, 6 Join, 2 Filter & 3 PK, 2FK & 2 DataType, 4 Sub & 2 \\ \hline
+Q5 & 7 TP, 2 Join, 2 Filter & 2 PK, 1FK & 6 DataType, 3 Sub & 2 \\ \hline
+Q6 & 2 TP, 1 Filter & - & 1 Sub & 1 \\ \hline
+Q7 & 14 TP, 5 Join, 1 Filter, 2 OPT & 5 PK, 4 FK & 11 DataType, 2 Sub & 5 \\ \hline
+Q8 & 10 TP, 2 Join, 4 OPT & 3 PK, 2 FK & 8 DatatType, 8 Sub & 3 \\ \hline
+Q9 & DESCRIBE, 1 TP & - & - & 1 \\ \hline
+Q10 & 7 TP, 3 Join, 2 Filter & 3 PK, 3 FK & 7 DatatType, 2 Sub & 3 \\ \hline
+Q11 & 2 TP, 1 Union & 11 PK, 11 FK & 29 DataType, 53 Sub & 11 \\ \hline
+Q12 & CONSTRUCT, 9 TP, 2 Join & 3 PK, 2 FK & 6 DataType, 7 Sub & 3 \\ \hline
+\end{tabular}%
+}
+\end{table}
