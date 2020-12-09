@@ -2,7 +2,7 @@
 \label{sec:appendix2}
 
 
-\begin{lstlisting}[caption=Prefixes, label=lst:prefixes2, basicstyle=\ttfamily,frame=single]
+\begin{lstlisting}[caption=Prefixes, label=lst:prefixes2, basicstyle=\small,frame=single]
 prefixes:
   rr: http://www.w3.org/ns/r2rml#
   foaf: http://xmlns.com/foaf/0.1/
@@ -19,9 +19,11 @@ prefixes:
   rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
   mad: http://transport.linkeddata.es/madrid/metro/
   gtfsres: http://transport.linkeddata.es/resource/
+  wheelchair: http://transport.linkeddata.es/resource/WheelchairBoardingStatus/
+  mad: http://transport.linkeddata.es/madrid/metro/
 
 \end{lstlisting}
-\begin{lstlisting}[caption=Routes TripleMap, label=lst:routes, basicstyle=\ttfamily,frame=single]
+\begin{lstlisting}[caption=Routes TripleMap, label=lst:routes, basicstyle=\small,frame=single]
 routes:
  sources:
   - [ROUTES.format]
@@ -44,7 +46,7 @@ routes:
             - [str1, $(agency_id)]
             - [str2, $(agency_id)]
 \end{lstlisting}
-\begin{lstlisting}[caption=Calendar\_Date TripleMap, label=lst:calendarDate, basicstyle=\ttfamily,frame=single]
+\begin{lstlisting}[caption=Calendar\_Date TripleMap, label=lst:calendarDate, basicstyle=\small,frame=single]
 calendar_rules:
  sources:  - [CALENDAR.format]
  s: mad:calendar_rules/$(service_id)
@@ -61,7 +63,7 @@ calendar_rules:
   - [schema:endDate, $(end_date), xsd:date]
 \end{lstlisting}
 
-\begin{lstlisting}[caption=Service\_Calendar\_Date TripleMap, label=lst:service2, basicstyle=\ttfamily,frame=single]
+\begin{lstlisting}[caption=Service\_Calendar\_Date TripleMap, label=lst:service2, basicstyle=\small,frame=single]
 services2:
  sources:
   - [CALENDAR_DATES.format]
@@ -77,7 +79,7 @@ services2:
             - [str1, $(service_id)]
             - [str2, $(service_id)]
 \end{lstlisting}
-\begin{lstlisting}[caption=Agency TripleMap, label=lst:agency, basicstyle=\ttfamily,frame=single]
+\begin{lstlisting}[caption=Agency TripleMap, label=lst:agency, basicstyle=\small,frame=single]
 agency:
  sources:
     - [AGENCY.format]
@@ -91,17 +93,17 @@ agency:
    - [foaf:phone,$(agency_phone)]
    - [gtfs:fareUrl,$(agency_fare_url)~iri]
 \end{lstlisting}
-\begin{lstlisting}[caption=Calendar\_Date\_Rules TripleMap, label=lst:calendarDateRules, basicstyle=\ttfamily,frame=single]
+\begin{lstlisting}[caption=Calendar\_Date\_Rules TripleMap, label=lst:calendarDateRules, basicstyle=\small,frame=single]
 calendar_date_rules:
  sources:
   - [CALENDAR_DATES.format]
- s: http://transport.linkeddata.es/madrid/metro/calendar_date_rule/$(service_id)-$(date)
+ s: mad:calendar_date_rule/$(service_id)-$(date)
  po:
   - [a, gtfs:CalendarDateRule]
   - [dct:date, $(date), xsd:date]
   - [gtfs:dateAddition, $(exception_type), xsd:boolean]
 \end{lstlisting}
-\begin{lstlisting}[caption=Stop\_Times TripleMap, label=lst:stoptimes, basicstyle=\ttfamily,frame=single]
+\begin{lstlisting}[caption=Stop\_Times TripleMap, label=lst:stoptimes, basicstyle=\small,frame=single]
 stoptimes:
  sources:
   - [STOP_TIMES.format]
@@ -132,7 +134,7 @@ stoptimes:
             - [str1, $(stop_id)]
             - [str2, $(stop_id)]
 \end{lstlisting}
-\begin{lstlisting}[caption=Frequencies TripleMap, label=lst:frequencies, basicstyle=\ttfamily,frame=single]
+\begin{lstlisting}[caption=Frequencies TripleMap, label=lst:frequencies, basicstyle=\small,frame=single]
 frequencies:
  sources:
   - [FREQUENCIES.format]
@@ -153,7 +155,7 @@ frequencies:
             - [str2, $(trip_id)]
 \end{lstlisting}
 \newpage
-\begin{lstlisting}[caption=Trips TripleMap, label=lst:trips, basicstyle=\ttfamily,frame=single]
+\begin{lstlisting}[caption=Trips TripleMap, label=lst:trips, basicstyle=\small,frame=single]
 trips:
  sources:
   - [TRIPS.format]
@@ -164,7 +166,7 @@ trips:
   - [gtfs:shortName, $(trip_short_name)]
   - [gtfs:direction, $(direction_id)]
   - [gtfs:block, $(block_id)]
-  - [gtfs:wheelchairAccessible,gtfsres:WheelchairBoardingStatus/$(wheelchair_accessible)~iri]
+  - [gtfs:wheelchairAccessible,wheelchair:$(wheelchair_accessible)~iri]
   - p: gtfs:service
     o:
       - mapping: services1
@@ -197,7 +199,7 @@ trips:
             - [str2, $(shape_id)]
 \end{lstlisting}
 
-\begin{lstlisting}[caption=Feed\_Info TripleMap, label=lst:feedInfo, basicstyle=\ttfamily,frame=single]
+\begin{lstlisting}[caption=Feed\_Info TripleMap, label=lst:feedInfo, basicstyle=\small,frame=single]
 feed:
  sources:
   - [FEED_INFO.format]
@@ -211,7 +213,7 @@ feed:
   - [schema:endDate,$(feed_end_date), xsd:date]
   - [schema:version,$(feed_version)]
 \end{lstlisting}
-\begin{lstlisting}[caption=Stops TripleMap, label=lst:stops, basicstyle=\ttfamily,frame=single]
+\begin{lstlisting}[caption=Stops TripleMap, label=lst:stops, basicstyle=\small,frame=single]
 stops:
  sources:
   - [STOPS.format]
@@ -228,7 +230,7 @@ stops:
   - [foaf:page,$(stop_url)~iri]
   - [gtfs:locationType, gtfsres:LocationType/$(location_type)~iri]
   - [gtfs:timeZone,$(stop_timezone)]
-  - [gtfs:wheelchairAccessible,gtfsres:WheelchairBoardingStatus/$(wheelchair_boarding)~iri]
+  - [gtfs:wheelchairAccessible,wheelchair:$(wheelchair_boarding)~iri]
   - p: gtfs:parentStation
     o:
       - mapping: stops
@@ -239,7 +241,7 @@ stops:
             - [str2, $(stop_id)]
 \end{lstlisting}
 
-\begin{lstlisting}[caption=Shapes TripleMap, label=lst:shapes, basicstyle=\ttfamily,frame=single]
+\begin{lstlisting}[caption=Shapes TripleMap, label=lst:shapes, basicstyle=\small,frame=single]
 shapes:
  sources:
   - [SHAPES.format]
@@ -252,7 +254,7 @@ shapes:
   - [gtfs:distanceTraveled,$(shape_dist_traveled)]
 \end{lstlisting}
 
-\begin{lstlisting}[caption=Service\_Calendar TripleMap, label=lst:service1, basicstyle=\ttfamily,frame=single]
+\begin{lstlisting}[caption=Service\_Calendar TripleMap, label=lst:service1, basicstyle=\small,frame=single]
 services1:
  sources:
   - [CALENDAR.format]
