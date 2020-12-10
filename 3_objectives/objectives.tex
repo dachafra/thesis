@@ -59,15 +59,17 @@ Our work is based on the assumptions listed below. These assumptions provide a b
 \end{enumerate}
 
 \section{Hypothesis}
-
+After the identification of the assumptions, we can describe the hypothesis of this thesis. They cover the general characteristics of the contributions.
 \begin{enumerate}[label=\textbf{H{\arabic*}}]
-    \item It is possible to translate declarative mappings
-    \item Virtualized Knowledge Graphs are improved in terms of completeness and performance over raw data exploiting declarative mapping rules and metadata annotations.
-    \item Not only size data is relevant in the evaluation of KG construction engines
-    \item A benchmark blablabla is able to stress and provide a full overview of the state of different engines 
+    \item It is possible to translate declarative mapping rules among different specifications allowing practitioners to have the possibility of selecting a wider set of engines to construct their KG. Our hypothesis here is that mapping translation techniques can be used to enhance multiple features of a KG construction workflow such as mapping rules generation, maintainability, optimization techniques, etc.
+    \item The exploitation of mapping rules and metadata descriptions for data constraint extraction and its application can enhance the performance, access and completeness of current virtual knowledge graph construction systems. This can be performed by extending the current virtual KG construction workflow, including a set of efficient additional steps for the application of the extracted constraints over the input sources. 
+    \item A benchmark based on \texttt{de-facto} standard models for publishing transport data on the web is able to stress and provide a full overview of the current state of different virtual types knowledge graph construction engines. The intrinsic features of these data models, a well defined target ontology and set of relevant queries covering SPARQL 1.1 features are able to define a representative benchmark that addresses the strengths and limitations of virtual KG construction engines and applied techniques.
+    \item The use of physical data structures and their corresponding operators allows scaling up the construction of materialized knowledge graphs from heterogeneous data sources. Using the information from the input mapping rules, these structures can handle complex data integration environments where a large number of joins among sources and high rate of duplicates have an impact over the performance of the KG construction. 
+    \item Optimizations for processing functional mapping rules can be applied to scale up the construction of materialized knowledge graphs. The application of efficient techniques for pre-processing transformation functions during a KG construction process, together with mapping and data translation rules, can deal with complex data integration systems. 
+    
 \end{enumerate}
 
-\section Restrictions
+\section{Restrictions}
 Finally, there is a set of restrictions that describes the limitations and define the future work objectives. The restrictions are:
 
 \begin{enumerate}[label=\textbf{R{\arabic*}}]
