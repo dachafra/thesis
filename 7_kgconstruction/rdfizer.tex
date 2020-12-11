@@ -8,7 +8,7 @@ Diverse approaches have been proposed to define the process of integrating heter
 \begin{figure}[t!]
 \centering
 \includegraphics[width=0.7\textwidth]{figures/Motivating_Example_v1.1.pdf}
-\caption{\textbf{Motivating example.} Available RML engines, implementing naive join strategy, fail to create a KG from two biomedical datasets with a total size of 1GB and 25\% duplicates.} 
+\caption[SDM-RDFizer motivating example]{\textbf{Motivating example.} Available RML engines, implementing naive join strategy, fail to create a KG from two biomedical datasets with a total size of 1GB and 25\% duplicates.} 
 \label{fig:motivatingExample}
 \end{figure}
 
@@ -32,43 +32,17 @@ This paper is structured in six additional sections. Section \ref{sec:pre} summa
 \begin{figure}[t!]
     \centering
     \includegraphics[width=1\textwidth]{figures/architecture_v1.1.jpg}
-    \caption{The architecture of the SDM-RDFizer.}
+    \caption[SDM-RDFizer architecture]{The architecture of the SDM-RDFizer.}
     \label{fig:architecture}
 \end{figure}
 \subsection{Preliminaries}
 \label{sec:pre}
 \subsubsection{RDF Mapping Language - RML}
-%The opening ‘topic’ sentence
-RML~\citep{dimou2014rml} is a declarative mapping language used to transform heterogeneous data, including JSON, CSV, and XML, into the RDF data model. 
-%The main ‘body’ sentences
-In RML, we write a customized set of rules expressed under the RML vocabulary\footnote\url{{https://rml.io/specs/rml/}}.
-These rules define mapping rules between entities and properties, from data structures to RDF triples, i.e., RML \emph{Triples Map}s.
-Figure~\ref{fig:motivatingExample} illustrates fragments of RML triples maps from our project iASiS\footnote\url{{https://www.project-iasis.eu/}}. 
-First, a \emph{Triples Map} tag groups the mappings sharing the same subject (lines 1, 16, and 27).
-Then, we define the data source by defining a \texttt{rml:logicalSource} element (line 2, 17, and 28).
-Next, we use the \texttt{rr:subjectMap} element to define the class of the subject.
-For example, to map entities in ``dataSource2'' to the class \texttt{iasis:Exon}, we use a template-valued term map and the RML class property (lines 29-31).
-Afterwards, a set of predicate-object maps (\texttt{rr:predicateObjectMap}) elements define the creation of predicates and its object value for the RDF subject.
-Lines 7 to 9 show the creation of a \texttt{iasis:interactionScore} predicate referencing the property ``omixcore'' from dataSource1. Lines 11 to 14 show the creation of a triples when its object is the subject of another triples map and the same source is used.
-Lastly, to integrate data from different sources, it is used a reference through a join (\texttt{rr:joinCondition}) to another triples map (lines 21-25).
-%The ‘wrap’ sentence
-Once we have defined the mapping rules, an RML Interpreter performs the data translation across the sources to RDF.
-Different characteristics of the data impact the performance of an RML Interpreter.
-For example, to integrate different sources, several object-join triples maps between data sources are required.
-In the following sub-section, we describe the main parameters affecting an RML interpreter.
+RML~\citep{dimou2014rml} is a declarative mapping language used to transform heterogeneous data, including JSON, CSV, and XML, into the RDF data model. In RML, we write a customized set of rules expressed under the RML vocabulary\footnote\url{{https://rml.io/specs/rml/}}. These rules define mapping rules between entities and properties, from data structures to RDF triples, i.e., RML \emph{Triples Map}s. Figure~\ref{fig:motivatingExample} illustrates fragments of RML triples maps from our project iASiS\footnote\url{{https://www.project-iasis.eu/}}. First, a \emph{Triples Map} tag groups the mappings sharing the same subject (lines 1, 16, and 27). Then, we define the data source by defining a \texttt{rml:logicalSource} element (line 2, 17, and 28). Next, we use the \texttt{rr:subjectMap} element to define the class of the subject. For example, to map entities in ``dataSource2'' to the class \texttt{iasis:Exon}, we use a template-valued term map and the RML class property (lines 29-31). Afterwards, a set of predicate-object maps (\texttt{rr:predicateObjectMap}) elements define the creation of predicates and its object value for the RDF subject. Lines 7 to 9 show the creation of a \texttt{iasis:interactionScore} predicate referencing the property ``omixcore'' from dataSource1. Lines 11 to 14 show the creation of a triples when its object is the subject of another triples map and the same source is used. Lastly, to integrate data from different sources, it is used a reference through a join (\texttt{rr:joinCondition}) to another triples map (lines 21-25). Once we have defined the mapping rules, an RML Interpreter performs the data translation across the sources to RDF. Different characteristics of the data impact the performance of an RML Interpreter. For example, to integrate different sources, several object-join triples maps between data sources are required. In the following sub-section, we describe the main parameters affecting an RML interpreter.
+
 \subsubsection{Parameters affecting an RML Interpreter}
-%The opening ‘topic’ sentence
-Chaves-Fraga et al.~\citep{chaves2019what} empirically analyze the parameters affecting the performance of an RML interpreter.
-%The main ‘body’ sentences
-Five dimensions are defined considering different complexity variables, e.g., mapping, data, platform, source, and output dimensions.
-The \emph{data dimension} takes different data characteristics into account, including the dataset size, the data frequency distribution, the partitioning type, and the data format.
-The \emph{platform dimension} considers the hardware resources used during knowledge graph creation.
-The \emph{source dimension} defines variables related to the access of the data source such as the data source transfer time, limitation in the access, which affect the creation time.
-Finally, the \emph{output dimension} defines three variables, i.e., the serialization type of the output, whether the interpreter removes duplicates or not, and the generation type generating the output at once or in a streaming manner.
-%The ‘wrap’ sentence
-From an interpreter perspective, Chaves-Fraga et al.~\citep{Chaves-FragaEIC19} show that the dimensions of mapping complexity, data, and output are the ones that impact the most.
-Efficient join operators are of paramount importance for an RML interpreter efficiency during execution time.
-Further, removing duplicates efficiently during the transformation process affects positively the performance of an RML interpreter.
+Chaves-Fraga et al.~\citep{chaves2019what} empirically analyze the parameters affecting the performance of an RML interpreter. Five dimensions are defined considering different complexity variables, e.g., mapping, data, platform, source, and output dimensions. The \emph{data dimension} takes different data characteristics into account, including the dataset size, the data frequency distribution, the partitioning type, and the data format. The \emph{platform dimension} considers the hardware resources used during knowledge graph creation.
+The \emph{source dimension} defines variables related to the access of the data source such as the data source transfer time, limitation in the access, which affect the creation time. Finally, the \emph{output dimension} defines three variables, i.e., the serialization type of the output, whether the interpreter removes duplicates or not, and the generation type generating the output at once or in a streaming manner. From an interpreter perspective, Chaves-Fraga et al.~\citep{Chaves-FragaEIC19} show that the dimensions of mapping complexity, data, and output are the ones that impact the most. Efficient join operators are of paramount importance for an RML interpreter efficiency during execution time. Further, removing duplicates efficiently during the transformation process affects positively the performance of an RML interpreter.
 \begin{figure}[h!]
  \centering
  \subfloat[Predicate Tuple Table]{
@@ -78,12 +52,13 @@ Further, removing duplicates efficiently during the transformation process affec
   \subfloat[Predicate Join Tuple Table]{
 \includegraphics[width=0.8\textwidth]{figures/PJTT.jpg}
     \label{fig:pjtt}}
-    \caption{{\bf The Physical Data Structures.} The two physical data structures used by SDM-RDFizer are illustrated. (a) A Predicate Tuple Table with three entries. (b) A Predicate Join Tuple Table with two entries.}
+    \caption[Physical Data Structures for KGC]{{\bf The Physical Data Structures.} The two physical data structures used by SDM-RDFizer are illustrated. (a) A Predicate Tuple Table with three entries. (b) A Predicate Join Tuple Table with two entries.}
     \label{fig:hash_table}
 \end{figure}
 \subsection{The SDM-RDFizer: An RML Engine}
 \label{sec:approach}
 This section describes the SDM-RDFizer in terms of its architecture, the physical operators that make up the execution engine of RML triples maps, and the main properties of these operators.  
+
 \subsubsection{The SDM-RDFizer Architecture}
 A data integration system \textit{DI} provides an abstract representation $\langle O,S,M\rangle$ to specify the mapping rules in a set $M$ that define the integration of a set $S$ of data sources into instances of a unified schema or ontology $O$. 
 SDM-RDFizer receives as input a data integration system \textit{DI} and produces as output instances of the concepts in $O$ that result from the execution of the mapping rules in $M$ over the data sources in $S$. 
@@ -138,7 +113,7 @@ Physically, predicate join tuples are hash tables. The hash key of an entry corr
   \subfloat[Object Join Map]{
 \includegraphics[width=0.6\textwidth]{figures/Join_v1.1.jpg}
     \label{fig:ojm}}
-    \caption{SDM-RDFizer implements three physical RML operators that rely on PTTs to avoid the generation of duplicates. Object Join Maps resort to PJTTs to provide a direct access to the inner tables (i.e., the parent triples maps) of a join between two triples maps; also, PJTTs avoid the traversal of a parent triples map in case it is referenced by more than one triples map.}
+    \caption[Efficient Physical operator for KGC]{SDM-RDFizer implements three physical RML operators that rely on PTTs to avoid the generation of duplicates. Object Join Maps resort to PJTTs to provide a direct access to the inner tables (i.e., the parent triples maps) of a join between two triples maps; also, PJTTs avoid the traversal of a parent triples map in case it is referenced by more than one triples map.}
     \label{fig:DTR}
 \end{figure}
 
@@ -192,7 +167,7 @@ Contrary, the SDM-RDFizer algorithm of a simple object map resorts to a PTT of $
     \subfloat[1M records]{
     \includegraphics[width=0.45\columnwidth]{figures/sdmrdfizer/1M_vera25.png}
     \label{fig:vera25_1M}}
-\caption{{\bf Total execution time of experiments on datasets with 25\% duplicates.} SOM means simple object map, ORM object reference map and OJM object join map. RocketRML generates incorrect results running OJM mappings.}
+\caption[Execution time for with 25\% duplicates]{{\bf Total execution time of experiments on datasets with 25\% duplicates.} SOM means simple object map, ORM object reference map and OJM object join map. RocketRML generates incorrect results running OJM mappings.}
     \label{fig:25percent}
 \end{figure}
 \begin{figure}[!tb]
@@ -207,7 +182,7 @@ Contrary, the SDM-RDFizer algorithm of a simple object map resorts to a PTT of $
     \subfloat[1M records]{
     \includegraphics[width=0.45\columnwidth]{figures/sdmrdfizer/1M_vera75.png}
     \label{fig:vera75_1M}}
-\caption{{\bf Total execution time of experiments on datasets with 75\% duplicates.}  SOM means simple object map, ORM object reference map and OJM object join map. RocketRML generates incorrect results running OJM mappings.}
+\caption[Execution time for with 75\% duplicates]{{\bf Total execution time of experiments on datasets with 75\% duplicates.}  SOM means simple object map, ORM object reference map and OJM object join map. RocketRML generates incorrect results running OJM mappings.}
 \label{fig:75percent}
 \end{figure}
 \subsection{SDM-RDFizer as a Resource}

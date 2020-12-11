@@ -15,7 +15,7 @@ In order to achieve the first objective of this thesis, we need to tackle the fo
 
     \item The construction of virtual knowledge graphs from heterogeneous data sources (e.g., CSV, JSON, XML or RDB) does not exhibit good query evaluation performance nor completeness. The common technique is to use na\"ive SQL data wrappers that hidden the complexity of the input sources. However, in order to tackle the advantage of proposed SPARQL-to-SQL optimization techniques~\citep{priyatna2014formalisation,calvanese2017ontop}, well-formed RDB instances are required, including their corresponding domain and integrity constraints.
 
-    \item Current approaches for constructing materialized knowledge graphs do not scale-up in complex data integration scenarios (e.g., high rate of duplicates or interoperability issues over the input data sources, high data volume, etc.). The absence of engines to efficiently parse declarative mapping languages to construct materialized knowledge graphs hinders their global and industry adoption over real use cases.
+    \item Current approaches for constructing materialized knowledge graphs~\citep{csimcsek2019rocketrml,lefranccois2017sparql} do not scale-up in complex data integration scenarios (e.g., high rate of duplicates or interoperability issues over the input data sources, high data volume, etc.). The absence of engines to efficiently parse declarative mapping languages to construct materialized knowledge graphs hinders their global and industry adoption over real use cases.
 \end{itemize}
 
 The second goal is focused on proposing evaluations of knowledge graph construction systems to understand what are their main current limits, and it has the following open research problems:
@@ -23,8 +23,6 @@ The second goal is focused on proposing evaluations of knowledge graph construct
     \item The evaluations performed over materialization knowledge graphs engines are not representative neither general enough to provide an overview of the current limitations of the applied techniques. Engines such as RocketRML~\citep{csimcsek2019rocketrml} and SPARQL-Generate~\citep{lefranccois2017sparql} evaluate their features using their own use cases, datasets and parameters. 
     \item The current virtual knowledge graph construction benchmarks~\citep{lanti2015npd,bizer2009berlin} are mainly focused on relational databases. Hence, they are not enough to test the capabilities of the new generation of engines that are able to run or distribute SPARQL queries over data in several formats. 
 \end{itemize}
-
-
 
 \section{Contributions to the State of the Art}
 In this work, we aim to provide solutions to the open research problems described in the previous section. The contributions for solving the first research problem are:

@@ -11,7 +11,7 @@ Features like functions in mappings~\citep{de2017declarative,junior2016funul} an
 Traditional virtual OBDA approaches, usually, rely on loading tabular data into SQL-based systems\footnote{\url{https://github.com/oeg-upm/morph-rdb/wiki/Usage\#csv-files}}$^,$\footnote{\url{https://ontop-vkg.org/tutorial/mapping/primary-keys.html}}(e.g., MySQL, Apache Drill, Spark SQL, Presto) to perform query translation techniques. However, the correctness and optimization of these techniques are supported by the main assumption about the existence of constraints over the source data (i.e., a good physical design of the relational database instance). Their absence during a virtual OBDA process over tabular data directly impacts  completeness and performance of these techniques. Completeness is affected because of heterogeneity issues in data sources (e.g., datatype CSV columns are simply treated as string-type SQL columns). Furthermore, performance is impacted because indexes are not created based on basic relational constraints, i.e., primary and foreign key constraints are not defined in the schema. Consequently, query translation optimization techniques that commonly exploit indexes (e.g., ~\citep{rodriguez2015efficient,priyatna2014formalisation}) may not produce the expected results whenever the constraints have not been applied, or the indexes have not been created.
 \begin{table}[t]
 \centering
-\caption{Most commonly used formats and percentage over the total number of datasets to expose data in mature EU open data portals in October 2019. Each dataset may be shared in different formats.}
+\caption[Formats in EU open data portal]{Most commonly used formats and percentage over the total number of datasets to expose data in mature EU open data portals in October 2019. Each dataset may be shared in different formats.}
 \label{tab:odp}
 \begin{tabular}{c|c|c|c}
 \hline
@@ -81,7 +81,7 @@ Although some of the aforementioned challenges are not only specific to tabular 
 % \usepackage{graphicx}
 \begin{table*}[t]
 \centering
-\caption{Properties of CSVW and RML+FnO that can be used to address the challenges of dealing with tabular data in a virtual OBDA approach}
+\caption[Relevant properties of CSVW and RML+FnO]{Properties of CSVW and RML+FnO that can be used to address the challenges of dealing with tabular data in a virtual OBDA approach}
 \label{tab:features}
 \resizebox{0.9\textwidth}{!}{%
 \begin{tabular}{c|l|l}
@@ -160,7 +160,7 @@ Analyzing the definition of OBDA in~\citep{xiao2018obdasurvey} and its extension
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=1\linewidth]{figures/architecture.pdf}
-    \caption{\textbf{The Morph-CSV Framework.} Morph-CSV extends the starting phase of a typical OBDA system including a set of steps for dealing with the identified tabular data querying challenges. The framework first, extracts the constraints from mappings and tabular metadata and then, implements them in a set of operators that are run before executing the query translation and query execution phases, which can be delegated to any SPARQL-to-SQL engine. The mapping rules are translated accordingly to the modified tabular dataset to allow its access by the underlying OBDA engine.}
+    \caption[The Morph-CSV Framework.]{\textbf{The Morph-CSV Framework.} Morph-CSV extends the starting phase of a typical OBDA system including a set of steps for dealing with the identified tabular data querying challenges. The framework first, extracts the constraints from mappings and tabular metadata and then, implements them in a set of operators that are run before executing the query translation and query execution phases, which can be delegated to any SPARQL-to-SQL engine. The mapping rules are translated accordingly to the modified tabular dataset to allow its access by the underlying OBDA engine.}
     \label{fig:workflow}
 \end{figure}
 \subsubsection{From a virtual tabular dataset to an OBDA instance}
@@ -177,7 +177,7 @@ Given a $VTD$, we define the function $\theta(VTD)=PI$ where $PI$ is an OBDA ins
 We extend the function $\theta(VTD)$ with the aim of enhancing the virtual OBDA baseline approach over tabular data. We define $\theta^{++}(VTD)$=$PI$ as a function that extracts a set of constraints from $M$ and $MD$ and then applies them over $D_{tabular}$ to obtain $PI$. More in detail, the function can be expressed as $\theta^{++}(VTD)$=$\gamma(D_{tabular},O,M,\psi(M,MD))$ where the function $\psi(M,MD)= C$ extracts a set of constraints from OBDA annotations for tabular data. Then, $\gamma(D_{tabular},O,M,C)$ applies the constraints $C$ over $D_{tabular}$ to create a relational database schema $S^{'}$ and its corresponding instance $D^{'}$. In summary, the final output is an OBDA instance $PI^{'}=\langle P^{'},D^{'}\rangle$, where $D^{'}$ is a relational database instance that is compliant with the main assumptions of the OBDA framework and $P^{'}=\langle O,S^{'},M^{'}\rangle$ where $S^{'}$ contains a set of domain and integrity constraints and $M^{'}$ are the mapping rules that define the relations between $O$ and $S^{'}$. Following the proposed workflow in Figure \ref{fig:vtd}, the user first defines the query based on the concepts defined in the ontology, and then, during the starting phase, the $\theta^{++}(VTD)$ is performed. During the execution of the function, first, the constraints from mappings and annotations ($\psi(M,MD)$) are extracted, and then the OBDA instance $PI^{'}$ is generated where the constraints are applied to efficiently create the schema $S^{'}$ and the relational database instance $D^{'}$. Mapping rules are also translated, from $M$ to $M{'}$ to be aligned with the new created schema.
 \begin{table}[t]
 \centering
-\caption{Summary of constraints, corresponding functions and OBDA annotations applied by Morph-CSV}
+\caption[Functions and annotations applied by Morph-CSV]{Summary of constraints, corresponding functions and OBDA annotations applied by Morph-CSV}
 \label{tab:summary}
 \resizebox{0.9\textwidth}{!}{%
 \begin{tabular}{l|l|l|l|l}
@@ -309,7 +309,7 @@ The final step before translating and executing the query is the creation of an 
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=1\linewidth]{figures/steps/rdb.pdf}
-    \caption{\textbf{Generated schema.} The schema generated by Morph-CSV extracting domain and integrity constraints from the annotations and based on the identified sources selected from the input query.}
+    \caption[Output RDB schema from Morph-CSV]{\textbf{Generated schema.} The schema generated by Morph-CSV extracting domain and integrity constraints from the annotations and based on the identified sources selected from the input query.}
     \label{fig:rdb}
 \end{figure}
 
