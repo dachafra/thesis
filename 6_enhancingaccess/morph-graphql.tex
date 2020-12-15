@@ -21,7 +21,7 @@ In this paper, we propose the exploitation of declarative mapping languages to s
 \subsection{The Morph-GraphQL framework}
 The Morph-GraphQL framework (Figure \ref{fig:obda2graphql}) proposes the exploitation of the information encoded in declarative mapping rules following a well-known specification (e.g. R2RML and RML) to generate GraphQL servers. A domain expert can create these types of mappings without the need for programming skills. Despite that the creation of mappings might not be easy for domain experts to be created from scratch, there are several tools with easy to use graphical interface that already developed by researchers in the semantic Web community such as RMLEditor~\citep{heyvaert2016rmleditor} or KARMA~\citep{knoblock2015exploiting}. The generated GraphQL servers benefit from the wide range of tools available for GraphQL in order to access data stored in various formats (i.e. RDB, CSV, JSON). The approach consists of the following steps: 1) the generation of the definition of a query to be evaluated by the underlying dataset (e.g. ListEpisodes), 2) the generation of the types in the GraphQL schema and 3) the generation of GraphQL resolvers. 
 
-\begin{figure}[ht]
+\begin{figure}[!ht]
     \centering
     \includegraphics[width=0.8\linewidth]{figures/workflow-morphgraphql.pdf}
     \caption[morph-GraphQL workflow]{\textbf{morph-GraphQL workflow.} morph-GraphQL receives declarative mappings and generates GraphQL servers. These servers, as it is defined in the specification, contain their two main components (i.e. schema and resolvers) that can be used by any GraphQL engine to evaluate queries over the data source.}
@@ -115,7 +115,7 @@ The benchmark includes a list of \textit{choke-points}, which are challenges tha
 These choke-points are covered in the 16 hand-crafted query templates provided by the benchmark. The summarise of the queries, the relation with the proposed choke-points and the support of Morph-GraphQL is show in Table \ref{table:supported-queries}.
 
 
-\begin{figure}[t]
+\begin{figure}[ht]
     \centering
     \includegraphics[width=.8\linewidth]{figures/evaluation.pdf}
     \caption[Morph-GraphQL evaluation workflow.]{\textbf{Evaluation Workflow.} We evaluated Morph-GraphQL by comparing its performance over the supported LinGBM queries againts two equivalent Semantic Web approaches. First one is the materialisation of the LinGBM RDB to RDF using R2RML mappings and the second one is the translation from SPARQL-to-SQL using also the the same mapping rules.}
@@ -123,7 +123,7 @@ These choke-points are covered in the 16 hand-crafted query templates provided b
 \end{figure}
 
 \subsubsection{Evaluation Setup}
-\begin{table}[h!]
+\begin{table}[!ht]
  \centering
   \caption[Morph-GraphQL supported LinGBM queries]{Supported Queries in Morph-GraphQL}
  \label{table:supported-queries}

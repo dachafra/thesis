@@ -41,7 +41,7 @@ Listing \ref{list:soa_rdf_example} shows an example of an RDF graph with a set o
 <http://transport.org/trip/1> gtfs:wheelchair "false"^^xsd:boolean .
 \end{lstlisting}
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \centering
 \includegraphics[width=\textwidth]{figures/state-of-the-art/RDF.pdf}
 \caption{Graphical representation of an RDF Graph}
@@ -75,7 +75,7 @@ Given the RDF graph shown in Figure \ref{fig:soa_rdf_example}, we might be inter
 
 % Please add the following required packages to your document preamble:
 % \usepackage{graphicx}
-\begin{table}[h]
+\begin{table}[!ht]
 \centering
 \caption{SPARQL result-set example}
 \label{tab:soa_result_set}
@@ -130,7 +130,7 @@ Since 2012, R2RML is a W3C recommendation to declarative declare mapping rules b
     \item from zero to multiple predicate-object maps (\texttt{rr:PredicateObjectMap}). Predicate-object map is formed by one or many predicate maps (\texttt{rr:PredicateMap}), and one to many object maps (\texttt{rr:ObjectMap}) or reference-object maps (\texttt{rr:RefObjectMap}). This last one is used when joins among logical sources are defined.
 \end{itemize}
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \centering
 \includegraphics[width=\textwidth]{figures/state-of-the-art/R2RML-structure.pdf}
 \caption{R2RML structure with its relevant properties}
@@ -140,7 +140,7 @@ Since 2012, R2RML is a W3C recommendation to declarative declare mapping rules b
 Figure \ref{fig:soa_r2rml-structure} shows the basic structure of an R2RML Triples Map, with the relations between its main properties and their cardinalities. \texttt{rr:SubjectMap}, \texttt{rr:PredicateMap} and \texttt{rr:ObjectMap} are defined as term maps (\texttt{rr:TerMap}. This property is used to generate the desirable RDF terms, either as IRIs (\texttt{rr:IRI}) Blank Nodes (\texttt{rr:BlankNode}) or literal (\texttt{rr:Literal}). The values of the term maps can be specify using the following properties: \texttt{rr:Constant} for constant values, \texttt{rr:Column} for values obtained directly from a column of a table or \texttt{rr:Template} for the ones that are a concatenation between a string and a column reference, for example, to generate subject IRIs. Furthermore, additional information can be provided such as the language of a literal, using the \texttt{rr:Language} property, or its corresponding datatype with \texttt{rr:Datatype}. Figure \ref{fig:soa_termmap-structure} gives an overview of the R2RML term map.
 
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \centering
 \includegraphics[width=0.7\textwidth]{figures/state-of-the-art/term-map.png}
 \caption{R2RML \texttt{rr:TermMap} overview}
@@ -149,14 +149,14 @@ Figure \ref{fig:soa_r2rml-structure} shows the basic structure of an R2RML Tripl
 
 We provide a complete example of the construction of a knowledge graph through an R2RML mapping. The input table (Figure \ref{fig:soa_csv}) represents information about the stop times for a giving trip of the Madrid's metro system. It provides the corresponding identifier for the trip and each stop together with the pickup time and type. Figure \ref{fig:soa_r2rml} shows the R2RML mapping for transforming the input table to a RDF dataset following the LinkedGTFS\footnote{\url{https://lov.linkeddata.es/dataset/lov/vocabs/gtfs}} ontology. We can observe that the subject map uses a \texttt{rr:template} with reference to three different columns of the table to generate unique identifiers for the IRIs. The set of \texttt{rr:PredicateObjectMap} (POM) defines the rules to generate three different properties of the \texttt{gtfs:StopTime} class. The \texttt{gtfs:arrivalTime} POM uses the \texttt{rr:dataType} property to declare the type of the input data, \texttt{gtfs:pickupType} uses the \texttt{rr:template} to generate an uri-based literal in the output dataset, and finally, \texttt{gtfs:trip} predicate has a \texttt{rr:RefObjectMap} to generate its corresponding object, referencing to the corresponding IRI trip defined in antoher TriplesMap. Finally, the output RDF dataset is shown in Figure \ref{fig:soa_rdf}.
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \centering
 \includegraphics[width=0.85\textwidth]{figures/state-of-the-art/Stop_times CSV.pdf}
 \caption{Excerpt of a Stop-times table}
 \label{fig:soa_csv}
 \end{figure}
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \centering
 \includegraphics[width=0.85\textwidth]{figures/state-of-the-art/R2RML-example.pdf}
 \caption{R2RML mapping for stop-times table}
@@ -164,7 +164,7 @@ We provide a complete example of the construction of a knowledge graph through a
 \end{figure}
 
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \centering
 \includegraphics[width=0.85\textwidth]{figures/state-of-the-art/RDF from Stop_times.pdf}
 \caption{Output RDF dataset after parsing the R2RML document}
@@ -174,10 +174,10 @@ We provide a complete example of the construction of a knowledge graph through a
 
 
 \subsubsection{RML: Extending R2RML for Heterogeneous Data}
-The RDF Mapping Language (RML)~\citep{dimou2014rml} proposes to extend the R2RML mapping specification to cover other kinds of data formats such as CSV, XML or JSON, hence, this specification is one of the most used for constructing knowledge graph from heterogeneous data sources. In this section we explain the main differences between RML and R2RML and then we describe a new serialization of the RML mappings following a YAML syntax and its main properties~\citep{Heyvaert2018Declarative}.
+The RDF Mapping Language (RML)~\citep{dimou2014rml} proposes to extend the R2RML mapping specification to cover other kinds of data formats such as CSV, XML or JSON, hence, this specification is one of the most used for constructing knowledge graph from heterogeneous data sources. In this section we explain the main differences between RML and R2RML and then we describe another serialization of the RML mappings following a YAML syntax and its main properties~\citep{Heyvaert2018Declarative}.
 
 
-\begin{table}[h]
+\begin{table}[!ht]
 \centering
 \caption{The differences between R2RML and RML}
 \label{tab:soa_rmlvsr2rml}
@@ -215,7 +215,7 @@ YARRRML~\citep{Heyvaert2018Declarative} is a serialization of the RML mappings b
 
 
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \centering
 \includegraphics[width=0.7\textwidth]{figures/state-of-the-art/YARRRML example.pdf}
 \caption{YARRML mapping example based for transforming Stop Times table}
@@ -266,7 +266,7 @@ Rahm and Do~\citep{rahm2000data} have reported the relevance of data transformat
 
 Figure \ref{fig:soa_yarrrml_fno} shows an example of the integration between RML mapping language and the Function Ontology following YARRRML specification. We can observe that the object of the predicate \texttt{gtfs:headsign} is defined as \texttt{fnml:FunctionMap} term map, where we declarative indicate the function that has to be executed (\texttt{grel:lowercase}) with its corresponding parameters. In this example, the function only needs one parameter that is the reference to the column \texttt{stop\_headsign} from the Stop\_Times input source. Listing \ref{list:soa_fno_example} depicts how the output RDF graph after the application of the RML+FnO, where the \texttt{grel:lowercase} function has been applied over the object value of \texttt{gtfs:headsign}.
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \centering
 \includegraphics[width=0.7\textwidth]{figures/state-of-the-art/YARRRML+FnO.pdf}
 \caption{YARRML mapping integrated with transformation functions following the FnO}
@@ -288,7 +288,7 @@ Figure \ref{fig:soa_yarrrml_fno} shows an example of the integration between RML
 Metadata describe the available information about or within a dataset(s). Providing metadata for describing the content of the data on the web it is an useful manner to obtain relevant information of an specific dataset. For example, DCAT~\citep{maali2018data} is a W3C recommendation to describe metadata from data catalogs. This standard is used in most of the open data portals across EU to describe the content of their datasets. Another relevant W3C recommendation for describing the content of data in the web is CSV on the Web~\citep{tennison2015model}.   
 The recommendation\footnote{http://www.w3.org/TR/tabular-metadata/} defines a model for providing metadata on CSV files and tabular data such as datatypes, valid values, data transformations, and primary and foreign key constraints. A related W3C proposal\footnote{https://www.w3.org/TR/csv2rdf/} defines a procedure and rules for the generation of RDF from tabular data and a few implementations that refer to this proposal are already available. Indeed, there are data organizations that have generated guidelines and documentations to help in the creation of these annotations to common users and provide the metadata through the open data portals. 
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \centering
 \includegraphics[width=0.85\textwidth]{figures/state-of-the-art/csvw-model.png}
 \caption{The CSV on the Web model}
@@ -298,7 +298,7 @@ The recommendation\footnote{http://www.w3.org/TR/tabular-metadata/} defines a mo
 
 Taking into account the information during the process of KG construction from tabular dataset can help to enhance the process in terms of completeness and performance. It also allows to declarative deal with the typical heterogeneity issues that appear when these kind of data want to be integrated such as data may not be normalized, information about relationships or column names are not always descriptive or homogeneous, missing (meta)data, etc. Figure \ref{fig:soa_csvw} shows the complete data model for describing tabular content on the web. It has been splinted in several parts that can describe the schema of the dataset, dialect annotations (e.g., delimiter value or the prefix used for comments) and information about datatype and related properties such as \texttt{csvw:null} (for null values) and \texttt{csvw:lang} (for the language). Each of these properties can be defined as a array, link, URI template, column reference or atomic value among others. The data model is materialized in a specific dialect of JSON-LD created for it, which means that the metadata annotations can be also expressed as an RDF graph, facilitating the interoperability of this proposals with other such as RML or R2RML. In Figure \ref{fig:soa_csvw_example} we show an example of CSVW annotations following the JSON-LD syntax. It provides useful information about the datatypes, column names or boolean values for the trips of a GTFS feed.
 
-\begin{figure}[!h]
+\begin{figure}[!ht]
 \centering
 \includegraphics[width=0.5\textwidth]{figures/state-of-the-art/CVSW example.pdf}
 \caption{An example of CSVW annotations over Transport Domain}
