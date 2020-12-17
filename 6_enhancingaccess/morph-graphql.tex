@@ -1,4 +1,4 @@
-\section{Morph-GraphQL: GraphQL Server Generation from Declarative Mappings}
+\section{GraphQL Server Generation from Declarative Mappings}
 \label{chap6_morphgraphql}
 Introduced in 2000, Representational State Transfer (REST) has become the most common manner to provide web services in the last decade. Those web services that conform to the REST principles, known as RESTful web services, use HTTP/S and its operations to make requests to the underlying server, such as GET to retrieve objects, POST to add objects, PUT to modify objects and DELETE to remove objects, among others.
 
@@ -6,8 +6,7 @@ Over the years, the complexity of modern software concept has evolved since the 
 
 In order to ameliorate the aforementioned problems, Facebook proposed the GraphQL query language \citep{graphql}, initially being used internally by the company in 2012. GraphQL was released for public use in 2015 and since then has been adopted by companies from various sectors such as technology (GitHub), entertainment (Netflix), finance (PayPal), travel (KLM), among others. 
 
-Two main components of a GraphQL server are \textbf{schema} and \textbf{resolvers}.
-The GraphQL schema specifies the type of an object together with the fields that can be queried. GraphQL resolvers are data extraction functions responsible for accessing the underlying datasets. These functions are written by software engineers using a  specific programming language and, are then used by GraphQL engines, which translate GraphQL queries to the corresponding underlying query language of the sources (e.g., SQL). Multiple GraphQL engines support major programming languages (e.g. JavaScript, Python, Java, Golang, Ruby). In addition to the aforementioned frameworks, query planning tools have been developed in order to translate GraphQL queries into other query languages (e.g. dataloader\footnote{\url{https://github.com/facebook/dataloader}}, joinmonster\footnote{\url{https://join-monster.readthedocs.io/en/latest/}}).
+Two main components of a GraphQL server are \textbf{schema} and \textbf{resolvers}. The GraphQL schema specifies the type of an object together with the fields that can be queried. GraphQL resolvers are data extraction functions responsible for accessing the underlying datasets. These functions are written by software engineers using a  specific programming language and, are then used by GraphQL engines, which translate GraphQL queries to the corresponding underlying query language of the sources (e.g., SQL). Multiple GraphQL engines support major programming languages (e.g. JavaScript, Python, Java, Golang, Ruby). In addition to the aforementioned frameworks, query planning tools have been developed in order to translate GraphQL queries into other query languages (e.g. dataloader\footnote{\url{https://github.com/facebook/dataloader}}, joinmonster\footnote{\url{https://join-monster.readthedocs.io/en/latest/}}).
 
 Generating a GraphQL server requires expertise from both domain experts and software developers. Typically, the following tasks need to be done: 
 \begin{enumerate}

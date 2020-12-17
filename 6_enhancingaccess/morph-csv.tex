@@ -1,4 +1,4 @@
-\section{Morph-CSV: Virtual Knowledge Graph Construction over Tabular Data}
+\section{Virtual Knowledge Graph Construction over Tabular Data}
 \label{chap6_morphgcsv}
 %Guided by the Open Data principles, governments and private organizations are regularly publishing vast amounts of public data in open data portals. For example, almost a million datasets are available in the European Open Data Portal (EODP)\footnote{\url{https://www.europeandataportal.eu}}, and many of them are available in tabular formats (e.g., CSV, Excel), as observed in Table \ref{tab:odp}. Both the simplicity of a tabular representation and the variety of tools to manage a table (e.g., Excel, Calc) have influenced the popularity of tabular formats to represent open data.  
 
@@ -41,7 +41,7 @@ We propose a set of new steps to be aligned with the current KGC workflow. Furth
 
 
 \subsection{Motivating Example}
-\begin{figure}[ht]
+\begin{figure}[th]
     \centering
     \includegraphics[width=0.6\linewidth]{figures/example.pdf}
     \caption[Morph-CSV motivating example]{\textbf{Motivating Example.} SPARQL query evaluation over two tabular data files in the transport domain through a common virtual KGC approach. It loads the files as single tables in an SQL-based system and uses the mapping rules for query translation. The number of results differs with respect to the expected results due the heterogeneity of the raw data. Additionally, query performance may be affected by the join condition between the two tables, the absence of indexes and the loading of columns that are not needed to answer the input query (wheelchair).}
@@ -128,7 +128,7 @@ In Table \ref{tab:features}, we summarize the relevant properties from RML+FnO a
 The formal framework presented in~\citep{xiao2018obdasurvey} defines an OBDA\footnote{In this section we use OBDA as synonym of virtual KGC} specification as a tuple $P$ = $\langle O,S,M\rangle$ where $O$ is an ontology, $S$ is the source schema, and $M$ a set of mappings. Additionally, an OBDA instance is defined as a tuple $PI$ = $\langle P,D\rangle$ where P is an OBDA specification and $D$ is a data instance conforming to $S$. In a virtual OBDA framework, queries are posed over a conceptual layer and then translated to queries over the data layer using information in the mappings. There is a set of assumptions over the framework that support the possibility of doing query translation and  ensuring  semantic preservation in the process, together with the application of  optimization techniques proposed in the state of the art. To motivate our proposal, we have to establish what are the main assumptions made in previous proposals and their impact when data is represented in tabular form.
 
 
-\begin{figure}[ht]
+\begin{figure}[th]
   \centering
   \subfloat[Baseline approach]{
     \includegraphics[width=0.48\linewidth]{figures/naive-approach.pdf}  
@@ -152,7 +152,7 @@ Analyzing the definition of OBDA in~\citep{xiao2018obdasurvey} and its extension
     that includes an RDB wrapper able to provide a relational view over $S$ and $D$. In the context of a tabular dataset $D_{tabular}$, $D$=$R_{wrapper}(D_{tabular})$ where $R_{wrapper}$ is a relational database wrapper that satisfies $S$.
 \end{itemize}
 
-\begin{figure}[!ht]
+\begin{figure}[th]
     \centering
     \includegraphics[width=1\linewidth]{figures/architecture.pdf}
     \caption[The Morph-CSV Framework.]{\textbf{The Morph-CSV Framework.} Morph-CSV extends the starting phase of a typical OBDA system including a set of steps for dealing with the identified tabular data querying challenges. The framework first, extracts the constraints from mappings and tabular metadata and then, implements them in a set of operators that are run before executing the query translation and query execution phases, which can be delegated to any SPARQL-to-SQL engine. The mapping rules are translated accordingly to the modified tabular dataset to allow its access by the underlying OBDA engine.}
@@ -208,9 +208,9 @@ Based on the preliminaries and assumptions on the OBDA framework, we now define 
 
 \paragraph{}\noindent\textbf{Problem statement:} Given a $VTD$, the problem of OBDA query translation over tabular data is defined as the problem of explicitly enforcing implicit constraints $C$ extracted from mapping rules $M$ and metadata $MD$ on a tabular dataset $D_{tabular}$, such that: 
 \begin{itemize}
-    \item The number of results obtained in the evaluation of the SPARQL query $Q$ over the function $eval(Q,\theta^{++}(VTD))$ is equal or greater than the number of results in the evaluation of the same query $Q$ over the function $eval(Q,\theta(VTD))$, i.e., $\#answers(eval(Q,\theta^{++}(VTD))) \geq \\ \#answers(eval(Q,\theta(VTD)))$.
+    \item The number of results obtained in the evaluation of the SPARQL query $Q$ over the function $eval(Q,\theta^{++}(VTD))$ is equal or greater than the number of results in the evaluation of the same query $Q$ over the function $eval(Q,\theta(VTD))$, i.e., \\ $\#answers(eval(Q,\theta^{++}(VTD))) \geq  \#answers(eval(Q,\theta(VTD)))$.
     \item The total execution time of evaluating a SPARQL query $Q$ over $eval(Q,\theta^{++}(VTD))$ is %decreased compared to the evaluation of the 
-    less than or equal than the total execution time of the same SPARQL query $Q$ over the function $eval(Q,\theta(VTD))$, i.e.,\\ $time(eval(Q,\theta^{++}(VTD))) \leq \\
+    less than or equal than the total execution time of the same SPARQL query $Q$ over the function $eval(Q,\theta(VTD))$, i.e.,\\ $time(eval(Q,\theta^{++}(VTD))) \leq 
     time(eval(Q,\theta(VTD)))$. 
 \end{itemize}
 
@@ -227,7 +227,7 @@ Based on the preliminaries and assumptions on the OBDA framework, we now define 
  We show the workflow of Morph-CSV in Figure \ref{fig:workflow} with the inputs and outputs of each step. 
 
 
-\begin{figure}[ht]
+\begin{figure}[th]
   \centering
   \subfloat[Input SPARQL query.]{
   \includegraphics[width=0.5\linewidth]{figures/steps/selectquery.pdf}
@@ -255,12 +255,12 @@ The second step is to select the relevant sources to answer the input query. The
 
 Second, Morph-CSV runs $select\_sources(M)$, where it projects, from the input $D_{tabular}$, the sources and columns that are referenced in $M$, hence, relevant sources for the input query. The output of this function generates a set of new tabular sources $s_i\ldots s_n$ that substitute the original $D_{tabular}$ in $VTD$. Following the previous example, Figure \ref{fig:selection2} shows the selection of the relevant columns of  source \textit{routes.csv}, where Morph-CSV has the original source as  input (Figure \ref{fig:selection2i}), and discards the unnecessary columns of the source based on the mapping rules, obtaining as output the source with the relevant columns for evaluating the input query (Figure \ref{fig:selection2r}). Note that in this step, unnecessary sources from the input GTFS feed such as \textit{agency.csv} and \textit{stops.csv} are also discarded.
 
-\begin{figure}[ht]
+\begin{figure}[th]
 \centering
 \subfloat[Original routes.csv input source.]{
-    \includegraphics[width=0.5\linewidth]{figures/steps/pushdowninput.pdf} 
+    \includegraphics[width=0.75\linewidth]{figures/steps/pushdowninput.pdf} 
     \label{fig:selection2i}
-}
+}\\
 \subfloat[Output of routes.csv source.]{
   \includegraphics[width=0.5\linewidth]{figures/steps/pushdownresult.pdf}  
   \label{fig:selection2r}
@@ -274,14 +274,14 @@ There are two functions for performing data normalization. The first one is the 
  
 The second function is the treatment of multiple entities in the same source. Morph-CSV takes the mapping rules and executes the function $cut(\mathcal{M},\mathcal{D}_{tabular})$. This function analyzes the mapping rules $\mathcal{M}$, and performs a 3NF~\citep{codd1979extending} normalization step over ${D}_{tabular}$ when there are two sets of mapping rules ($TM_j$ and $TM_i$) that have the same source, and the intersection of their columns in the rules only contains the join condition references. Following a similar approach as in 2NF, the output is a modified $VTD$ with a set of new sources $s_i\ldots s_n$, each one with the corresponding columns of each entity. For example, in Figure \ref{fig:normalization} we show the 3NF normalization of the \textit{routes.csv} file, that generates an auxiliary source for the \texttt{rr:TriplesMap} with the \textit{gtfs:RouteType} entity data (Figure \ref{fig:normalization}), removing that information from \textit{routes.csv}. In several data integration approaches, normalization steps are not taken into account in order to improve query execution (reducing the number of joins among sources). However, in the case of RDF, where each entity of a class has a unique URI (subject), joins cannot be reduced (see input mapping in Figure \ref{fig:selectionm}). This means that taking into account normalization steps in an OBDA context not only helps to improve query completeness, but also helps to improve performance. Additionally, normalization is also essential for allowing Morph-CSV to efficiently run data preparation steps, as we show in the next step.
 
-\begin{figure}[ht]
+\begin{figure}[th]
 \centering
 \subfloat[Routes.csv after 3NF normalization step.]{
     \includegraphics[width=0.5\linewidth]{figures/steps/normalization1.pdf}  
     \label{fig:norm1}
 }
 \subfloat[Route\_type.csv file generated with Morph-CSV.]{
-    \includegraphics[width=0.5\linewidth]{figures/steps/normalization2.pdf} 
+    \includegraphics[width=0.4\linewidth]{figures/steps/normalization2.pdf} 
     \label{fig:norm}
 }
 \caption[Normalization step]{\textbf{Normalization.} 3NF Normalization step over the \textit{routes.csv} file generating other file with the data for \texttt{gtfs:RouteType} class.}
@@ -291,7 +291,7 @@ The second function is the treatment of multiple entities in the same source. Mo
 \subsubsection*{Data preparation}
 In this step, Morph-CSV addresses the challenge of \textit{Heterogeneity} and executes three different functions: $duplicates$, $sub$ and $create$. First, Morph-CSV removes all duplicates in the raw data, not only the original ones, but also other duplicates that can appear during the normalization step (see Figure \ref{fig:norm}). It applies the ideas described in~\citep{jozashoori2019mapsdi}, performing $duplicates(s_{j})$ where $s_{j}$ is a source in $D_{tabular}$. As it has already been demonstrated in~\citep{jozashoori2019mapsdi,iglesias2020sdm,jozashoori2020funmap}, this step not only has a high impact on the behavior of these engines, but in this case, it also reduces the number of operations performed by Morph-CSV $sub$ and $create$, as they are defined as deterministic functions. The first one is defined as $sub(exp(A_{ij}),val)$ where $exp(A_{ij})$ is a boolean function over column $A_{ij}$ of source $s_{j}$ that when true, the value of $A_{ij}$ is substituted by $val$. There are multiple substitution functions that Morph-CSV executes such as default values, null values and date formats. This function is one of the most important for enhancing the completeness of the query (e.g., enforcing the default values of a column). The second function creates a new column in a specific source $s_{j}$. It is defined as $create(c(A_{nj},\ldots,A_{mj}))$, where $c(A_{nj},\ldots,A_{mj})$ is the application of a set of transformation functions over the columns $A_{nj},\ldots,A_{mj}$ in source $s_{j}$. This function is used to push down the application of ad-hoc transformation functions, usually defined inside the mapping rules~\citep{junior2016funul,de2017declarative}, thus, avoiding the incorporation of them inside the SQL translated query. In Figure \ref{fig:preparation} we show the \textit{route\_type.csv} file after the execution of this step. First, Morph-CSV removes the duplicates of the file obtaining as output a file with only two rows. Then, it executes the transformation function defined in the mapping rules and creates a new column in the file, generating the desired value for the subject of the class according to the LinkedGTFS ontology, ``Subway''. Additionally, the engine substitutes the definition of the transformation functions in the mapping rules by a reference to the created column. In this manner, Morph-CSV efficiently performs the $sub$ and $create$ functions directly over the raw data and together with the normalization step. Thus, the number of joins in the input query is reduced.
 
-\begin{figure}[!ht]
+\begin{figure}[th]
     \centering
     \includegraphics[width=1\linewidth]{figures/steps/creation-result.pdf}
     \caption{Data preparation of \textit{route-types.csv} file.}
@@ -301,9 +301,9 @@ In this step, Morph-CSV addresses the challenge of \textit{Heterogeneity} and ex
 \subsubsection*{Schema creation and load}
 The final step before translating and executing the query is the creation of an SQL schema applying the rest of the identified constraints, and loading the selected tabular data sources. Besides the typical integrity constraints that can be extracted from CSVW annotations (PK/FK), Morph-CSV implements a rule for creating indexes in the RDB instance in order to optimize the execution of query joins. In tabular datasets, it is common that the join conditions defined in the mapping rules are based on columns that are not part of PK-FK relations; thus, they are not indexed and OBDA optimizations do not have the desired effect. To address this problem, Morph-CSV gets the \texttt{rr:child} and \texttt{rr:parent} references of the mapping rules and calculates their selectivity on the fly. Then, taking this selectivity into account Morph-CSV decides to create, or not, an index over these columns. Additionally, the mapping document is translated so that it is aligned with the RDB schema that has been created. Figure \ref{fig:rdb} shows the RDB schema generated by Morph-CSV for the input query in Figure \ref{fig:selectionq}, with the applied domain and integrity constraints. 
 
-\begin{figure}[!ht]
+\begin{figure}[th]
     \centering
-    \includegraphics[width=1\linewidth]{figures/steps/rdb.pdf}
+    \includegraphics[width=0.7\linewidth]{figures/steps/rdb.pdf}
     \caption[Output RDB schema from Morph-CSV]{\textbf{Generated schema.} The schema generated by Morph-CSV extracting domain and integrity constraints from the annotations and based on the identified sources selected from the input query.}
     \label{fig:rdb}
 \end{figure}

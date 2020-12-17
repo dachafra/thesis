@@ -1,16 +1,12 @@
-\section{SDM-RDFizer: Knowledge Graph Materialization at Scale}
+\section{Efficient RML parsing for Knowledge Graph Materialization at Scale}
+\label{chap7_rdfizer}
 Knowledge graphs have gained momentum as data structures to integrate--as factual statements-- data and knowledge present in heterogeneous data sources. 
 DBpedia and Wikidata are exemplary encyclopedic knowledge graphs frequently accessed by scientific and industrial communities; e.g., only Wikidata receives billions of visits per month\footnote{\url{https://stats.wikimedia.org/}}. 
 Similarly, knowledge graphs are receiving significant attention in science and industrial developments \citep{AuerKPKSV18,NoyGJNPT19}. In fact, according to Google, knowledge graph is a trend term\footnote{\url{https://trends.google.com/trends/explore?q=knowledge\%20graph}} and the Google Scholar indexes more than 3,5M entries of scientific publications with the term knowledge graph.
-Although results demonstrate the success in the adoption of Semantic Web technologies, put in perspective the need of providing efficient and mature technologies for creating and maintaining knowledge graphs. 
+Although results demonstrate the success in the adoption of Semantic Web technologies, put in perspective the need of providing efficient and mature technologies for constructing and maintaining knowledge graphs. 
 
-Diverse approaches have been proposed to define the process of integrating heterogeneous datasets into knowledge graphs \citep{chebotko2009semantics,calvanese2017ontop,chaves2019what,priyatna2014formalisation}. Mapping languages (e.g., R2RML \citep{R2RML} and RML \citep{dimou2014rml}) and engines (e.g., RMLMapper\footnote{\url{https://github.com/RMLio/rmlmapper-java}} and RocketRML \citep{csimcsek2019rocketrml}) represent valuable contributions for performing this transformation process. As observed in our next example, albeit highly used, existing approaches lack efficient data management techniques demanded to create knowledge graphs from large and heterogeneous datasets with duplicates.   
-\begin{figure}[t!]
-\centering
-\includegraphics[width=0.7\textwidth]{figures/Motivating_Example_v1.1.pdf}
-\caption[SDM-RDFizer motivating example]{\textbf{Motivating example.} Available RML engines, implementing naive join strategy, fail to create a KG from two biomedical datasets with a total size of 1GB and 25\% duplicates.} 
-\label{fig:motivatingExample}
-\end{figure}
+   
+
 
 \noindent \textbf{Motivating Example:}
 Creating a knowledge graph from biomedical data sources is an exemplary scenario of being overwhelmed by the volume and heterogeneity of data. 
@@ -26,6 +22,12 @@ In the case of RocketRML, the process stops early due to failure of the memory c
 While applying RMLMapper, the transformation process times out after 48 hours. 
 The inability of available engines to perform in this scenario demonstrates the need to develop engines able to perform complex transformations in an efficient manner.
 \\
+\begin{figure}[t!]
+\centering
+\includegraphics[width=0.7\textwidth]{figures/Motivating_Example_v1.1.pdf}
+\caption[SDM-RDFizer motivating example]{\textbf{Motivating example.} Available RML engines, implementing naive join strategy, fail to create a KG from two biomedical datasets with a total size of 1GB and 25\% duplicates.} 
+\label{fig:motivatingExample}
+\end{figure}
 \textbf{Our Resource:} We address the problem of efficient knowledge graph creation, and propose a resource named SDM-RDFizer which is able to transform data from myriad data sources into an RDF knowledge graph. SDM-RDFizer implements a set of unique physical operators and data structures that speed up the execution of the mapping rules that specify a knowledge graph creation process. The current version of SDM-RDFizer is customized for RML, a mapping language extensively used for the creation of knowledge graphs in diverse domains~\citep{dimou2014rml}.    
 SDM-RDFizer is publicly available as a resource in a Github\footnote{\url{https://github.com/SDM-TIB/SDM-RDFizer}} and in Zenodo\footnote{\url{https://doi.org/10.5281/zenodo.3872103}}. SDM-RDFizer is used in more than eight international projects. Moreover, experimental results reveal the contribution that SDM-RDFizer makes to the repertoire of efficient technologies for knowledge graph management.  
 \begin{figure}[t!]
@@ -33,15 +35,11 @@ SDM-RDFizer is publicly available as a resource in a Github\footnote{\url{https:
     \includegraphics[width=1\textwidth]{figures/architecture_v1.1.jpg}
     \caption[SDM-RDFizer architecture]{The architecture of the SDM-RDFizer.}
     \label{fig:architecture}
+
 \end{figure}
-\subsection{Preliminaries}
 
-\subsubsection{RDF Mapping Language - RML}
-RML~\citep{dimou2014rml} is a declarative mapping language used to transform heterogeneous data, including JSON, CSV, and XML, into the RDF data model. In RML, we write a customized set of rules expressed under the RML vocabulary\footnote\url{{https://rml.io/specs/rml/}}. These rules define mapping rules between entities and properties, from data structures to RDF triples, i.e., RML \emph{Triples Map}s. Figure~\ref{fig:motivatingExample} illustrates fragments of RML triples maps from our project iASiS\footnote\url{{https://www.project-iasis.eu/}}. First, a \emph{Triples Map} tag groups the mappings sharing the same subject (lines 1, 16, and 27). Then, we define the data source by defining a \texttt{rml:logicalSource} element (line 2, 17, and 28). Next, we use the \texttt{rr:subjectMap} element to define the class of the subject. For example, to map entities in ``dataSource2'' to the class \texttt{iasis:Exon}, we use a template-valued term map and the RML class property (lines 29-31). Afterwards, a set of predicate-object maps (\texttt{rr:predicateObjectMap}) elements define the creation of predicates and its object value for the RDF subject. Lines 7 to 9 show the creation of a \texttt{iasis:interactionScore} predicate referencing the property ``omixcore'' from dataSource1. Lines 11 to 14 show the creation of a triples when its object is the subject of another triples map and the same source is used. Lastly, to integrate data from different sources, it is used a reference through a join (\texttt{rr:joinCondition}) to another triples map (lines 21-25). Once we have defined the mapping rules, an RML Interpreter performs the data translation across the sources to RDF. Different characteristics of the data impact the performance of an RML Interpreter. For example, to integrate different sources, several object-join triples maps between data sources are required. In the following sub-section, we describe the main parameters affecting an RML interpreter.
 
-\subsubsection{Parameters affecting an RML Interpreter}
-Chaves-Fraga et al.~\citep{chaves2019what} empirically analyze the parameters affecting the performance of an RML interpreter. Five dimensions are defined considering different complexity variables, e.g., mapping, data, platform, source, and output dimensions. The \emph{data dimension} takes different data characteristics into account, including the dataset size, the data frequency distribution, the partitioning type, and the data format. The \emph{platform dimension} considers the hardware resources used during knowledge graph creation.
-The \emph{source dimension} defines variables related to the access of the data source such as the data source transfer time, limitation in the access, which affect the creation time. Finally, the \emph{output dimension} defines three variables, i.e., the serialization type of the output, whether the interpreter removes duplicates or not, and the generation type generating the output at once or in a streaming manner. From an interpreter perspective, Chaves-Fraga et al.~\citep{chaves2019what} show that the dimensions of mapping complexity, data, and output are the ones that impact the most. Efficient join operators are of paramount importance for an RML interpreter efficiency during execution time. Further, removing duplicates efficiently during the transformation process affects positively the performance of an RML interpreter.
+
 \begin{figure}[h!]
  \centering
  \subfloat[Predicate Tuple Table]{
@@ -228,11 +226,7 @@ All the resources used in this evaluation are publicly available\footnote{\url{h
 In this section, we describe the outcomes of our experiments evaluating the performance of the selected engines (i.e., SDM-RDFizer, RMLMapper, and RocketRML) in different testbeds.
 \autoref{fig:25percent} and \autoref{fig:75percent} report on execution time for creating a knowledge graph from datasets with 25\% and 75\% of duplicates, respectively. It should be noted that since RocketRML does not support N-M join relations and generates incorrect outputs subsequently, we only provide the results of SOM and ORM mappings for this engine. For the rest of the experiments, we have verified that the generated outputs are the same for all the approaches in terms of cardinality and correctness.\\
 \noindent The obtained results clearly reveal the benefits of applying the proposed operators during the process of creating a knowledge graph. As illustrated in \autoref{fig:25percent} and \autoref{fig:75percent}, independent of the size of the input datasets and the percentage of existing duplicates, RMLMapper and RocketRML fail to generate RDF triples from mappings including 2-ORM and 5-ORM; they time out in five hours. Moreover, the execution time of RMLMapper and RocketRML increases as the size of data and number triples maps increase. Nonetheless, as it can be observed, SDM-RDFizer completes the RDF triples generation in all testbeds within a reasonable time period. Additionally, the performance of SDM-RDFizer$^-$ provides evidence of the quality of the SDM-RDFizer operators and their ability of speeding up a knowledge graph creation process.       
-\subsection{Related Work}
 
-Solutions provided to the problem of knowledge graph creation from structured and semi-structured data are gaining momentum in practitioners and users~\citep{corcho2019towards}. Since 2012, with the appearance of the W3C recommendation of the R2RML~\citep{R2RML} mapping language for transforming relational databases to knowledge graphs, diverse proposals and optimizations techniques have tackled this problem. For example, \citep{gawriljuk2016scalable} presents a framework for incremental knowledge graph creation. Additionally, diverse optimizations techniques are proposed for virtual knowledge graph generation\citep{calvanese2017ontop,priyatna2014formalisation}, i.e., SPARQL-to-SQL query translation techniques~\citep{chebotko2009semantics}. Albeit efficient, this proposals are only focused on relational database data sources, and most of the optimizations are done over a SQL translated query that cannot be applied when datasets are heterogeneous.
-
-With RML~\citep{dimou2014rml} specification proposed as an extension of R2RML for describing mapping rules over diverse data formats, multiple tools have been developed for the creation of knowledge graphs. For example, CARML\footnote{\url{https://github.com/carml/carml}} executes RML rules and includes additional features like MultiTermMap (to deal with arrays) and XML namespace (to improve XPath expressions). RockeML~\citep{csimcsek2019rocketrml} is a RML engine implemented using the NodeJS framework and RMLMapper is also a commonly used RML engine. Unfortunately, none of these engines implements efficient operators to execute mapping rules. As a result, they are not able to scale up to large volume of data, high-duplicate rate, and heterogeneity. Our ambition is to provide a resource for generating knowledge graphs at scale.
 
 \subsection{Conclusions}
 
