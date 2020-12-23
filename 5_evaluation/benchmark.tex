@@ -51,7 +51,7 @@ In summary, the main contributions of this work are:
 \end{enumerate}
 
 
-\subsection{Preliminaries}
+\subsection{Concepts and Definitions}
 
 In this section, we introduce the main concepts and definitions that are later used to explain our work. Besides this, well-known concepts from the literature such as SPARQL queries and result sets~\citep{w3c2013sparql}, or ontologies~\citep{mcguinness2004owl} will be used throughout this work.
 
@@ -202,7 +202,7 @@ The GTFS-Madrid-Bench proposes an extended workflow using VIG as the Dataset Gen
 \end{enumerate}
  
 
-\begin{figure}[h]
+\begin{figure}[th]
     \centering
     \includegraphics[width=0.85\linewidth]{figures/best-dist.pdf}
     \caption[Example of best dataset]{\textbf{Example of Best Dataset}. Best dataset distributes the formats over the data sources ensuring that at least there is one source per each format and the joins among different formats are minimised. \textit{extjoin} means that there is a relation between sources in different formats and \textit{internjoin} means that the joins are between sources in the same format.}
@@ -210,7 +210,7 @@ The GTFS-Madrid-Bench proposes an extended workflow using VIG as the Dataset Gen
 \end{figure}
 
 
-\begin{figure}[h]
+\begin{figure}[th]
     \centering
     \includegraphics[width=0.85\linewidth]{figures/worst-dist.pdf}
     \caption[Example of worst dataset]{\textbf{Example of Worst Dataset}. Worst dataset distributes the formats over the data sources ensuring that at least there is one source per each format and the joins among different formats are maximised. \textit{extjoin} means that there is a relation between sources in different formats.}
@@ -622,4 +622,15 @@ Additionally, in our evaluation we only have the possibility to obtain the total
 We have also found possible improvements in terms of data and mapping generation in the process of creation of the resources in this benchmark. In the data generation process, one of the main improvements may be the incorporation of semantics. For example, in our benchmark we have a file that represents the calendar of the trips, which has a start and an end date. The data generator should validate that the start date must be earlier than the end date, so that queries can be created to exploit this constraint. Another example that would improve with the inclusion of semantics is the scaling of dataset sources that are related and may be ``joined''. Currently, even if each dataset is scaled, the number of tuples per join attribute value does not change. Ideally, this should be scaled only in certain cases. Additionally, the inclusion of a set of constraints or validation rules may improve this process (e.g. define a range of possible values for a column).
 
 With respect to the mapping generation process, we find two main issues. First, as mappings need to relate the ontology with the data source, the raw data needs some changes in a pre-processing step in order to be aligned with the features of the ontology (e.g classes or properties). There are some proposals to include these transformation functions in mappings such as the Function Ontology~\citep{de2016ontology} or R2RML-F~\citep{debruyne2016r2rml} but at the moment of writing only Squerall and Morph-CSV are able to parse RML mappings with functions. Finally, we have to create manually all of the mapping documents required to test the engines. Following the proposal in~\citep{corcho2019towards}, an improvement will be to be able to define the mappings conceptually, independently of the language, and then, to have techniques to translate them to a specific language. With this approach we will ensure the correctness of all the mapping rules.
+
+\subsection{Conclusions}
+In this section we propose a benchmark for virtual knowledge graph construction using real data from the transport domain. The benchmark design considers variables that span all of its resources (queries, mappings and data) in order  to test the capabilities and performance of the  processors. GTFS-Madrid-Bench satisfies requirements that are an extension of those already identified in existing OBDA benchmarks. Besides, metrics have been established for each step of the workflow of virtualized knowledge graph access.
+
+As already discussed, the main objective of this benchmark is not to provide a ranking of engines, but to provide a set of resources that can be useful for: (i) practitioners who choose the engine that best fits their use cases and (ii) developers of virtual knowledge graph access engines to improve their tools and compare their results with other proposals. As such, we expect this benchmark to be a stepping stone in this area where much research and development has been done for decades, but there is a need for more mature applications to be used in real-world environments. Indeed, our experimental study has shown that there are still relevant open issues, such as SPARQL conformance, semantic preservation in the translation from SPARQL queries to the query languages used to query raw data (CSV, JSON, XML), and the application of query evaluation optimization techniques. With the GTFS-Madrid-Bench we intend to contribute to the community by providing not only the baseline that can be used to improve the development of the current engines, but also the possibility to use it to test new approaches and techniques over the next years. 
+
+The design of this benchmark has been a complex task, since it had to cover all of the identified requirements and, at the same time, work on a very general scenario with a mix of KGC approaches. On the one hand, some of the current OBDA proposals work with SQL datasets and in general conform to most of the features of the SPARQL language. Throughout the experiments we realized that the OBDA proposals that are designed to work with other formats support fewer features of the query language, and in general they have issues in their query translation process. There is a lot of room for improvement in these proposals, such as generating more efficient queries, which has been done in the SQL-based OBDA proposals. On the other hand, we were only able to include in the benchmark the Ontario KGC proposal, even though other KGC proposals have been published in the literature since it was not feasible to execute them because of lack of documentation. In all cases, the evaluation of our benchmark queries with the different engines exposed the need for improvements in their current releases, in terms of efficiency and correctness of the results.
+
+It is also worth mentioning that the benchmark is easily extensible to be used with other data formats and engines. That is, if in the future there is a requirement to evaluate an engine that supports a different data format, the only need is to create a script that translates the data sources from CSV to the corresponding format.
+
+Future work includes the development of mapping translation techniques that involve the different mapping language specifications. In the context of virtual knowledge graph construction it would be very useful to help in the development and maintenance of mappings, so as to avoid inconsistencies among mappings and errors in the evaluation. Another line of work is to improve the data generation process to ensure that scaled data is well aligned with the domain data model. 
 

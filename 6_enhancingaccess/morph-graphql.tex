@@ -67,7 +67,7 @@ Algorithm \ref{algGenerateSchema} generates a GraphQL type from a Triples Map. I
 \input{algorithms/algGenerateSchema.tex}
 
 
-\subsection{Generating Resolvers}
+\subsubsection{Generating Resolvers}
 %TBD see Listing \ref{lstGenerateQueryRootResolver}.
 %\lstinputlisting[
 %frame=single
@@ -86,7 +86,7 @@ Algorithm \ref{algGenerateQueryRootNaive} generates a GraphQL resolver from a Tr
 \input{algorithms/algGenerateQueryRootNaive.tex}
 
 
-\subsection{Morph-GraphQL}
+\subsection{Experimental Evaluation}
 In this section, we present the experimental evaluation of Morph-GraphQL. Our aim is to answer the following questions:
 \begin{itemize}
     \item \textbf{RQ1:} Can Morph-GraphQL generate a GraphQL server from declarative mappings that is able to answer the set of queries provided by a GraphQL benchmark?
@@ -96,7 +96,7 @@ In this section, we present the experimental evaluation of Morph-GraphQL. Our ai
 We have implemented our framework as an open-source project \textbf{Morph-GraphQL}\footnote{\url{https://github.com/oeg-upm/morph-graphql}}$^,$\footnote{\url{https://doi.org/10.5281/zenodo.3584339}}. In our previous work~\citep{priyatna2019morph} we described the full example of Star Wars generating a GraphQL server based on an R2RML mapping using Morph-GraphQL. Currently, the Morph-GraphQL framework is able to: translate R2RML mappings into a Javascript-based GraphQL server for accessing tabular datasets (CSV files or Relational Databases)\citep{priyatna2019morph}. We use the JoinMonster library\footnote{\url{https://join-monster.readthedocs.io}} to generate efficient SQL queries when joins are needed.
 
 \subsubsection{Link\"{o}ping GraphQL Benchmark} 
-Currently, the only GraphQL benchmark available is the Link\"{o}ping GraphQL Benchmark (LinGBM), proposed by Hartig et al.~\citep{hartig2019LinGBM}. This benchmark focuses on exposing read-only GraphQL APIs over a legacy relational database. At the time of writing, the LinGBM benchmark v1.0 sets its context in the domain of e-commerce. It consists of a dataset generator and a set of query templates (a query with placeholder variables to be instantiated). Additionally, guidelines are provided on the mapping between the relational database schema and the GraphQL schema (e.g. Table Offer is mapped to GraphQL type Offer). 
+Currently, the only GraphQL benchmark available is the Link\"{o}ping GraphQL Benchmark (LinGB)\footnote{\url{https://github.com/LiUGraphQL/LinGBM/wiki}}. This benchmark focuses on exposing read-only GraphQL APIs over a legacy relational database. At the time of writing, the LinGBM benchmark v1.0 sets its context in the domain of e-commerce. It consists of a dataset generator and a set of query templates (a query with placeholder variables to be instantiated). Additionally, guidelines are provided on the mapping between the relational database schema and the GraphQL schema (e.g. Table Offer is mapped to GraphQL type Offer). 
 
 \textbf{Dataset Generator.}
 The dataset generator\footnote{\url{https://github.com/LiUGraphQL/LinGBM/wiki/Datasets}} is based on the Berlin SPARQL Benchmark (BSBM)~\citep{bizer2009berlin}. The dataset contains ten tables (e.g.  Vendor, Offer, Producer, Product, and Person, Review) with different join cardinalities (e.g. 1-1, 1-N, M-N).

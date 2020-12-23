@@ -1,12 +1,28 @@
-\chapter{Conclusions}
+\chapter{Conclusions and Future work}
 \label{chap:conc}
-
+This thesis presents several contributions to the state of the art to address research objectives in the are of knowledge graph construction using declarative mapping languages. The contributions and identified future lines of work are summarized below.
 
 
 \section{Achievements}
+Constructing knowledge graphs from heterogeneous data sources is a complex data integration problem. Open research problems addressed in this thesis are: (i) the generation and interoperability of different mapping rules specifications to obtain the desirable (virtual) KG, (ii) the creation of representative evaluation methods to provide an overview of the state of the art on the KGC engines and to understand their current limitations, (iii) as well as optimizations techniques to scale up the construction of virtual but also materialized KGs. 
+ 
+ 
+The first objective of the this thesis is focused on define \textbf{representative features of a new knowledge graph construction generation systems}. This is done in Chapter \ref{chapter:mappig-translation}, where the \textit{mapping translation} concept is defined, adding a new layer into a KGC workflow. As we demonstrate with several use cases, exploiting the benefits of making interoperable different mapping languages specifications can enhance several steps of this process. The specific use case shown in this thesis is on the statistics domain, where we propose a set of new properties over the R2RML specification to improve the maintainability of the creation of the mapping rules in this domain. The ideas around this concept are also used over the different optimizations shown in Chapters \ref{chapter:virtual} and \ref{chapter:construction}.
+
+The exploitation of mapping rules to enhance the construction of virtual and materialized knowledge graphs techniques is 
+
+To accomplish the second objective of this thesis, described as \textbf{}
+
 
 
 
 
 \section{Future Work}
+In this section we describe those research problems that were not tackled during this thesis, due to time-permitting issues, or that were appearing as continuation of the proposed solutions in this work.
+
+Aligned with the vision of the future generation of knowledge graph construction systems, we think that the mapping translation concept needs to be explored further, and this would allow a new range of KGC approaches that may be part of a new generation. In our opinion, the KGC community should see this variety of mapping languages not only as challenges (e.g., interoperability) but also, and mainly, as an opportunity for further research and development in this area, to address the need to cover more types of data sources while taking advantage of all the work that has been done in advanced aspects like query translation. Providing mapping translator services across mapping languages would bring further benefits and increase the availability of ontology-based data for its exploitation by search engines and query answering systems at Web scale. Additionally, the definition of a conceptual model describing the concepts of different mapping languages using the same vocabulary can be one of the first points to provide such translation services across different specifications. Finally, the analysis of the role of the users in the process of constructing knowledge graphs will be essential to develop robust and useful solutions in complex data integration environments.
+
+One of the main future lines we have identify during this thesis, extending the contributions on the enhancement of KGC systems, is to define methodologies and techniques for an optimal physical design of knowledge graphs. The main idea is to be able to decide which parts of a KG have to be materialized or virtualized analyzing the features of the typical inputs of a KGC process (data, constraints, mapping rules, ontology). We believe that these methodologies will help to start to see the web as an integrated database that can be queried using Semantic Web technologies. Together with the application of the optimizations techniques proposed in this thesis over distributed environments, such as the ones proposed in \citep{endris2019ontario,mami2019squerall}, leverage the use of declarative KGC techniques to its next steps providing the basis for developing real-world knowledge graph applications.
+
+For the evaluation systems, we need to extend the current proposals in order to coverage other be more flexibly to evaluate a KGC workflow, taking into account all the parameters that can have an impact in their behavior. Some examples of these possible future lines are: the inclusion of mapping rules with transformation functions, the adaption of mapping rules construction in a data integration system to isolated parameters from this input in the evaluation, or the improvement in creation of datasets at scale, exploiting the information from mapping rules or graph constraints (SHACL). Finally, it is important to create systems that include a ground truth in order to test not only the performance and scalabitily of the engines but also other important features such as correctness and completeness.
 
