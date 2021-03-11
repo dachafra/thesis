@@ -1,5 +1,5 @@
 
-\chapter{New Generation of Knowledge Graph Construction systems}
+\chapter{New Generation of Knowledge Graph Construction Approaches}
 \label{chapter:mappig-translation}
 
 \epigraph{The primary goal of a researcher should be to continually challenge science with creative ideas}{\textit{Oscar Corcho}}
@@ -50,22 +50,24 @@ Finally, using these two properties, we define the concepts of weak and strong s
 \end{figure}
 
 
-\section{Mapping Translation by examples}
+\section{Mapping Translation by example}
 In this section we identify a set of scenarios and challenges in the creation and use of KGC mapping languages, where mapping translation is relevant. We describe the challenge and provide some references to some of the work presented in the literature addressing or acknowledging it. The presented use cases are summarized in Table \ref{tab:chap4_summary}.
 
 \begin{table}[!ht]
 \centering
-\caption{Summary of mapping translation approaches}
+\caption{Summary of Mapping Translation Approaches}
 \label{tab:chap4_summary}
 \resizebox{0.65\textwidth}{!}{%
 \begin{tabular}{c|c|c}
 \hline
 \textbf{Use Case}         & \textbf{Engine} & \textbf{Translation}     \\ \hline
+Maintenance               & Mapeathor       & Excel-to-[R2]RML           \\ \hline
 Maintenance               & yarrrml-parser  & YARRRML-to-RML           \\ \hline
-Maintenance               & r2rml-statistic  & R2MLIterator-to-R2RML    \\ \hline
+Maintenance               & r2rml-statistic & R2MLIterator-to-R2RML    \\ \hline
 Maintenance               & ShExML          & ShExML-to-RML            \\ \hline
 Declarative to Programmed & morph-graphQL   & R2RML-to-GraphQLResolver \\ \hline
-Access                    & morph-CSV       & RML(+FnO)-to-R2RML       \\ \hline
+Access                    & Morph-CSV       & RML(+FnO)-to-R2RML       \\ \hline
+Access                    & FunMap          & RML(+FnO)-to-RML          \\ \hline
 Optimizations/Semantics   & ontop           & R2RML-to-OBDA            \\ \hline
 \end{tabular}%
 }
@@ -107,7 +109,7 @@ Similarly, this analysis may be extended to other combinations of mapping langua
 Ontop \citep{rodriguez2015efficient} is an OBDA system that comes with both data and query translation techniques. Ontop translates R2RML mappings into its own mapping called "OBDA mappings". These mappings are represented as datalog rules, allowing the formalisation and semantic optimisation techniques to be performed, and generating a more efficient SQL queries (e.g. self-join elimination) that can be evaluated in less time by the underlying databases.
 
 
-\section{Use Case: Virtual Knowledge Graph in the Statistics Domain}
+\section{Use Case: Virtual Knowledge Graph Construction in the Statistics Domain}
 \label{sec:chap4_rmlc}
 
 Statistics data is one of the most common ways of sharing public information nowadays. PDF, HTML and, especially, CSV format, are some of the most used formats of tabular data being published on the web by statistics agencies. Whereas this is still the main trend, many agencies worldwide are embracing semantic technologies for publishing their resources as Statistics Knowledge Graph (SKG), which is the knowledge graph on the web that stores and allows access to statistics linked data. In many cases both formats co-exist, allowing to access the information in different ways. 
@@ -117,7 +119,7 @@ Due to high volume and variability of data, the transformation from tabular to S
 In an ad-hoc approach~\citep{corcho2017publishing}, a processor which is the main component responsible for the transformation process, is developed for a specific purpose. Those processors are not commonly used for other solutions. The SKG resulting from the transformation process is stored in a triple store and there is a need for repeating the transformation process whenever the original statistics data changes to ensure that generated SKG is synchronised with the original statistics data. On the other hand, using R2RML to generate SKG brings several benefits in comparison to the ad-hoc approach. There are many R2RML processors~\citep{priyatna2014formalisation,calvanese2017ontop} available which means that one is not restricted to use a particular processor and may easily use another if necessary. Furthermore, many of those processors have incorporated techniques for keeping the desired SKG virtual, thus eliminating the need of synchronization between the tabular data and SKG. A virtualization process is highly recommended when the data published is volatile because it ensures that the retrieved data is updated. This is achieved by translating SPARQL queries posed to the virtual SKG into another query supported by the underlying data source and evaluated on the original dataset~\citep{poggi2008linking}. Table \ref{table:chapter4_compare} summarizes our discussion regarding the approaches on transforming statistics data into SKG.
 
 \begin{table}[tbp]
-\caption[Transforming approaches for SKG]{Comparison of Approaches for Transforming Statistics Data to SKG}
+\caption[KG Construction Approaches from Statistics Data]{Comparison of Approaches for Transforming Statistics Data to SKG}
 \label{table:chapter4_compare}
 \begin{tabular}{c|c|c}
 \hline

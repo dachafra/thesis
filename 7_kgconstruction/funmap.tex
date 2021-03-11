@@ -7,7 +7,7 @@
 \definecolor{rust}{RGB}{190, 51, 2}
 \definecolor{grey}{RGB}{183, 183, 183}
 
-\section{Efficient Processing of Functional Mappings for Knowledge Graph Construction}
+\section{Efficient Processing of Functional Mappings for KG Materialization}
 \label{chap7_funmap}
 %KG construction requires the description of schema alignments among data sources and an ontology, as well as the specification of methods to curate and transform data collected from the input sources into a unified format. 
 A rich spectrum of mapping languages has been proposed to specify schema-ontology alignments across data sources implemented in a variety of semi-structured and structured formats; exemplar approaches include R2RML~\citep{R2RML}, RML~\citep{dimou2014rml}, and xR2RML~\citep{michel2015translation}. Furthermore, function-based mapping languages \citep{de2017declarative,debruyne2016r2rml,junior2016funul,vu2019d} are equipped with abstractions that enable interoperable and reusable specifications of data transformations by means of user-defined functions. Moreover, formalisms like RML+FnO~\citep{de2017declarative} combine the Function ontology and RML, enabling declarative specification of the schema-ontology alignments and data transformations that define the process of KG construction. Albeit expressive, existing mapping languages lack efficient interpreters able to scale up to complex KG construction scenarios. The incoming data avalanche urges KG construction approaches capable of integrating large and diverse data, and efficiently transforming this data to comply with application-specific KG formats.   
@@ -104,7 +104,7 @@ Considering the fact that a \verb|TriplesMap| may only be used some attributes o
 For each transformation function $F_i$ over a given source $S_i$ in the set of data sources $S$, FunMap projects all attributes $a'_i$ in $S_i$ that are input attributes of $F_i$, into a temporal data source $S'_i$ followed by duplicate removal. Subsequently, it evaluates $F_i$ over $S'_i$ and stores the results into the attribute $o_i$. Lastly, it creates a new data source $S_{i}^{output}$ with the attributes $a'_i$ and $o_i$; $S_{i}^{output}$ is added to $S'$. 
 \begin{figure}[t!]
 \includegraphics[width=\textwidth]{figures/OriginalDatasource.png}
-\caption[Original data source for KGC]{\textbf{Original data source for KG construction.} The data source includes many attributes among which only a few are required by the transformation function or function-free mappings in the process of knowledge graph creation.} 
+\caption[Original input data source used by FunMap in KGC workflow]{\textbf{Original input data source used by FunMap in KGC workflow.} The data source includes many attributes among which only a few are required by the transformation function or function-free mappings in the process of knowledge graph creation.} 
 \label{fig:OriginalDatasource}
 \end{figure}
 \begin{figure}[t!]

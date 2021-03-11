@@ -138,7 +138,7 @@ The formal framework presented in~\citep{xiao2018obdasurvey} defines an OBDA\foo
   \includegraphics[width=0.48\linewidth]{figures/vtd-approach.pdf} 
   \label{fig:vtd}
   }
-\caption[Virtual OBDA for tabular data approaches]{\textbf{Virtual OBDA for tabular data approaches.} The baseline approach creates the schema and relational database instance extracting file and columns names from the tabular dataset. The proposed workflow exploits the information from the mapping rules and metadata to extracted a set of constraints and applying them over the tabular data to generate the schema and the relational database instance.}
+\caption[Virtual OBDA approaches for tabular data]{\textbf{Virtual OBDA approaches for tabular data.} The baseline approach creates the schema and relational database instance extracting file and columns names from the tabular dataset. The proposed workflow exploits the information from the mapping rules and metadata to extracted a set of constraints and applying them over the tabular data to generate the schema and the relational database instance.}
 \label{fig:obda}
 \end{figure}
 
@@ -172,7 +172,7 @@ Given a $VTD$, we define the function $\theta(VTD)=PI$ where $PI$ is an OBDA ins
 We extend the function $\theta(VTD)$ with the aim of enhancing the virtual OBDA baseline approach over tabular data. We define $\theta^{++}(VTD)$=$PI$ as a function that extracts a set of constraints from $M$ and $MD$ and then applies them over $D_{tabular}$ to obtain $PI$. More in detail, the function can be expressed as $\theta^{++}(VTD)$=$\gamma(D_{tabular},O,M,\psi(M,MD))$ where the function $\psi(M,MD)= C$ extracts a set of constraints from OBDA annotations for tabular data. Then, $\gamma(D_{tabular},O,M,C)$ applies the constraints $C$ over $D_{tabular}$ to create a relational database schema $S^{'}$ and its corresponding instance $D^{'}$. In summary, the final output is an OBDA instance $PI^{'}=\langle P^{'},D^{'}\rangle$, where $D^{'}$ is a relational database instance that is compliant with the main assumptions of the OBDA framework and $P^{'}=\langle O,S^{'},M^{'}\rangle$ where $S^{'}$ contains a set of domain and integrity constraints and $M^{'}$ are the mapping rules that define the relations between $O$ and $S^{'}$. Following the proposed workflow in Figure \ref{fig:vtd}, the user first defines the query based on the concepts defined in the ontology, and then, during the starting phase, the $\theta^{++}(VTD)$ is performed. During the execution of the function, first, the constraints from mappings and annotations ($\psi(M,MD)$) are extracted, and then the OBDA instance $PI^{'}$ is generated where the constraints are applied to efficiently create the schema $S^{'}$ and the relational database instance $D^{'}$. Mapping rules are also translated, from $M$ to $M{'}$ to be aligned with the new created schema.
 \begin{table}[t]
 \centering
-\caption[Functions and annotations applied by Morph-CSV]{Summary of constraints, corresponding functions and OBDA annotations applied by Morph-CSV}
+\caption[Functions and Annotations applied by Morph-CSV]{Summary of constraints, corresponding functions and OBDA annotations applied by Morph-CSV}
 \label{tab:summary}
 \resizebox{0.9\textwidth}{!}{%
 \begin{tabular}{l|l|l|l|l}
@@ -265,7 +265,7 @@ Second, Morph-CSV runs $select\_sources(M)$, where it projects, from the input $
   \includegraphics[width=0.5\linewidth]{figures/steps/pushdownresult.pdf}  
   \label{fig:selection2r}
 }
-\caption[Source selection]{\textbf{Source Selection.} Based on the selection of the rules, only route\_id and trip\_id columns are selected, discarding the rest fields.}
+\caption[Source selection step by Morph-CSV]{\textbf{Source selection step by Morph-CSV.} Based on the selection of the rules, only route\_id and trip\_id columns are selected, discarding the rest fields.}
 \label{fig:selection2}
 \end{figure}
 
@@ -284,7 +284,7 @@ The second function is the treatment of multiple entities in the same source. Mo
     \includegraphics[width=0.4\linewidth]{figures/steps/normalization2.pdf} 
     \label{fig:norm}
 }
-\caption[Normalization step]{\textbf{Normalization.} 3NF Normalization step over the \textit{routes.csv} file generating other file with the data for \texttt{gtfs:RouteType} class.}
+\caption[Normalization step by Morph-CSV]{\textbf{Normalization step by Morph-CSV.} 3NF Normalization step over the \textit{routes.csv} file generating other file with the data for \texttt{gtfs:RouteType} class.}
 \label{fig:normalization}
 \end{figure}
 

@@ -113,7 +113,7 @@ GTFS is a \textit{de-facto standard} developed by Google for the description of 
 The Linked GTFS vocabulary\footnote{\url{https://github.com/OpenTransport/linked-gtfs}} can be seen as an ontology that represents the entities, properties and relationships described in the GTFS specification. The GTFS-Madrid-Bench mappings have been aligned to a subset of this vocabulary as the subway feed provides only the mandatory CSV files from the GTFS specification. Its conceptual model is shown in Figure \ref{fig:gtfsOntology} and a description of its classes is given in Table \ref{tab:GTFSClasses}. The ontology usually defines one class for each of the sources in the GTFS specification with the corresponding data and object properties, but there are some additions. The {\tt gtfs:Service} class represents information of the dates when a service (represented in GTFS in the files calendar and calendar\_dates) is available for one or more routes, the ontology also adds the {\tt gtfs:ServiceRule} class together with its two subclasses ({\tt gtfs:CalendarRule} and {\tt gtfs:CalendarDateRule})  to represent the service rules specified  in the calendar and calendar\_dates files. Finally, the class defined as \\{\tt gtfs:WheelchairBoardingStatus} and its three possible values (instances) have also been added to represent the corresponding field definitions in stops and trips. 
 
 \begin{table}[t]
-\caption{LinkedGTFS classes and their descriptions}
+\caption{The LinkedGTFS Ontology: Classes and their Descriptions}
 \label{tab:GTFSClasses}
 %\setlength{\tabcolsep}{1em}
 \resizebox{0.8\textwidth}{!}{
@@ -205,7 +205,7 @@ The GTFS-Madrid-Bench proposes an extended workflow using VIG as the Dataset Gen
 \begin{figure}[th]
     \centering
     \includegraphics[width=0.85\linewidth]{figures/best-dist.pdf}
-    \caption[Example of best dataset]{\textbf{Example of Best Dataset}. Best dataset distributes the formats over the data sources ensuring that at least there is one source per each format and the joins among different formats are minimised. \textit{extjoin} means that there is a relation between sources in different formats and \textit{internjoin} means that the joins are between sources in the same format.}
+    \caption[Example of a possible best GTFS-Madrid-Bench distribution]{\textbf{Example of Best Dataset}. Best dataset distributes the formats over the data sources ensuring that at least there is one source per each format and the joins among different formats are minimised. \textit{extjoin} means that there is a relation between sources in different formats and \textit{internjoin} means that the joins are between sources in the same format.}
     \label{fig:best}
 \end{figure}
 
@@ -213,7 +213,7 @@ The GTFS-Madrid-Bench proposes an extended workflow using VIG as the Dataset Gen
 \begin{figure}[th]
     \centering
     \includegraphics[width=0.85\linewidth]{figures/worst-dist.pdf}
-    \caption[Example of worst dataset]{\textbf{Example of Worst Dataset}. Worst dataset distributes the formats over the data sources ensuring that at least there is one source per each format and the joins among different formats are maximised. \textit{extjoin} means that there is a relation between sources in different formats.}
+    \caption[Example of a possible worst GTFS-Madrid-Bench distribution]{\textbf{Example of Worst Dataset}. Worst dataset distributes the formats over the data sources ensuring that at least there is one source per each format and the joins among different formats are maximised. \textit{extjoin} means that there is a relation between sources in different formats.}
     \label{fig:worst}
 \end{figure}
 
@@ -228,7 +228,7 @@ We want to be able to compare the results obtained by processors with the result
 
 \begin{table}[]
 \centering
-\caption[Mapping features of GTFS]{\textbf{Mapping features of GTFS.} Each TriplesMap of the GTFS mapping file and its corresponding features: the related source, number of Classes, PredicateObjectMaps, Predicates, Objects and RefObjectMaps (joins). }
+\caption[Mapping Features for transforming LinkedGTFS to GTFS]{\textbf{Mapping Features for transforming LinkedGTFS to GTFS.} Each TriplesMap of the GTFS mapping file and its corresponding features: the related source, number of Classes, PredicateObjectMaps, Predicates, Objects and RefObjectMaps (joins). }
 \label{tab:mappings}
 \resizebox{0.9\textwidth}{!}{%
 \begin{tabular}{l|l|l|c|c|c|c}
@@ -272,7 +272,7 @@ We have defined two sets of 18 queries with identical templates but differences 
 
 \begin{sidewaystable*}[p]
 \centering
-\caption{GTFS-Madrid-Bench Queries}
+\caption{Description of the GTFS-Madrid Benchmark Queries}
 \label{tab:queries}
 \resizebox{1\textwidth}{!}{%
 \begin{tabular}{c|l|c|c|c|c|c|c|c|c|c}
@@ -316,7 +316,7 @@ q18 & All routes that have trips on Sunday  & 8 & 5 &   &  & UNION &  &  & 4 & 1
 \subsubsection{Metrics}
 In this section we define the metrics that are used to evaluate the performance of Virtual Knowledge Graph access engines. The metrics consider the workflow followed by Virtual Knowledge Graph systems, and for each of the steps identified in the workflow we introduce a set of metrics to be measured and reported.
 \begin{table}[]
-\caption[Metrics VS dimensions]{Relation between each relevant metric for the Madrid-GTFS-Bench and the dimensions that can impact over that metric. In the Dimension column, Q means query, M mappings and D data.}
+\caption[Comparison between Benchmark Metrics and Dimensions]{\textbf{Comparison between Benchmark Metrics and Dimensions.} Relation between each relevant metric for the Madrid-GTFS-Bench and the dimensions that can impact over that metric. In the Dimension column, Q means query, M mappings and D data.}
 \label{tab:dimsensions}
 \begin{tabular}{l|c|c}
 \hline
@@ -432,7 +432,7 @@ In the case of Morph-RDB, we use it together with the docker images containing t
 Additionally, we use Ontario and Ontop with the docker images containing the instances of MySQL server v8.0, the latest version at the time of writing. Note that the use of cache is not supported anymore in MySQL v8.0 so that we only evaluate our queries in cold mode. We perform the rest of the experiment configurations with Ontario against the CSV and JSON datasets, and Morph-CSV against CSV datasets. 
 
 \begin{table}[]
-\caption[Overall execution time GTFS-1]{Overall execution time (in seconds) of  benchmark queries in experiment configurations with original size datasets. W means that the engine obtained a different number of results in comparison to the baseline. E means that the processor is not able to execute the query. TO means that the processor is not able to evaluate the query within the timeout duration (3600 seconds).}
+\caption[GTFS-Madrid-Bench: Overall execution time GTFS-1]{Overall execution time (in seconds) of  benchmark queries in experiment configurations with original size datasets. W means that the engine obtained a different number of results in comparison to the baseline. E means that the processor is not able to execute the query. TO means that the processor is not able to evaluate the query within the timeout duration (3600 seconds).}
 \label{tab:gtfs1}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|}
@@ -474,7 +474,7 @@ Analysing the results in general, the errors obtained in the execution of the qu
 
 
 \begin{table}[]
-\caption[Overall execution time GTFS-5]{Overall execution time (in seconds) of  benchmark queries in experiment configurations with size 5 datasets. W means that the engine obtained a different number of results in comparison to the baseline. E means that the processor is not able to execute the query. TO means that the processor is not able to evaluate the query within the timeout duration (3600 seconds).}
+\caption[GTFS-Madrid-Bench: Overall execution time GTFS-5]{Overall execution time (in seconds) of  benchmark queries in experiment configurations with size 5 datasets. W means that the engine obtained a different number of results in comparison to the baseline. E means that the processor is not able to execute the query. TO means that the processor is not able to evaluate the query within the timeout duration (3600 seconds).}
 \label{tab:gtfs5}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{|c|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|}
@@ -499,7 +499,7 @@ Analysing the results in general, the errors obtained in the execution of the qu
 \end{table}
 
 \begin{table}[]
-\caption[Overall execution time GTFS-10]{Overall execution time (in seconds) of  benchmark queries in experiment configurations with size 10 datasets. W means that the engine obtained a different number of results in comparison to the baseline. E means that the processor is not able to execute the query. TO means that the processor is not able to evaluate the query within the timeout duration (3600 seconds).}
+\caption[GTFS-Madrid-Bench: Overall execution time GTFS-10]{Overall execution time (in seconds) of  benchmark queries in experiment configurations with size 10 datasets. W means that the engine obtained a different number of results in comparison to the baseline. E means that the processor is not able to execute the query. TO means that the processor is not able to evaluate the query within the timeout duration (3600 seconds).}
 \label{tab:gtfs10}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|}
@@ -525,7 +525,7 @@ GTFS-W-10                                               & Cold                  
 
 
 \begin{table}[]
-\caption[Overall execution time GTFS-50]{Overall execution time (in seconds) of  benchmark queries in experiment configurations with size 50 datasets. W means that the engine obtained a different number of results in comparison to the baseline. E means that the processor is not able to execute the query. TO means that the processor is not able to evaluate the query within the timeout duration (3600 seconds).}
+\caption[GTFS-Madrid-Bench: Overall execution time GTFS-50]{Overall execution time (in seconds) of  benchmark queries in experiment configurations with size 50 datasets. W means that the engine obtained a different number of results in comparison to the baseline. E means that the processor is not able to execute the query. TO means that the processor is not able to evaluate the query within the timeout duration (3600 seconds).}
 \label{tab:gtfs50}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|}
@@ -551,7 +551,7 @@ GTFS-W-50                                               & Cold                  
 
 
 \begin{table}[]
-\caption[Overall execution time GTFS-100]{Overall execution time (in seconds) of  benchmark queries in experiment configurations with size 100 datasets. W means that the engine obtained a different number of results in comparison to the baseline. E means that the processor is not able to execute the query. TO means that the processor is not able to evaluate the query within the timeout duration (3600 seconds).}
+\caption[GTFS-Madrid-Bench: Overall execution time GTFS-100]{Overall execution time (in seconds) of  benchmark queries in experiment configurations with size 100 datasets. W means that the engine obtained a different number of results in comparison to the baseline. E means that the processor is not able to execute the query. TO means that the processor is not able to evaluate the query within the timeout duration (3600 seconds).}
 \label{tab:gtfs100}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|}
@@ -576,7 +576,7 @@ GTFS-W-100                                              & Cold                  
 \end{table}
 
 \begin{table}[]
-\caption[Overall execution time GTFS-500]{Overall execution time (in seconds) of  benchmark queries in experiment configurations with size 500 datasets. W means that the engine obtained a different number of results in comparison to the baseline. E means that the processor is not able to execute the query. TO means that the processor is not able to evaluate the query within the timeout duration (3600 seconds).}
+\caption[GTFS-Madrid-Bench: Overall execution time GTFS-500]{Overall execution time (in seconds) of  benchmark queries in experiment configurations with size 500 datasets. W means that the engine obtained a different number of results in comparison to the baseline. E means that the processor is not able to execute the query. TO means that the processor is not able to evaluate the query within the timeout duration (3600 seconds).}
 \label{tab:gtfs500}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|}

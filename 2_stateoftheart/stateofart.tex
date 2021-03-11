@@ -21,7 +21,7 @@ Different types of data integration systems have been proposed. Data warehouses~
 
 Ontology based data access (OBDA) and integration (OBDI) are data integration systems where the global schema is defined by an ontology~\citep{poggi2008linking}. The formal framework presented in~\citep{xiao2018obdasurvey} defines an OBDA specification as a tuple $P$ = $\langle O,S,M\rangle$ where $O$ is an ontology, $S$ is the source schema, and $M$ a set of mappings. Additionally, an OBDA instance is defined as a tuple $PI$ = $\langle P,D\rangle$ where P is an OBDA specification and $D$ is a data instance conforming to $S$. The main difference between OBDA and OBDI systems is that in OBDA $D$ is fixed to an specific data format, while OBDI extends $D$ to cover heterogeneous data sources and formats. In both ontology-based approaches, two different alternatives exist to enable data access: (1) those where data are materialized taking into account the mappings and the ontologies which can be seen as a ontology-based ETL process, and (2) those where the transformation is done on the queries, which can then be evaluated on the original data sources, so, it can be defined as a new kind of mediator system. In this work we refer to the first alternative as a materialized knowledge graph construction process, while the second alternative is defined as a virtual knowledge graph construction one. As we are focused on creating KG from heterogeneous data sources, both alternatives can be described as an OBDI approach.
 
-\section{Representation and Query Language for the Semantic Web}
+\section{Representation and Query Languages for the Semantic Web}
 \label{sec:soa_representation}
 In this section, we provide a overview of the core semantic web technologies that have a relevant role during a knowledge graph construction process. We discuss in detail the Resource Description Framework (RDF)~\citep{RDF}, used for modeled the target data model in the DIS (i.e., the ontology), but also usually used for declaring the mapping rules~\citep{R2RML,dimou2014rml,michel2015translation}. We also provide a detailed explanation of the SPARQL query language~\citep{SPARQL} as it is an essential input for the virtual knowledge graph construction techniques (e.g., translating SPARQL to SQL).
 
@@ -77,7 +77,7 @@ Given the RDF graph shown in Figure \ref{fig:soa_rdf_example}, we might be inter
 % \usepackage{graphicx}
 \begin{table}[!ht]
 \centering
-\caption{SPARQL result-set example}
+\caption{Example of a SPARQL result-set}
 \label{tab:soa_result_set}
 \resizebox{0.2\textwidth}{!}{%
 \begin{tabular}{|c|}
@@ -92,7 +92,7 @@ The SPARQL built-in conditions are constructed using the elements of the set ($I
 
 In SPARQL there are many type of query forms based on graph pattern matching that allow to evaluate several query types. As we shown in Listing \ref{list:soa_sparql_example} the SELECT clause is used to select elements from the data. DESCRIBE query returns information about the resources that match a graph pattern in form of another RDF graph. CONSTRUCT is used to construct a new RDF graph based on the graph pattern indicated in the WHERE clause. Finally, ASK is a boolean-based query that retrieves true if there is at least one solution for the provided pattern.
 
-\section{Annotations in Knowledge Graph Construction}
+\section{Declarative Annotations for Knowledge Graph Construction}
 \label{sec:soa_annotations}
 One of the main components for the construction of knowledge graphs are the annotations. Additionally to the mapping rules, that relate the target model with the input sources in a typical data integration system definition, we include in the annotations set the constraints concept. In a DIS, the constrains property allows to: i) define ad-hoc transformation functions that permit the cleaning and preparation of the input data; ii) definition of metadata annotations to describe the content of the input source. This property is essential during a knowledge graph construction process as it is able to deal with the typical features of heterogeneous data sources such as the absence of a well-defined and fixed data schema, a normalized database instance or the non-explicit declarations of relations among the sources. We start this section discussing existing approaches for the design of mappings. Then, we describe the current mapping language specifications and their standardization through the W3C. Finally, we present approaches to define, declaratively, constraints over a DIS.
 
@@ -313,7 +313,7 @@ Taking into account the information during the process of KG construction from t
 \label{sec:soa_engines}
 Solutions provided to the problem of knowledge graph construction from structured and semi-structured data are gaining momentum in practitioners and users. Since 2012, with the appearance of the W3C recommendation of the R2RML~\citep{R2RML} mapping language for transforming relational databases to knowledge graphs, diverse proposals, and optimizations techniques have tackled this problem. We described in detail engines of both approaches, materialization and virtualization.
 
-\subsection{Materialization Knowledge Graph Construction Engines}
+\subsection{Materialized Knowledge Graph Construction Engines}
 With the RML~\citep{dimou2014rml} specification proposed as an extension of R2RML for describing mapping rules over diverse data formats, multiple tools have been developed for the creation of knowledge graphs. There are multiple RML parsers\footnote{\url{https://rml.io/implementation-report/}}: CARML\footnote{\url{https://github.com/carml/carml}} executes RML rules and includes additional features like MultiTermMap (to deal with arrays) and XML namespace (to improve XPath expressions). RocketML~\citep{csimcsek2019rocketrml} is a RML engine implemented using the NodeJS framework and RMLMapper\footnote{\url{https://github.com/RMLio/rmlmapper-java}} is also a commonly used RML engine. Additionally, RMLStreamer~\citep{haesendonck2019parallel} is an RML engine that is able to generate knowledge graphs from streaming data. There are other engines that are able to construct knowledge graphs from heterogeneous data sources without the support of mapping rules. For example, SPARQL-Generate~\citep{lefranccois2017sparql} is an engine based on SPARQL 1.1 that includes the transformation rules within an SPARQL query. Chimera~\citep{scrocca2020turning} is based on RMLMapper but it also includes a lowering step to convert RDF datasets in other formats and data models. Although most of the R2RML-compliant engines are able to generate materialized KGs from a RDB, their scientific contributions are focused on optimizations over the SPARQL-to-SQL process, so we described them in the following section.
 
 The CSV2RDF tool is presented in~\citep{Mahmud2018}, the authors define algorithms to transform CSV data into RDF using CSVW metadata annotations, and their experimental study uses datasets from the CSVW Implementation Report\footnote{https://w3c.github.io/csvw/tests/reports/index.html}. Another tool, COW: Converter for CSV on the Web\footnote{https://csvw-converter.readthedocs.io/en/latest/} allows the conversion of datasets in CSV format and uses a JSON schema expressed in an extended version of the CSVW standard. 
@@ -327,7 +327,7 @@ There are two main proposals of the construction of virtual knowledge graph beyo
 
 
 
-\section{Evaluation of Knowledge Graph Construction}
+\section{Knowledge Graph Construction Evaluation Resources}
 \label{sec:soa_evaluations}
 To facilitate data exploitation for constructing knowledge graphs, application developers need to understand the strengths and weaknesses of existing KGC engines. Additionally, tool developers may want to know if their engines cover the requirements of real-use-case scenarios. In both cases the challenge is to develop techniques and methodologies that cover the requirements for constructing knowledge graph, and to ensure that is extensible and sustainable over time. In general, it is necessary to have an overview of state of the art engines that are tailored to different source formats, accepting as input those mappings that are represented in a variety of declarative languages.
 
@@ -350,7 +350,7 @@ Specific OBDA requirements have been analyzed by the authors of the NPD benchmar
 Simple queries defined in LSLOD~\citep{hasnain2017biofed} have been used in order to evaluate the performance of the Ontario~\citep{endris2019ontario} engine. In this work, all of the original RDF datasets were translated into RDB tables. The idea was to evaluate an heterogeneous setup consisting of RDF and RDB sources, focused on the source selection problem, and the generation of the corresponding optimized query plan. Additionally, the simple queries from LSLOD are focused on the evaluation of the distribution of star-shaped groups that do not exploit some of the features of the SPARQL language, such as FILTER, ORDER BY, GROUP BY and NOT EXISTS, which are relevant in the context of  real-life use cases.
 
 
-\section{Conclusions}
+\section{Conclusions and limitations of the State of the Art}
 \label{sec:soa_conclusions}
 After the analysis and description of the state of the art in knowledge graph construction from heterogeneous data sources, we want to conclude this section with identifying the strength and weak points of the field that have motivated this thesis:
 \begin{itemize}
