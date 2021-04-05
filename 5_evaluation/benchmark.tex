@@ -370,7 +370,7 @@ In terms of data size, we decide to evaluate the engines over the scale values (
 To test OBDI engines and to demonstrate the capabilities of the benchmark resources covering multiple scenarios, we chose to analyze the impact of the number of joins among different formats. The main reason to test this paremeters is because Ontario is focused on improving the performance of these kind of queries. The dataset were created taking into account the selected formats (JSON, CSV, XML, SQL and MongoDB) and varying the number of relations (joins) among different formats. More specifically, the dataset distributions are the following:
 
 \begin{itemize}
-    \item MINEXTJ dataset: The number of joins among sources in different formats is minimized but ensuring that all of the formats are covered. The aim of this configuration is to study the behavior of the engines when they have to deal with different data sources but where most of the joins are done between sources in the same format. Hence they may delegate their treatment to the underlying data source manager (e.g. MySQL in RDB) and apply common optimization techniques in query translation approaches~\cite{priyatna_2014_www}. To meet this requirement and, having 5 possible formats for the data sources, the proposed groups for this dataset are: trips, shapes, calendar and calendar\_dates sources in one group, routes and agency in another, frequencies in the third group, stop and stop\_times in the fourth one and feed\_info in the last one. This composition generates the GTFS$_{mad}^{MIN-EXTJ}$ dataset. We show the used dataset in the evaluation in Figure \ref{fig:best}. 
+    \item MINEXTJ dataset: The number of joins among sources in different formats is minimized but ensuring that all of the formats are covered. The aim of this configuration is to study the behavior of the engines when they have to deal with different data sources but where most of the joins are done between sources in the same format. Hence they may delegate their treatment to the underlying data source manager (e.g. MySQL in RDB) and apply common optimization techniques in query translation approaches~\citep{priyatna2014formalisation}. To meet this requirement and, having 5 possible formats for the data sources, the proposed groups for this dataset are: trips, shapes, calendar and calendar\_dates sources in one group, routes and agency in another, frequencies in the third group, stop and stop\_times in the fourth one and feed\_info in the last one. This composition generates the GTFS$_{mad}^{MIN-EXTJ}$ dataset. We show the used dataset in the evaluation in Figure \ref{fig:best}. 
    
     \item MAXEXTJ Dataset: The number of joins among sour\-ces in different formats is maximized and the five formats are covered. In this distribution, all the possible joins are among sources in different formats. This means that the OBDI engine may be enforced to perform the joins after the execution of the translated queries over the original data sources. In the same manner as the minimized dataset, the groups of sources are: shapes and stops in one group, trips and feed\_info in another, calendar and agency in the third group, routes and stop\_times in the fourth and calendar\_dates and frequencies in the last one. This composition generates the GTFS$_{mad}^{MAX-EXTJ}$ dataset. We show the used dataset in the evaluation in Figure \ref{fig:worst}. 
 \end{itemize}
@@ -439,7 +439,9 @@ Analyzing the results in general, the errors obtained in the execution of the qu
 }
 \end{table}
 
-\begin{table}[]
+\begin{table}t]
+\caption{Overall execution time (in seconds) of  benchmark queries in experiment configurations with size 10 datasets. W means that the engine obtained a different number of results in comparison to the baseline. E means that the processor is not able to execute the query. TO means that the processor is not able to evaluate the query within the timeout duration (3600 seconds).}
+\label{tab:gtfs10}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|}
 \hline
@@ -462,7 +464,7 @@ GTFS-MAXEXTJ-10                                               & Cold            
 \end{table}
 
 
-\begin{table}[]
+\begin{table}[t]
 \caption[GTFS-Madrid-Bench: Overall execution time GTFS-50]{Overall execution time (in seconds) of  benchmark queries in experiment configurations with size 50 datasets. W means that the engine obtained a different number of results in comparison to the baseline. E means that the processor is not able to execute the query. TO means that the processor is not able to evaluate the query within the timeout duration (3600 seconds).}
 \label{tab:gtfs50}
 \resizebox{\textwidth}{!}{%
