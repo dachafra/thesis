@@ -304,7 +304,7 @@ Total Lines   & $\sim$700 & 74 \\
 \item Q3: Retrieve the number of immigrants arriving in Spain in the year of 2015.
 \end{itemize}
 
-\noindent\paragraph{Mappings}
+\noindent\paragraph{Mappings.}
 Generating the naive mapping described in the first approach is not feasible in this case, as there is a need to generate a TriplesMap for each column that represents a country and the dataset contains more than 40 columns. Instead, we generate two R2RML-iterator mapping documents,one with \texttt{rmlc:columns} property and the other with \texttt{rmlc:range} property. Then we use the our mapping translator engine to generate the naive version of R2RML.
 
 Our proposals mapping document (either version) contains only 1 TriplesMap and 4 PredicateObjectMap mappings, totalling less than 70 lines. On the contrary, the generated R2RML mapping document has more than 40 TriplesMap, more than 170 PredicateObjectMap mappings, totalling more than 2800 lines. The Table \ref{table:compare2} summarizes the characteristics of the mappings.
