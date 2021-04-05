@@ -11,26 +11,9 @@ Our main contribution includes the definition of various dimensions and set of v
 
 We motivate our work by analyzing different scenarios where the performance of RMLMapper and SDM-RDFizer may be affected by changing the configuration of the testbeds utilized for empirically evaluating these engines. We aim at remarking the importance of taking into account different parameters during the definition of a testbed. We first describe a scenario where na\"ive parameters (size and format) leads to wrong decisions during the comparing of SDM-RDFizer and RMLMapper. The testbeds include a data source with one thousand rows, different number of predicate-object (POM) in RML triple maps, and diverse configurations of selectivity of triple map joins.
 
-%\begin{figure}[t!]
-%	\centering
-%	\includegraphics[width=\columnwidth]{figures/TripleMap.jpg}
-%	\caption[RML Mapping example]{{\bf Motivating Example.} RML triple maps to transform two CSV files into RDF. TripleMap1 is composed of two predicate-object, i.e., Two POM. TripleMap2 has a join to TripleMap1; Observation.csv (outer relation) is joined to  Sensor.csv (inner relation) and the result, SensorID, is used as an object value.}
-%	\label{fig:mappingRule}
-%\end{figure}
-
-%RML expresses mappings to transform sources represented in (semi)-structured format, e.g. CSV or XML, into RDF. Each mapping rule in RML, named RML triple map, is represented in RDF and consists of the following parts \citep{dimou2014rml}:
-%\begin{itemize}
-%    \item A \emph{Logical Source} that refers to a data source from where data is collected.
-%    \item A \emph{Subject Map} that defines the subject of the generated RDF triples. 
-%    \item \emph{Predicate-Object Maps} (POM) that expresses the predicate and the object the RDF triple to be generated; a triple map can comprise several POMs.
-%\item
-%A \emph{Referencing Object Map}, that indicates the reference or join condition to another triple map; the subject URL is the referenced triple map corresponds to the result of the evaluation of the join. 
-%\end{itemize}
-%\autoref{fig:mappingRule} illustrates two RML triple maps. \texttt{TripleMap1} is composed of two predicate-object maps, i.e. it is a Two POM mapping rule. \texttt{TripleMap2} has a referencing object map that joins the records of file Observation.csv with the records of the file Sensor.csv on the attributes \texttt{SensorLocation} and \texttt{ObservationLocation}. The result of executing the join between the two RML triple maps is the identifier of the sensor that collected the observation; this value is used as the object value of the predicate \texttt{observationSensor}.
-%\subsubsection{Impact of Number of Predicates and Objects in Mapping Rules}
 In this example, we execute a testbed where three different configurations of an RML mapping rule: Two-POM, Five-POM, and Ten-POM, i.e. they correspond to three mapping rules with two, five, and ten Predicate-Object Maps, respectively. 
 Both engines exhibit a similar behavior while the number of predicate-object maps varies from two to five POMs, as shown in Table~\ref{tab:trivial}. However, when more complex mapping rules with more POMs are considered, the behavior of the SDM-RDFizer and RMLMapper is not impacted equally. Moreover, the results suggest that RMLMapper execution time increases with the number of POMs, while the SDM-RDFizer seems to be slightly affected. 
-\begin{table}[ht!]
+\begin{table}[t!]
 \centering
 \caption[Impact of number of POMs on KGC engines]{\textbf{Impact of Number of Predicate-Object Maps.} Various predicate object maps (POM) specified in the mapping rules. The behavior of the two engines is similar when the mapping rules are simple (less than 5 POM) but it is different when more complex mappings are running (10 POM); time in seconds.
 }
@@ -54,7 +37,7 @@ We now consider another parameter, the join selectivity, i.e. the cardinality of
 \textbf{High Selectivity}, \textbf{Medium Selectivity}, and \textbf{Low Selectivity}, and Table~\ref{tab:joinSelectivity} reports on the results of RMLMapper and  SDM-RDFizer. First, it can be observed that the RMLMapper execution time increases by around $8$ seconds, while the SDM-RDFizer behavior is not equally affected by the selectivity of the join condition. As can be seen in Table~\ref{tab:joinSelectivity}, the SDM-RDFizer execution time (in seconds) increases from high to medium selectivity by $0.04$ (from $2.16$ to $2.20$), then decreases from medium to low selectivity by $0.01$ (from $2.20$ to $2.19$).
 On the other hand, the RMLMapper execution time increases by $1.83$ (from $38.6$ to $40.43$), and $5.63$ (from $40.43$ to $46.06$) seconds from high to medium, and medium to low selectivity, respectively. As in the previous example, both engines are not equally affected by the complexity of the testbed. 
 
-\begin{table}[ht!]
+\begin{table}[t!]
 \centering
 \caption[Impact of join selectivity on KGC engines]{\textbf{Impact of Join Selectivity.} Impact of the join selectivity variable over the engines with high, medium and low percentage of selectivity. While RMLMapper engine behavior increases in terms of execution time when the selectivity decreases, the SDM-RDFizer behavior is maintained, i.e. this variable affects to the first engine but it does not impact equality to the second one.}
 \label{tab:joinSelectivity}
@@ -238,7 +221,7 @@ As can be observed in the results reported in this section, the behavior of the 
 
 
 \subsection{Evaluation of affected parameters in KGC}
-The goal of our experiment is to assess the impact of the discussed variables and configurations during the evaluation of existing knowledge graph construction tools. We aim at answering the following research questions: \textbf{RQ1}:What is the effect of mixing different variables in one testbed?; \textbf{RQ2}: What is the impact of considering configurations of different complexity of the same variable in one testbed?; \textbf{RQ3}: Do the different variables and configurations influence in the behavior of existing knowledge graph construction tools? To answer these research questions, we set up the following experimental studies:
+The goal of our experiment is to assess the impact of the discussed variables and configurations during the evaluation of existing knowledge graph construction tools. Directly related with our hypothesis H3 (definition of a evaluation benchmark) defined in Chapter \ref{chap:objectives}, we aim at answering the detailed following research questions: \textbf{RQ1}:What is the effect of mixing different variables in one testbed?; \textbf{RQ2}: What is the impact of considering configurations of different complexity of the same variable in one testbed?; \textbf{RQ3}: Do the different variables and configurations influence in the behavior of existing knowledge graph construction tools? To answer these research questions, we set up the following experimental studies:
 
 \noindent \textbf{Datasets.}
 For this evaluation, we generated three different datasets with 1,000 (1K), 10,000 (10K), and 50,000 (50K) rows, and various number of columns based on the tested parameters; ~\autoref{tab:datasets} shows the properties of the datasets generated for \texttt{Relation Type}, \texttt{Join Duplicates}, and \texttt{Join Selectivity} evaluations. 
@@ -315,16 +298,6 @@ The SDM-RDFizer and the testbeds are implemented in Python 3.6; the SDM-RDFizer 
 Results of each configurations are ordered from lower to higher complexity and compared using the Pearson's correlation. 
 A high positive value of correlation between two configurations indicates that the corresponding engines had a similar behavior, i.e. the trends of execution time of the tools are similar; they are represented with blue bubbles in our plots. When a configuration is compared to itself, the Pearson's correlation reaches the highest value ($1.0$), represented with grey bubbles in our plots. 
 On the other hand, a negative value indicates that there is an inverse correlation between the engines, i.e. they exhibit an opposite behavior; they are represented with red bubbles.
-
-
-\subsubsection*{Discussion of the Observed Results}
-We observe that the behavior of the engines can be affected when multiple variables are involved in a testbed (e.g. size and relation type) or when different levels of complexity of a variables (e.g. low, high join selectivity). We discuss the obtained results during our evaluation over the different configurations and parameters involved in each experiment:   
-
-\noindent \textbf{Dataset Size (Na{\"i}ve):}
-Figure~\ref{fig:naive_bubble} depicts the comparison of engines when the dataset size is considered. When \texttt{configuration 1} is compared to itself, the Pearson's correlation value is $1.0$; additionally, it is high and positive when it is compared to \texttt{configurations 2, 3, 5, and 6} (large blue bubbles). 
-Using this parameter, the correlation analysis suggests that both engines behave similarly in all configurations. Moreover, this indicates that only considering the data size is not enough to uncovered the properties of the studied engines.
-
-
 \begin{figure}[!tb]
     \centering
     \subfloat[Dataset 1K]{
@@ -344,9 +317,19 @@ Using this parameter, the correlation analysis suggests that both engines behave
       \includegraphics[width=0.48\columnwidth]{figures/duplicate_joins_allk_bubble.png}
       \label{fig:js1}
     }
-    \caption[Knowledge Graph Construction Tools on Duplicates during Join]{\textbf{Comparison of Knowledge Graph Construction Tools on Duplicates during Join.} The first two (2) configurations, i.e., 1-2 on x-axis and y-axis, represent results of SDM-RDFizer on datasets with \textit{low} (5\%-20\% of data) number of duplicates and \textit{high} (30\%-50\% of data) number of duplicates generated during joins, respectively. The last two configurations, i.e., 3-4 on x-axis and y-axis, represent results of RMLMapper on datasets with \textit{low} number of duplicates and \textit{high} number of duplicates generated during joins, respectively. Grey bubbles correspond to correlation value of $1.0$; blue bubbles show a positive correlation while red bubbles show a negative correlation. Results evidence that both join duplicates and dataset size are needed for characterising an engine performance.}
+    \caption[Knowledge Graph Construction Tools on Duplicates during Join]{\textbf{Comparison of Knowledge Graph Construction Tools on Duplicates during Join.} The first two (2) configurations, i.e., 1-2 on x-axis and y-axis, represent results of SDM-RDFizer on datasets with \textit{low} (5\%-20\% of data) number of duplicates and \textit{high} (30\%-50\% of data) number of duplicates generated during joins, respectively. The last two configurations, i.e., 3-4 on x-axis and y-axis, represent results of RMLMapper on datasets with \textit{low} number of duplicates and \textit{high} number of duplicates generated during joins, respectively. Grey bubbles correspond to correlation value of $1.0$; blue bubbles show a positive correlation while red bubbles show a negative correlation. Results evidence that both join duplicates and dataset size are needed for characterizing an engine performance.}
     \label{fig:duplicates_bubble}
 \end{figure}
+
+\subsubsection*{Discussion of the Observed Results}
+We observe that the behavior of the engines can be affected when multiple variables are involved in a testbed (e.g. size and relation type) or when different levels of complexity of a variables (e.g. low, high join selectivity). We discuss the obtained results during our evaluation over the different configurations and parameters involved in each experiment:   
+
+\noindent \textbf{Dataset Size (Na{\"i}ve):}
+Figure~\ref{fig:naive_bubble} depicts the comparison of engines when the dataset size is considered. When \texttt{configuration 1} is compared to itself, the Pearson's correlation value is $1.0$; additionally, it is high and positive when it is compared to \texttt{configurations 2, 3, 5, and 6} (large blue bubbles). 
+Using this parameter, the correlation analysis suggests that both engines behave similarly in all configurations. Moreover, this indicates that only considering the data size is not enough to uncovered the properties of the studied engines.
+
+
+
 
 
 \begin{figure}[!tb]
