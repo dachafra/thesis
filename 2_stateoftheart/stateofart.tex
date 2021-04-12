@@ -94,7 +94,7 @@ In SPARQL there are many type of query forms based on graph pattern matching tha
 
 \section{Declarative Annotations for Knowledge Graph Construction}
 \label{sec:soa_annotations}
-Annotations are one of the main components used for the construction of knowledge graphs. We define annotation as mapping rules, that relate the target model with the input sources, and constraints, which allow: i) defining ad-hoc transformation functions that permit the cleaning and preparation of the input data; and ii) describing the content of the input source. Constraints are essential during a knowledge graph construction process as it is able to deal with the typical features of heterogeneous data sources such as the absence of a well-defined and fixed data schema, a normalized database instance or the non-explicit declarations of relations among the sources. We start this section discussing existing approaches for the design of mappings. Then, we describe the current mapping language specifications, some of which have been standardized by W3C. Finally, we present approaches to define, declaratively, constraints over a DIS.
+Annotations are one of the main components used for the construction of knowledge graphs. We define annotation as mapping rules, that relate the target model with the input sources, and constraints, which allow: i) defining ad-hoc transformation functions that permit the cleaning and preparation of the input data; and ii) describing the content of the input source. Constraints are essential during a knowledge graph construction process as it is able to deal with the typical features of heterogeneous data sources such as the absence of a well-defined and fixed data schema, a normalized database instance or the non-explicit declarations of relations among the sources. We start this section discussing existing approaches for the design of mappings. Then, we describe the current mapping language specifications, some of which have been standardized by W3C. Finally, we present approaches to define, declaratively, constraints over a DIS. An overview of the approaches described in this section is shown in Figure \ref{fig:soa_mapping_rules_story}.
 
 \subsection{Mapping Rules}
 In a DIS, the mapping layer contains information about how the input sources are related with the target model. There are two basic approaches for defining mapping rules in a data integration system: Local as a View (LAV) and Global as a View (GAV). In KG construction, the usual approach followed to define these rules is the Global as View one. We describe in detail each proposal and continue with the specific mapping languages, summarizing them in Table \ref{tab:soa_sum_mappings}
@@ -232,6 +232,13 @@ There are a set of mapping languages and engines for constructing knowledge grap
     \item \textbf{RDF lists and containers.} In formats such as JSON it is very common to have values that are modeled as arrays of data. This kind of data structures are also allowed in RDF using \texttt{rdfs:Container} with its corresponding subclasses \texttt{rdf:Bag}, \texttt{rdf:Seq} and \texttt{rdf:Alt} when there is not order, and the \texttt{rdf:List} class is used when there is an order. xR2RML extends the term map types including \texttt{xrr:RdfList}, \texttt{xrr:RdfBag}, \texttt{xrr:RdfSeq} and \texttt{xrr:RdfAlt} that allow the construction of these data structures in RDF.
 \end{itemize}
 
+\begin{figure}[!t]
+\centering
+\includegraphics[angle=90,width=0.8\textwidth]{figures/state-of-the-art/mapping_story.pdf}
+\caption{Declarative and functional mapping rules for KGC in Semantic Web}
+\label{fig:soa_mapping_rules_story}
+\end{figure}
+
 \noindent\textbf{SPARQL-Generate.} The solution proposed in~\citep{lefranccois2017sparql} presents a template-based language to construct knowledge graphs extending SPARQL 1.1. It exploits the representation capabilities from SPARQL to declare the transformation rules inside the query. The approach of using SPARQL to define the transformation rules has been also proposed in previous approaches focused on specific data formats such as Tarql for CSV files\footnote{\url{https://tarql.github.io/}}. However, this kind of solution follows a procedural approach to define rules, instead of a declarative one. Therefore, and in comparison with the rest of proposals, they cannot exploit the benefits of declarative definition of rules such as the maintainability, reproducibility and understandability.
 
 \noindent\textbf{ShExML.} In~\citep{garcia2020shexml}, the authors propose a solution based on the validation language for knowledge graphs, ShEx~\citep{prud2014shape}. Although it is based on this specification, it uses its own syntax and grammar. In comparison to R2RML-based proposals, ShExML separates the declaration, how to extract the data from the input sources, from the shapes, how to generate the desirable RDF graph. The main objective of this proposal is to help users to create the rules, and it also provides a translation engine to transform ShExML rules to RML mappings.
@@ -254,6 +261,8 @@ Based on & - & R2RML & R2RML and RML & SPARQL & ShEx \\ \hline
 \end{tabular}%
 }
 \end{table}
+
+
 
 
 \subsection{Declarative Constraints: Transformation Functions and Metadata}
