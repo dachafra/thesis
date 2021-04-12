@@ -49,7 +49,7 @@ Listing \ref{list:soa_rdf_example} shows an example of an RDF graph with a set o
 \end{figure}
 
 
-Several formats can be used to serialize an RDF graph. RDF/XML\footnote{\url{https://www.w3.org/TR/rdf-syntax-grammar/}} was the first serialization to be proposed and it is supported by XML. Notation 3 (N3) provides a human readable serialization, although currently is not used widely. N-Triples\footnote{\url{https://www.w3.org/TR/n-triples/}} and Turtle\footnote{\url{https://www.w3.org/TR/turtle/}} are subsets of N3, more widely adopted. Finally, the last serialization that has been proposed as W3C recommendation is JSON-LD\footnote{\url{https://www.w3.org/TR/json-ld11/}}. Since it is based on JSON, it facilitates the consumption of RDF data to developers and practitioners as it encapsulates the RDF in a standard JSON document. There are other serialization of RDF that are not recommended by W3C but are highly adopted for specific purposes. For example, HDT~\citep{fernandez2013binary} is a binary serialization of RDF for publishing and exchanging RDF data at large scale.
+Several formats can be used to serialize an RDF graph. RDF/XML\footnote{\url{https://www.w3.org/TR/rdf-syntax-grammar/}} was the first serialization to be proposed and it is supported by XML. Notation 3 (N3) provides a human readable serialization, although currently is not used widely. N-Triples\footnote{\url{https://www.w3.org/TR/n-triples/}} and Turtle\footnote{\url{https://www.w3.org/TR/turtle/}} are subsets of N3, more widely adopted. RDFa~\citep{adida2008rdfa} is a W3C recommendation for annotating entities in (X)HTML documents, which, for example, allows search engines (e.g., Google) to construct knowledge graphs scrapping these web documents. Finally, the last serialization that has been proposed as W3C recommendation is JSON-LD\footnote{\url{https://www.w3.org/TR/json-ld11/}}. Since it is based on JSON, it facilitates the consumption of RDF data to developers and practitioners as it encapsulates the RDF in a standard JSON document. There are other serialization of RDF that are not recommended by W3C but are highly adopted for specific purposes. For example, HDT~\citep{fernandez2013binary} is a binary serialization of RDF for publishing and exchanging RDF data at large scale.
 
 \begin{lstlisting}[float,caption=Example of SPARQL query,frame=tlrb,label={list:soa_sparql_example}, columns=fullflexible]
 PREFIX gtfs: <http://vocab.gtfs.org/terms#> .
@@ -244,14 +244,13 @@ There are a set of mapping languages and engines for constructing knowledge grap
 \caption{Summary of Mapping Languages specifications}
 \label{tab:soa_sum_mappings}
 \resizebox{0.85\textwidth}{!}{%
-\begin{tabular}{|l|c|c|c|c|c|}
-\hline
+\begin{tabular}{l|c|c|c|c|c}
 \textbf{Features/Mappings} & \textbf{R2RML} & \textbf{RML} & \textbf{xR2RML} & \textbf{SPARQ-Generate} & \textbf{ShExML} \\ \hline
 Format & RDB & \begin{tabular}[c]{@{}c@{}}Heterogeneous\\ Datasources\end{tabular} & Tree-based formats & \begin{tabular}[c]{@{}c@{}}Heterogeneous\\ Datasources\end{tabular} & \begin{tabular}[c]{@{}c@{}}Heterogeneous\\ Datasources\end{tabular} \\ \hline
 Type & Declarative & Declarative & Declarative & Procedural & Declarative \\ \hline
 \begin{tabular}[c]{@{}l@{}}Special\\ Features\end{tabular} & \begin{tabular}[c]{@{}c@{}}W3C\\ Recommendation\end{tabular} & \begin{tabular}[c]{@{}c@{}}Integration with\\ CSVW and FnO\end{tabular} & \begin{tabular}[c]{@{}c@{}}Access outer fields\\ Dynamic Language\\ RDF Lists\end{tabular} & \begin{tabular}[c]{@{}c@{}}Native support for\\ streaming data\end{tabular} & - \\ \hline
-Based on & - & RML & R2RML and RML & SPARQL & ShEx \\ \hline
-\begin{tabular}[c]{@{}l@{}}Transformation\\ Functions\end{tabular} & - & \begin{tabular}[c]{@{}c@{}}Function \\ Ontology\end{tabular} & - & \begin{tabular}[c]{@{}c@{}}SPARQL \\ Functions\end{tabular} & - \\ \hline
+Based on & - & R2RML & R2RML and RML & SPARQL & ShEx \\ \hline
+\begin{tabular}[c]{@{}l@{}}Transformation\\ Functions\end{tabular} & - & \begin{tabular}[c]{@{}c@{}}Function \\ Ontology\end{tabular} & - & \begin{tabular}[c]{@{}c@{}}SPARQL \\ Functions\end{tabular} & - \\
 \end{tabular}%
 }
 \end{table}
@@ -292,14 +291,14 @@ The recommendation\footnote{http://www.w3.org/TR/tabular-metadata/} defines a mo
 \begin{figure}[!ht]
 \centering
 \includegraphics[width=0.85\textwidth]{figures/state-of-the-art/csvw-model.png}
-\caption{The CSV on the Web model\citep{tennison2015model}}
+\caption{The CSV on the Web model~\citep{tennison2015model}}
 \label{fig:soa_csvw}
 \end{figure}
 
 
 Taking into account this metadata during the process of KG construction from tabular datasets can help to enhance the process in terms of completeness and performance. It also allows dealing with the typical heterogeneity issues that appear in these kinds of data: data may not be normalized, information about relationships or column names are not always descriptive or homogeneous, missing (meta)data, etc. Figure \ref{fig:soa_csvw} shows the complete data model for describing tabular content on the web. It has been splinted in several parts that can describe the schema of the dataset, dialect annotations (e.g., delimiter value or the prefix used for comments) and information about datatype and related properties such as \texttt{csvw:null} (for null values) and \texttt{csvw:lang} (for the language). Each of these properties can be defined as an array, link, URI template, column reference or atomic value among others. The data model is materialized in a specific dialect of JSON-LD created for it, so that metadata annotations can be also expressed as an RDF graph, facilitating the interoperability of this proposal with others such as RML or R2RML. In Figure \ref{fig:soa_csvw_example} we show an example of CSVW annotations for our running example following the JSON-LD syntax. It provides useful information about the datatypes, column names or boolean values for the trips of a GTFS feed.
 
-\begin{figure}[!ht]
+\begin{figure}[!t]
 \centering
 \includegraphics[width=0.5\textwidth]{figures/state-of-the-art/CVSW example.pdf}
 \caption{An example of CSVW annotations over Transport Domain}
@@ -312,7 +311,7 @@ Taking into account this metadata during the process of KG construction from tab
 
 \section{Knowledge Graph Construction Engines}
 \label{sec:soa_engines}
-Academic and industrial solutions for knowledge graph construction from structured and semi-structured data are gaining momentum. Since 2012, with the appearance of the W3C recommendation R2RML~\citep{R2RML}, diverse proposals, and optimization techniques have provided support for these transformations. We describe in detail engines for both groups of approaches, materialization and virtualization.
+Academic and industrial solutions for knowledge graph construction from structured and semi-structured data are gaining momentum. Since 2012, with the appearance of the W3C recommendation R2RML~\citep{R2RML}, diverse proposals, and optimization techniques have provided support for these transformations. We describe in detail engines for both groups of approaches, materialization and virtualization. Table \ref{tab:soa_limitations_kgce} summarizes the KGC engines and their current limitations.
 
 \subsection{Materialized Knowledge Graph Construction Engines}
 With RML~\citep{dimou2014rml} proposed as an extension of R2RML for describing mapping rules over diverse data formats, multiple tools have been developed for the creation of knowledge graphs. There are multiple RML parsers\footnote{\url{https://rml.io/implementation-report/}}: CARML\footnote{\url{https://github.com/carml/carml}} executes RML rules and includes additional features like MultiTermMap (to deal with arrays) and XML namespace (to improve XPath expressions). RocketML~\citep{csimcsek2019rocketrml} is an RML engine implemented using the NodeJS framework that pre-processed join conditions to enhance the performance of the process. RMLMapper\footnote{\url{https://github.com/RMLio/rmlmapper-java}} is another RML engine implemented in Java and extensively used to obtain high-quality KGs. Additionally, RMLStreamer~\citep{haesendonck2019parallel} is an RML engine that is able to generate knowledge graphs from streaming data. There are other engines that are able to construct knowledge graphs from heterogeneous data sources without the support of mapping rules. For example, SPARQL-Generate~\citep{lefranccois2017sparql} is an engine based on SPARQL 1.1 that includes transformation rules within a SPARQL query. Chimera~\citep{scrocca2020turning} is based on RMLMapper and it includes a lowering step to convert RDF datasets into other formats and data models. Although most of the R2RML-compliant engines are able to generate materialized KGs from a RDB, their scientific contributions are focused on optimizations over the SPARQL-to-SQL process, so we describe them in the following section.
@@ -326,6 +325,73 @@ In this context, the term constraint has been used in~\citep{hovland2016obda}, w
 
 There are two main proposals of the construction of virtual knowledge graphs beyond relational databases: Ontario and Squerall. Ontario~\citep{endris2019ontario} is based on the concept of RDF molecule templates~\citep{endris2017mulder} which aims to perform efficient source selection in a data lake composed of heterogeneous data sources in their original format. It creates a set of star-shaped sub-queries that match the RDF Molecule Templates (RDF-MT), and applies optimization techniques to define the query plan that will be executed. Similarly, Squerall~\citep{mami2019querying} takes input data and mappings, and offers a middleware that is able to aggregate the intermediate results in a distributed manner. Finally, Polyweb~\citep{khan2019one} is another proposal that is able to translate and distribute queries using RML mappings over relational databases and CSV files.
 
+
+% Please add the following required packages to your document preamble:
+% \usepackage{graphicx}
+\begin{table}[t]
+\centering
+\caption{Limitations of the current Knowledge Graph Construction approaches}
+\label{tab:soa_limitations_kgce}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{l|c|c|c|c}
+\multicolumn{1}{c|}{\textbf{Engine}} &
+  \textbf{Type} &
+  \textbf{Mapping Rules} &
+  \textbf{Written In} &
+  \textbf{Limitation(s)} \\ \hline
+RMLMapper &
+  Materializer &
+  RML (+FnO) + CSVW &
+  Java &
+  Scalability \\ \hline
+RocketRML &
+  Materializer &
+  RML (+FnO) &
+  JavaScript &
+  \begin{tabular}[c]{@{}c@{}}Memory consumption\\ in duplicates removal\end{tabular} \\ \hline
+CARML &
+  Materializer &
+  RML (+FnO) &
+  Java &
+  Scalability \\ \hline
+Chimera &
+  Materializer &
+  RML &
+  \begin{tabular}[c]{@{}c@{}}Java\\ (extension of RMLMapper)\end{tabular} &
+  Memory consumption \\ \hline
+SPARQL-Generate &
+  Materializer &
+  SPARQL-Generate &
+  Java &
+  Scalability \\ \hline
+CSV2RDF &
+  Materializer &
+  CSVW &
+  Python &
+  Scalability \\ \hline
+Ontop &
+  \begin{tabular}[c]{@{}c@{}}Materializer \&\\ Virtualizer\end{tabular} &
+  \begin{tabular}[c]{@{}c@{}}R2RML\\ OBDA\end{tabular} &
+  Java &
+  Support for RDB \\ \hline
+Morph-RDB &
+  \begin{tabular}[c]{@{}c@{}}Materializer \&\\ Virtualizer\end{tabular} &
+  R2RML &
+  Java &
+  Support for RDB \\ \hline
+Squerall &
+  Virtualizer &
+  RML (+FnO) &
+  Java &
+  \begin{tabular}[c]{@{}c@{}}Join Support\\ SPARQL operators\end{tabular} \\ \hline
+Ontario &
+  Virtualizer &
+  RML &
+  Python &
+  SPARQL operators \\
+\end{tabular}%
+}
+\end{table}
 
 
 \section{Knowledge Graph Construction Evaluation Resources}
