@@ -18,7 +18,7 @@ To accomplish the second objective of this thesis, described as \textbf{represen
 % \usepackage{graphicx}
 \begin{table}[t]
 \centering
-\caption{Summarization of experimental evaluations}
+\caption{Summary of experimental evaluations}
 \label{tab:experimental-evals}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{l|l|l|l|l}
@@ -52,7 +52,17 @@ FunMap &
 \end{table}
 
 
+From a more general perspective, the achievements and conclusions of this thesis are:
+\begin{itemize}
+    \item \textbf{Heterogeneity in mapping specifications is a benefit, not a problem.}
+    \item \textbf{Pre-processing and data cleaning steps need more attention.}
+    \item \textbf{Scalability is still an issue in KG construction.}
+    \item \textbf{Virtual KG construction approaches are immature.}
+    
+\end{itemize}
 
+
+Finally, it is also important to mention that during the realization of this thesis, two relevant events have been led to leverage the topic of knowledge graph construction to a relevant position in the semantic web community. The first is the celebration of the international workshop series on Knowledge Graph Construction \ footnote {\ url {https://kg-construct.github.io/workshop/}}, which celebrates its first edition co-located with the ESWC2019 (with more than 70 participants) and its second edition with the ESWC2021. The second is the kick-off and co-chairing of the W3C community group on Knowledge Graph Construction \ footnote {\ url {https://www.w3.org/community/kg-construct/}}, where more than 120 participants are, at the moment of writing this dissertation, discussing the next generation of mapping specifications, engines, optimizations, test-cases, and benchmarks.
 
 \section{Future Work}
 In this section we describe those research problems that were not tackled during this thesis, due to time-permitting issues, or that were appearing as continuation of the proposed solutions in this work.
@@ -65,5 +75,5 @@ One of the main future lines we have identify during this thesis, extending the 
 
 For the evaluation systems, we need to extend the current proposals in order to coverage other be more flexibly to evaluate a KGC workflow, taking into account all the parameters that can have an impact in their behavior. Some examples of these possible future lines are: the inclusion of mapping rules with transformation functions, the adaption of real mapping rules to isolated parameters for testing their impact in performance and scalability (e.g., mapping with or without join conditions), or the improvement in creation of datasets at scale, exploiting the information from mapping rules or graph constraints (e.g, SHACL shapes). Finally, it is important to create evaluation systems that include a ground truth in order to test not only the performance and scalabitily of the engines but also other important features such as correctness and completeness.
 
-Finally, the use of declarative and standard mapping rules and metadata descriptions makes it possible the generalization of KGC engines and optimizations, avoiding ad-hoc and manual steps. It also incorporates a set of important benefits for these processes such as the improvement of its maintainability, readability, and understandability. We believe that this kind of solutions should be promoted in academic, industry and public organizations as good practices for data management on the web to for example, avoid to have data cemeteries such as the current open data portals. Our vision is that, analyzing the role of the users in complex data integration environments on the web, will help to understand how to promote and develop robust and useful semantic web solutions for constructing knowledge graphs at scale in distributing scenarios.
+The use of declarative and standard mapping rules and metadata descriptions makes it possible the generalization of KGC engines and optimizations, avoiding ad-hoc and manual steps. It also incorporates a set of important benefits for these processes such as the improvement of its maintainability, readability, and understandability. We believe that this kind of solutions should be promoted in academic, industry and public organizations as good practices for data management on the web to for example, avoid to have data cemeteries such as the current open data portals. Our vision is that, analyzing the role of the users in complex data integration environments on the web, will help to understand how to promote and develop robust and useful semantic web solutions for constructing knowledge graphs at scale in distributing scenarios.
 
