@@ -59,7 +59,7 @@ Internally, the processor translates the SPARQL query $q$ into one or more queri
 \caption{Virtual Knowledge Graph Access Benchmark Requirements}
 \label{tab:req}
 %\setlength{\tabcolsep}{1em}
-\resizebox{1\textwidth}{!}{
+\resizebox{0.8\textwidth}{!}{
 \begin{tabular}{c|l}
 \hline
 \textbf{Variable} & \multicolumn{1}{c}{\textbf{Requirement}} \\ \hline
@@ -88,7 +88,7 @@ The Linked GTFS vocabulary\footnote{\url{https://github.com/OpenTransport/linked
 \caption{The LinkedGTFS Ontology: Classes and their Descriptions}
 \label{tab:GTFSClasses}
 %\setlength{\tabcolsep}{1em}
-\resizebox{1\textwidth}{!}{
+\resizebox{0.8\textwidth}{!}{
 \begin{tabular}{c|l}
 \hline
 \textbf{Class} & \multicolumn{1}{c}{\textbf{Description}} \\ \hline
@@ -328,13 +328,13 @@ We selected the most relevant open source virtual KGC engines in the state of th
 In this section we describe how we use our benchmark to evaluate several processors/engines. We have setup several experiment configurations for evaluating the selected processors. As an example, the experiment configurations for query $q4$ can be seen in Table \ref{tab:ExperimentalEnvironment}. These experiment configurations have a fixed set of mappings with routes and agencies. The processor used to evaluate this query depends on the dataset, for example, Ontario in the case of the JSON dataset or Morph-RDB, Ontario and Ontop for SQL.
 \begin{figure}[t]
     \centering
-    \includegraphics[width=1\linewidth]{figures/best-dist.pdf}
+    \includegraphics[width=0.75\linewidth]{figures/best-dist.pdf}
     \caption{\textbf{Example of MINEXTJ dataset}. GTFS$_{mad}^{minextj}$ dataset distributes the formats over the data sources ensuring that at least there is one source per each format and the joins among different formats are minimised. \textit{extjoin} means that there is a relation between sources in different formats and \textit{internjoin} means that the joins are between sources in the same format.}
     \label{fig:best}
 \end{figure}
 \begin{figure}[t]
     \centering
-    \includegraphics[width=1\linewidth]{figures/worst-dist.pdf}
+    \includegraphics[width=0.75\linewidth]{figures/worst-dist.pdf}
     \caption{\textbf{Example of MAXEXTJ dataset}. GTFS$_{mad}^{maxextj}$ dataset distributes the formats over the data sources ensuring that at least there is one source per each format and the joins among different formats are maximised. \textit{extjoin} means that there is a relation between sources in different formats.}
     \label{fig:worst}
 \end{figure}
@@ -344,7 +344,7 @@ In this section we describe how we use our benchmark to evaluate several process
 \centering
 \caption[Experiment configuration example set]{\textbf{Experiment configuration example set.} List of experimental configurations and processors for q4. $D$ is a dataset where $s$ is the scaling factor (i.e., 1, 5, 10, 50, 100, 500), $M$ is the set of mappings, $q$ is the SPARQL query, $\phi$ is a processor. $q$ is a SPARQL query defined in the Appendix Section.}
 \label{tab:ExperimentalEnvironment}
-\resizebox{\textwidth}{!}{%
+\resizebox{0.85\textwidth}{!}{%
 \begin{tabular}{c|c|c|c}
 \hline
 \textbf{Query $q$} & \textbf{Dataset $D$} & \textbf{TriplesMap $M$} & \textbf{Processor $\phi$} \\ \hline
@@ -575,7 +575,4 @@ As already discussed, the main objective of this benchmark is not to provide a r
 
 The design of this benchmark has been a complex task, since it had to cover all of the identified requirements and, at the same time, work on a very general scenario with a mix of KGC approaches. On the one hand, some of the current OBDA proposals work with SQL datasets and in general conform to most of the features of the SPARQL language. Throughout the experiments we realized that the OBDA proposals that are designed to work with other formats support fewer features of the query language, and in general they have issues in their query translation process. There is a lot of room for improvement in these proposals, such as generating more efficient queries, which has been done in the SQL-based OBDA proposals. On the other hand, we were only able to include in the benchmark Ontario, even though other KGC engines have been published in the literature since it was not feasible to execute them because of lack of documentation. In all cases, the evaluation of our benchmark queries with the different engines exposed the need for improvements in their current releases, in terms of efficiency and correctness of the results.
 
-It is also worth mentioning that the benchmark is easily extensible to be used with other data formats and engines. That is, if in the future there is a requirement to evaluate an engine that supports a different data format, the only need is to create a script that translates the data sources from CSV to the corresponding format.
-
-Future work includes the development of mapping translation techniques that involve the different mapping language specifications. In the context of virtual knowledge graph construction it would be very useful to get help in the development and maintenance of mappings, so as to avoid inconsistencies among mappings and errors in the evaluation. Another line of work is to improve the data generation process to ensure that scaled data is well aligned with the domain data model. 
 
