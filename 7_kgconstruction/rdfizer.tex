@@ -141,7 +141,7 @@ Contrary, the SDM-RDFizer algorithm of a simple object map resorts to a PTT of $
 
 Several projects from different domains already use SDM-RDFizer.
 iASiS\footnote{\url{http://project-iasis.eu/}} and BigMedilytics - lung cancer pilot \footnote{\url{https://www.bigmedilytics.eu/}} are exemplary of EU H2020 projects.
-The iASiS RDF knowledge graph comprises more than 1.2B RDF triples collected from more than 40 heterogeneous sources using more than 1300 RML triple maps, while 800 RML triple maps are used to create from 25 data sources, a lung cancer knowledge graph with 500M RDF triples. SDM-RDFizer has also created the \textit{Knowledge4COVID-19} knowledge graph during the EUvsVirus Hackathon\footnote{\url{https://blogs.tib.eu/wp/tib/2020/05/06/how-do-knowledge-graphs-contribute-to-understanding-covid-19-related-treatments/}}; it comprises 28M RDF triples describing 63527 COVID-19 articles and related COVID-19 concepts (e.g., drug-drug interactions and molecular disfunctions). SDM-RDFizer is also used in EU H2020, EIT-Digital, and Spanish national projects where the Ontology Engineering Group (Technical University of Madrid) participates. These projects, mainly focused on the transportation and smart cities domain, include: SPRINT\footnote{\url{http://sprint-transport.eu/}}, SNAP \footnote{\url{https://snap-project.eu/}} and Open Cities \footnote{\url{https://ciudades-abiertas.es/}}. Similar as the \textit{Knowledge4COVID-19} knowledge graph, SDM-RDFizer also created the Knowledge Graph of the Drugs4Covid project \footnote{\url{https://drugs4covid.oeg-upm.net/}} where NLP annotations and metadata from more than 60,000 COVID-19 articles are integrated in almost 44M RDF triples.
+The iASiS RDF knowledge graph comprises more than 1.2B RDF triples collected from more than 40 heterogeneous sources using more than 1300 RML triple maps, while 800 RML triple maps are used to create from 25 data sources, a lung cancer knowledge graph with 500M RDF triples. SDM-RDFizer has also created the \textit{Knowledge4COVID-19} knowledge graph during the EUvsVirus Hackathon\footnote{\url{https://short.upm.es/rb63h}}; it comprises 28M RDF triples describing 63527 COVID-19 articles and related COVID-19 concepts (e.g., drug-drug interactions and molecular disfunctions). SDM-RDFizer is also used in EU H2020, EIT-Digital, and Spanish national projects where the Ontology Engineering Group (Technical University of Madrid) participates. These projects, mainly focused on the transportation and smart cities domain, include: SPRINT\footnote{\url{http://sprint-transport.eu/}}, SNAP \footnote{\url{https://snap-project.eu/}} and Open Cities \footnote{\url{https://ciudades-abiertas.es/}}. Similar as the \textit{Knowledge4COVID-19} knowledge graph, SDM-RDFizer also created the Knowledge Graph of the Drugs4Covid project \footnote{\url{https://drugs4covid.oeg-upm.net/}} where NLP annotations and metadata from more than 60,000 COVID-19 articles are integrated in almost 44M RDF triples.
 
 \subsection{Experimental Evaluation}
 
@@ -155,7 +155,7 @@ We compare SDM-RDFizer with a baseline and existing RML interpreters. Directly r
 
 %\noindent\paragraph{\textbf{{Discussion of Observed Results.}}}
 
-\begin{figure}[!th]
+\begin{figure}[!t]
  \centering
     \subfloat[10k records]{
     \includegraphics[width=0.45\columnwidth]{figures/sdmrdfizer/10k_vera25.png}
@@ -170,7 +170,7 @@ We compare SDM-RDFizer with a baseline and existing RML interpreters. Directly r
 \caption[Execution time for with 25\% duplicates]{{\bf Total execution time of experiments on datasets with 25\% duplicates.} SOM means simple object map, ORM object reference map and OJM object join map. RocketRML generates incorrect results running OJM mappings.}
     \label{fig:25percent}
 \end{figure}
-\begin{figure}[!th]
+\begin{figure}[!t]
  \centering
     \subfloat[10k records]{
     \includegraphics[width=0.45\columnwidth]{figures/sdmrdfizer/10k_vera75.png}

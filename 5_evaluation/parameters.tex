@@ -218,14 +218,6 @@ In this dimension, we consider different variables related with the original sou
 In this dimension, we consider the variables related with the output of the generation process. The \textbf{serialization} impacts on the total execution time; the effect will depend on the size of the output and the number of times the processor has to access the disk to store the output. \textbf{Generation type} represents how an engine constructs a knowledge graph. The generation can be continuous, e.g. the SDM-RDFizer stores each RDF triple in a file once it is generated. Contrary, the generation can be in-memory, e.g. RMLMapper stores the output when the knowledge graph is created completely. Finally, the engines usually can have a flag for removing \textbf{duplicates}; this operation has to be specified in the setup because it strikes out the completeness and also the total execution time. The efficiency of the engines components that eliminate duplicates, can be captured by observing the variables of this dimension.   
 
 As can be observed in the results reported in this section, the behavior of the studied engines is not equally affected by the different independent variables. Thus, benchmarks need to include all these variables in order to provide a holistic overview of the performance of the studied engines, and ensure general and reproducible evaluations. 
-
-
-\subsection{Evaluation of affected parameters in KGC}
-The goal of our experiment is to assess the impact of the discussed variables and configurations during the evaluation of existing knowledge graph construction tools. Directly related with our hypothesis H3 (definition of a evaluation benchmark) defined in Chapter \ref{chap:objectives}, we aim at answering the detailed following research questions: \textbf{RQ1}:What is the effect of mixing different variables in one testbed?; \textbf{RQ2}: What is the impact of considering configurations of different complexity of the same variable in one testbed?; \textbf{RQ3}: Do the different variables and configurations influence in the behavior of existing knowledge graph construction tools? To answer these research questions, we set up the following experimental studies:
-
-\noindent \textbf{Datasets.}
-For this evaluation, we generated three different datasets with 1,000 (1K), 10,000 (10K), and 50,000 (50K) rows, and various number of columns based on the tested parameters; ~\autoref{tab:datasets} shows the properties of the datasets generated for \texttt{Relation Type}, \texttt{Join Duplicates}, and \texttt{Join Selectivity} evaluations. 
-For the \textit{Dataset Size (Na{\"i}ve)} parameter, we generated the same number of rows as in~\autoref{tab:datasets}, but with $30$ columns.
 \begin{table}[!tb]
     \centering
     \caption[Testbeds for Analyzing the Impact over KGC engines]{\textbf{Datasets.} Properties of Datasets used in the Empirical Evaluations.}
@@ -238,6 +230,14 @@ For the \textit{Dataset Size (Na{\"i}ve)} parameter, we generated the same numbe
      50K & 50,000 & 2 & 2 \\ \hline 
      \end{tabular}
 \end{table}
+
+\subsection{Evaluation of affected parameters in KGC}
+The goal of our experiment is to assess the impact of the discussed variables and configurations during the evaluation of existing knowledge graph construction tools. Directly related with our hypothesis H3 (definition of a evaluation benchmark) defined in Chapter \ref{chap:objectives}, we aim at answering the detailed following research questions: \textbf{RQ1}:What is the effect of mixing different variables in one testbed?; \textbf{RQ2}: What is the impact of considering configurations of different complexity of the same variable in one testbed?; \textbf{RQ3}: Do the different variables and configurations influence in the behavior of existing knowledge graph construction tools? To answer these research questions, we set up the following experimental studies:
+
+\noindent \textbf{Datasets.}
+For this evaluation, we generated three different datasets with 1,000 (1K), 10,000 (10K), and 50,000 (50K) rows, and various number of columns based on the tested parameters; ~\autoref{tab:datasets} shows the properties of the datasets generated for \texttt{Relation Type}, \texttt{Join Duplicates}, and \texttt{Join Selectivity} evaluations. 
+For the \textit{Dataset Size (Na{\"i}ve)} parameter, we generated the same number of rows as in~\autoref{tab:datasets}, but with $30$ columns.
+
 %
 During the experiments, we only considered the CSV file format to represent the generated tables.
 
@@ -253,23 +253,7 @@ We consider different configurations for the above-discussed variables in each d
 %
 \texttt{Dataset Size Configurations:} 1) SDM-RDFizer 1K; 2) SDM-RDFizer 10K; 3) SDM-RDFizer 50K; 4) RMLMapper 1K; 5) RML\-Mapper 10K; and 6) RMLMapper 50K. In each configuration of this parameter, we only use one data file.
 %
-\texttt{Relation Type configurations:} 1) SDM-RDFizer 1-N; 2) SDM-RDFizer N-1; 3) SDM-RDFizer N-M; 4) SDM-RDFizer Combinations (all relation types); 5) RMLMapper 1-N; 6) RMLMapper N-1; 7) RMLMapper N-M; and 8) RMLMapper Combinations (all relation types). For relation cardinality, we evaluated $N=\{1, 5, 10, 15\}$ and $M=\{1, 3, 5, 10\}$. In addition, we set the percentage of rows that involve in those relation types to $25\%$, i.e. $25\%$ of the overall rows from outer table have a matching join value to inner table, and $50\%$, respectively.
-%
-\texttt{Join Duplicate configurations:}  1) SDM-RDFizer Low, 2) SDM-RDFizer High, 3) RMLMapper Low, 4) RMLMapper High. \texttt{Low} Join Duplicates refer to datasets with low percentage of duplicates, i.e. from $5\%$ to $20\%$ of data generated could have duplicates due to the join conditions, similarly 
-\texttt{High} Join Duplicates refer to higher percentage of duplicates, i.e. from $30\%$ to $50\%$ of data generated could be duplicated. 
-%
-\texttt{Join Selectivity Configurations:} 1) SDM-RDFizer High; 2) SDM-RDFizer Low; 3) RMLMapper High; and 4) RMLMapper Low. In this case, the join selectivity \texttt{High} represents how many time the join condition matches the values in the inner join file from 5\% to 20\% of the overall rows, while \texttt{Low} means that the join condition matches range from 60\% to 100\% of the overall number of rows. As previously shown, we hypothesise that these configurations allow us to uncover patterns in the behavior of these engines that could not be observed if only na{\"i}ve variables were studied. 
-
-\noindent \textbf{Metrics}
-We report on the following metrics or observed variables: 
-\textit{Execution Time}: Elapsed time between execution of an engine and the delivery of the results.
-\textit{Number of Results}: Number of triples generated by the KGC engine.
-
-\noindent \textbf{Implementations.} 
-The SDM-RDFizer and the testbeds are implemented in Python 3.6; the SDM-RDFizer is publicly available\footnote{\url{https://github.com/SDM-TIB/SDM-RDFizer}}. Furthermore, Jupiter Notebooks are available to generate the data and plot the results. Additionally, we have created a Docker image to run the testbeds and reproduce the experimental results\footnote{\url{https://github.com/SDM-TIB/KGC-Param-Eval}}. The experiments were run in an Intel(R) Xeon(R) equipped with a CPU E5-2603 v3 @ 1.60GHz 20 cores, 100G memory with Ubuntu 16.04LTS.
-
-
-\begin{figure}[!tb]
+\begin{figure}[!t]
     \centering
     \subfloat[Dataset 1K]{
       \includegraphics[width=0.48\columnwidth]{figures/relation_type_01k_bubble.png}
@@ -292,6 +276,24 @@ The SDM-RDFizer and the testbeds are implemented in Python 3.6; the SDM-RDFizer 
     }
     \label{fig:relation_type_bubble}
 \end{figure}
+\texttt{Relation Type configurations:} 1) SDM-RDFizer 1-N; 2) SDM-RDFizer N-1; 3) SDM-RDFizer N-M; 4) SDM-RDFizer Combinations (all relation types); 5) RMLMapper 1-N; 6) RMLMapper N-1; 7) RMLMapper N-M; and 8) RMLMapper Combinations (all relation types). For relation cardinality, we evaluated $N=\{1, 5, 10, 15\}$ and $M=\{1, 3, 5, 10\}$. In addition, we set the percentage of rows that involve in those relation types to $25\%$, i.e. $25\%$ of the overall rows from outer table have a matching join value to inner table, and $50\%$, respectively.
+%
+\texttt{Join Duplicate configurations:}  1) SDM-RDFizer Low, 2) SDM-RDFizer High, 3) RMLMapper Low, 4) RMLMapper High. \texttt{Low} Join Duplicates refer to datasets with low percentage of duplicates, i.e. from $5\%$ to $20\%$ of data generated could have duplicates due to the join conditions, similarly 
+\texttt{High} Join Duplicates refer to higher percentage of duplicates, i.e. from $30\%$ to $50\%$ of data generated could be duplicated. 
+%
+
+\texttt{Join Selectivity Configurations:} 1) SDM-RDFizer High; 2) SDM-RDFizer Low; 3) RMLMapper High; and 4) RMLMapper Low. In this case, the join selectivity \texttt{High} represents how many time the join condition matches the values in the inner join file from 5\% to 20\% of the overall rows, while \texttt{Low} means that the join condition matches range from 60\% to 100\% of the overall number of rows. As previously shown, we hypothesise that these configurations allow us to uncover patterns in the behavior of these engines that could not be observed if only na{\"i}ve variables were studied. 
+
+\noindent \textbf{Metrics}
+We report on the following metrics or observed variables: 
+\textit{Execution Time}: Elapsed time between execution of an engine and the delivery of the results.
+\textit{Number of Results}: Number of triples generated by the KGC engine.
+
+\noindent \textbf{Implementations.} 
+The SDM-RDFizer and the testbeds are implemented in Python 3.6; the SDM-RDFizer is publicly available\footnote{\url{https://github.com/SDM-TIB/SDM-RDFizer}}. Furthermore, Jupiter Notebooks are available to generate the data and plot the results. Additionally, we have created a Docker image to run the testbeds and reproduce the experimental results\footnote{\url{https://github.com/SDM-TIB/KGC-Param-Eval}}. The experiments were run in an Intel(R) Xeon(R) equipped with a CPU E5-2603 v3 @ 1.60GHz 20 cores, 100G memory with Ubuntu 16.04LTS.
+
+
+
 
 
 \noindent \textbf{Testbeds.}
