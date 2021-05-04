@@ -15,7 +15,7 @@ Database technologies play a vital role in the development of information system
     \label{fig:obdatimeline}
 \end{figure*}
 
-In the early days of information system development, it was natural for organizations to develop their own data models, which were strongly aligned with their activities. This led to a large heterogeneity of data models across organizations, and even across different departments inside the same organization. Such heterogeneity was especially evident in the case of organizational changes, merges, etc. These situations made researchers and professionals start working on solutions for data integration, where data from several sources needed to be accessible according to a unified and global view over such local heterogeneous data sources. Data warehouses were used in order to align and materialize data from different sources, normally from the same organization, so as to provide support for analytical queries and for the generation of reports. Popular technologies used in production systems worldwide included the use of Extract-Transform-Load (ETL) workflows to overcome heterogeneity and ensure the availability of data in such data warehouses or on integrated databases. Indeed, these approaches are still strongly used nowadays.
+In the early days of information system development, it was natural for organizations to develop their own data models, which were strongly aligned with their activities. This led to a large heterogeneity of data models across organizations, and even across different departments inside the same organization. Such heterogeneity was especially evident in the case of organizational changes, merges, etc. These situations made researchers and professionals start working on solutions for data integration, where data from several sources needed to be accessible according to a unified and global view over such local heterogeneous data sources. Data warehouses were used in order to align and materialize data from different sources, normally from the same organization, so as to provide support for analytical queries and for the generation of reports. Popular technologies used in production systems worldwide included the use of Extract-Transform-Load (ETL) workflows to overcome heterogeneity and ensure the availability of data in such data warehouses or on integrated databases. Indeed, these approaches are still commonly used nowadays.
 
 In the meantime, data integration challenges became even more relevant when organizations started using Web technologies to provide access to their data (via Web Services, REST APIs or using Semantic Web and Linked Data approaches), both for their own information system development as well as for data sharing, and later on when public administrations started publishing open data according to  public-sector information reuse initiatives. Availability and heterogeneity of data (both in terms of content and format) is nowadays present at an unprecedented level. Following the aforementioned ETL approaches, the term data lake has been rather recently coined to refer to an evolution of data warehouses that considers not only structured data but also the other types of (semi-)structured and unstructured formats in which data is made available nowadays, as discussed above.
 
@@ -91,7 +91,7 @@ Introduced in 2000, REST \citep{fielding2000architectural} has become now the mo
 
 The two main components of a GraphQL server are the \textbf{schema} and the \textbf{resolvers}. The GraphQL schema specifies the type of an object together with the fields that can be queried. GraphQL resolvers are data extraction functions implemented in a programming language that are responsible to translate GraphQL queries into queries supported by the underlying datasets (e.g. GraphQL to SQL). In addition, query planning tools have been developed in order to translate GraphQL queries into other query languages (e.g. dataloader\footnote{\url{https://github.com/facebook/dataloader}}, joinmonster\footnote{\url{https://join-monster.readthedocs.io/en/latest/}}).
 
-In a recent paper~\citep{priyatna2019morph} we proposed the use of the mapping translation concept to facilitate the generation of GraphQL resolvers. We propose specifying mappings in R2RML, which is a well-defined and formalized mapping language, and apply a mapping translation technique to generate automatically the corresponding GraphQL schemes and resolvers in different programming languages. Our intuition is that following this approach, GraphQL resolver will be easier to maintain, as they are declarative and independent from any programming language. The details of this approach are presented in Section \ref{chap6_morphgraphql}.
+We proposed the use of the mapping translation concept to facilitate the generation of GraphQL resolvers. We propose specifying mappings in R2RML, which is a well-defined and formalized mapping language, and apply a mapping translation technique to generate automatically the corresponding GraphQL schemes and resolvers in different programming languages. Our intuition is that following this approach, GraphQL resolver will be easier to maintain, as they are declarative and independent from any programming language. The details of this approach are presented in Section \ref{chap6_morphgraphql}.
 
 \subsection{Providing access to semi-structured data}
 Semi-structured data formats are one of the most widely used formats to publish data on the Web. Although existing mapping languages provide support for this type of data sources, existing engines are mostly focused on the generation (materialization) of RDF-based knowledge graphs, with only a few proposals (e.g. xR2RML~\citep{michel2015translation}) focused on the application of query-translation techniques (virtualization) over such types of data sources.
@@ -99,6 +99,8 @@ Semi-structured data formats are one of the most widely used formats to publish 
 In the specific case of spreadsheets (CSV), providing access to this format is difficult for two main reasons: (i) CSV does not provide its own query language, (ii) there are some transformations that are commonly needed when treating data available in CSVs. For solving the first issue, query translation techniques have been applied over such data format by considering a CSV file as a single table that can be loaded in an RDB. For the second issue, some extensions of well-known mapping languages (RML together with the Function Ontology~\citep{de2017declarative}) and annotations following the CSVW specification~\citep{tennison2015model} can be used.
 
 Morph-CSV applies the concept of mapping translation for enhancing OBDA query translation over CSV files from SPARQL. It exploits the information of CSVW annotations and RML+FnO mappings to create an enriched RDB representation of the CSV files together with the corresponding R2RML mappings, allowing the use of existing query translation (SPARQL-to-SQL) techniques implemented in R2RML-compliant OBDA engines. This contribution is detailed in Section \ref{chap6_morphgcsv}.
+
+FunMap is a framework for the efficient evaluation of transformation functions defined in RML+FnO mappings. It exploits the information from the mapping rules to execute a set of heuristic-based optimizations to enhance the construction of knowledge graphs in complex data integration scenarios. The framework implements the concept of mapping translation pre-processing the rules, executing the declared functions and generating a function-free RML mapping that can running by any RML compliant engine. This contribution is detailed in Section \ref{chap7_funmap}.
 
 
 \subsection{Understanding the semantics of mapping languages}
@@ -118,7 +120,7 @@ Statistics data is one of the most common ways of sharing public information now
 
 Due to the high volume and variability of data, the transformation from tabular to SKG-oriented formats requires a process that is standard and maintainable. We identify two main approaches for transforming tabular data to Statistics Knowledge Graph (SKG). The first approach is an ad-hoc approach, such as one that has been reported in~\citep{corcho2017publishing}, in which CSV data is converted into RDF Data Cube~\citep{cyganiak2012rdf} using a set of custom rules. The second approach is defined on the basis of mapping languages, such as the RDB2RDF W3C Recommendation, R2RML, in which transformations are codified in a standard language, with several tools available for applying them.
 
-In an ad-hoc approach~\citep{corcho2017publishing}, a processor which is the main component responsible for the transformation process, is developed for a specific purpose. Those processors are not commonly used for other solutions. The SKG resulting from the transformation process is stored in a triple store and there is a need for repeating the transformation process whenever the original statistics data changes to ensure that generated SKG is synchronised with the original statistics data. On the other hand, using R2RML to generate SKG brings several benefits in comparison to the ad-hoc approach. There are many R2RML processors~\citep{priyatna2014formalisation,calvanese2017ontop} available which means that one is not restricted to use a particular processor and may easily use another if necessary. Furthermore, many of those processors have incorporated techniques for keeping the desired SKG virtual, thus eliminating the need of synchronization between the tabular data and SKG. A virtualization process is highly recommended when the data published is volatile because it ensures that the retrieved data is updated. This is achieved by translating SPARQL queries posed to the virtual SKG into another query supported by the underlying data source and evaluated on the original dataset~\citep{poggi2008linking}. Table \ref{table:chapter4_compare} summarizes our discussion regarding the approaches on transforming statistics data into SKG.
+In an ad-hoc approach~\citep{corcho2017publishing}, a processor which is the main component responsible for the transformation process, is developed for a specific purpose. Those processors are not commonly used for other solutions. The SKG resulting from the transformation process is stored in a triple store and there is a need for repeating the transformation process whenever the original statistics data changes to ensure that generated SKG is synchronised with the original statistics data. On the other hand, using R2RML to generate SKG brings several benefits in comparison to the ad-hoc approach. There are many R2RML processors~\citep{priyatna2014formalisation,calvanese2017ontop} available which means that one is not restricted using a particular processor and may easily use another if necessary. Furthermore, many of those processors have incorporated techniques for keeping the desired SKG virtual, thus eliminating the need of synchronization between the tabular data and SKG. A virtualization process is recommended when the data published is volatile because it ensures that the retrieved data is updated. This is achieved by translating SPARQL queries posed to the virtual SKG into another query supported by the underlying data source and evaluated on the original dataset~\citep{poggi2008linking}. Table \ref{table:chapter4_compare} summarizes our discussion regarding the approaches on transforming statistics data into SKG.
 
 \begin{table}[tbp]
 \caption[KG Construction Approaches from Statistics Data]{Comparison of Approaches for Transforming Statistics Data to SKG}
@@ -139,7 +141,7 @@ The size of the R2RML mapping documents depends on the number of columns in the 
 \subsection{From statistic data to SKG}
 In this section we discuss and exemplify two different approaches for transforming tabular data to SKG, the first one being the baseline which allows illustrating the advantages of our approach.
 
-\subsubsection{Approach 1 - Naive}
+\subsubsection{Approach 1 -- Naive}
 Given a CSV file containing statistics data, a typical way to transform it to SKG using R2RML mappings is to create one TriplesMap for each column corresponding to a slice of a dimension, for example January in Time dimension or Male in Gender dimension. The TriplesMap will have the following properties:
 \begin{itemize}
 \item Its \texttt{rr:logicalTable} property specifies the source CSV file (Listing \ref{list:logical})
@@ -162,7 +164,7 @@ rr:subjectMap [
 \begin{lstlisting}[float,caption=Dimension slice mapping,frame=tlrb,label={list:dimension}, columns=fullflexible]
 rr:predicateObjectMap[ 
     rr:predicate ex:month; 
-    rr:objectMap [ rr:constant "interval:January"; ];  
+    rr:objectMap [ rr:constant interval:January; ];  
 ];
 rr:predicateObjectMap[ 
     rr:predicate ex:numberOfArrivals; 
@@ -173,13 +175,13 @@ rr:predicateObjectMap[
 \begin{lstlisting}[float,caption=Dataset mapping,frame=tlrb,label={list:dataset}, columns=fullflexible]
 rr:predicateObjectMap[ 
     rr:predicate qb:dataSet; 
-    rr:objectMap [ rr:constant "ex:Arrivals"; ];
+    rr:objectMap [ rr:constant ex:Arrivals; ];
 ];
 \end{lstlisting}
 \lstset{upquote=false}
 Considering that a typical statistics CSV file contains many columns, the size of the R2RML mapping document grows linearly with the number of columns. The main issue with the first approach is the size of the R2RML/RML mapping, where the mapping expert has to create a TriplesMap for each column to answer the desirable SPARQL queries, as we will show in the Evaluation section.
 
-\subsubsection{Approach 2 - R2RML-iterator}
+\subsubsection{Approach 2 -- R2RML-iterator}
 In this approach, we aim to reduce the size of an R2RML mapping for statistics data by incorporating a set of new properties in the mapping specification. We identify that the only difference between those TriplesMaps is the name of the column, which provides a unique identifier to the TriplesMap object and the access to the data of each column. By incorporating a variable that references the target columns, R2RML-Iterator reduces the size of the mapping while maintaining the semantics of the R2RML mapping. This variable is formalized in the mapping language by incorporating four new properties (Figure \ref{fig:rmlc}) to the Logical Table object:
 
 \begin{itemize}
@@ -264,7 +266,7 @@ During the mapping translation process, the variables are replaced with the name
 
 In order to ensure that the iterator proposal aligns with R2RML, we have developed a mapping translator that converts its mapping document with an iterator variable to a R2RML mapping with multiple TriplesMap objects. In this way, we reduce the size of the R2RML mapping document, minimizing the time of the mapping creation and supporting an easier maintenance. Besides, as it is aligned to R2RML, any R2RML available processor is able to deal with our approach. 
 
-\subsection{R2RML iterator: Use Cases}
+\subsection{Examples of the R2RML-iterator}
 In this section we describe our experiment of transforming two statistics datasets from two different domains and agencies: a tourism statistics dataset from the Sri Lanka Tourism Development Authority (SLTDA) and a immigration statistics from the EuroStat. For each dataset, we use both R2RML and R2RML-Iterator mappings with Morph-RDB to generate virtual SKGs and evaluate three SPARQL queries for each one.
 
 \subsubsection{Case 1: Statistics from the Sri Lanka Tourism Development Authority}
@@ -279,7 +281,7 @@ Our intention is to transform that CSV file into a virtual SKG. Because this SKG
 \end{itemize}
 
 \noindent\paragraph{Mappings.}
-The R2RML mapping document generated using the naive approach described in the previous section contains 12 TriplesMaps and around 700 lines. Each TriplesMap describes the transformation rules of the number of arriving passengers every month of the year. Except for those PredicateObjectMap properties corresponding to the name the CSV columns, all TripleMaps have identical values. 
+The R2RML mapping document generated using the na\"ive approach described in the previous section contains 12 TriplesMaps and around 700 lines. Each TriplesMap describes the transformation rules of the number of arriving passengers every month of the year. Except for those PredicateObjectMap properties corresponding to the name the CSV columns, all TripleMaps have identical values. 
 
 On the contrary, the corresponding proposal mappings, either with \texttt{rmlc:column} property or with \texttt{rmlc:range} property have only 74 lines in total with 1 TriplesMap and 5 PredicateObject mappings. The Table \ref{table:compare1} summarizes the characteristics of the mappings.
 
@@ -296,7 +298,7 @@ Total Lines   & $\sim$700 & 74 \\
 \end{table}
 
 \subsubsection{Case 2: EuroStat - Immigration Statistics}
-\noindent\paragraph{Dataset and Queries.} Eurostat\footnote{\url{http://ec.europa.eu/eurostat}} publishes the statistics office of the European Union. Its main responsibility is to provide statistics information about European Union such as economy, finance, population, industry, etc. In this example, we consider a dataset containing the number of immigrants that have arrived in European countries available online\footnote{\url{http://ec.europa.eu/eurostat/product?code=tps00176&mode=view}}. We downloaded the aforementioned dataset as a CSV file containing the number of immigrants grouped by countries (x-asis) and years (y-axis). We have created three SPARQL queries, similar to the ones in the previous example:
+\noindent\paragraph{Dataset and Queries.} Eurostat\footnote{\url{http://ec.europa.eu/eurostat}} publishes the statistics office of the European Union. Its main responsibility is to provide statistics information about the European Union such as economy, finance, population, industry, etc. In this example, we consider a dataset containing the number of immigrants that have arrived in European countries available online\footnote{\url{http://ec.europa.eu/eurostat/product?code=tps00176&mode=view}}. We downloaded the aforementioned dataset as a CSV file containing the number of immigrants grouped by countries (x-asis) and years (y-axis). We have created three SPARQL queries, similar to the ones in the previous example:
 
 \begin{itemize}
 \item Q1: Retrieve the number of immigrants arriving in Spain.
@@ -305,7 +307,7 @@ Total Lines   & $\sim$700 & 74 \\
 \end{itemize}
 
 \noindent\paragraph{Mappings.}
-Generating the naive mapping described in the first approach is not feasible in this case, as there is a need to generate a TriplesMap for each column that represents a country and the dataset contains more than 40 columns. Instead, we generate two R2RML-iterator mapping documents,one with \texttt{rmlc:columns} property and the other with \texttt{rmlc:range} property. Then we use the our mapping translator engine to generate the naive version of R2RML.
+Generating the naive mapping described in the first approach is not feasible in this case, as there is a need to generate a TriplesMap for each column that represents a country and the dataset contains more than 40 columns. Instead, we generate two R2RML-iterator mapping documents, one with \texttt{rmlc:columns} property and the other with \texttt{rmlc:range} property. Then we use the our mapping translator engine to generate the naive version of R2RML.
 
 Our proposals mapping document (either version) contains only 1 TriplesMap and 4 PredicateObjectMap mappings, totalling less than 70 lines. On the contrary, the generated R2RML mapping document has more than 40 TriplesMap, more than 170 PredicateObjectMap mappings, totalling more than 2800 lines. The Table \ref{table:compare2} summarizes the characteristics of the mappings.
 \begin{table}[tbp]
