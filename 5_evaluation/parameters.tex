@@ -323,17 +323,6 @@ On the other hand, a negative value indicates that there is an inverse correlati
     \label{fig:duplicates_bubble}
 \end{figure}
 
-\subsubsection*{Discussion of the Observed Results}
-We observe that the behavior of the engines can be affected when multiple variables are involved in a testbed (e.g. size and relation type) or when different levels of complexity of a variables (e.g. low, high join selectivity). We discuss the obtained results during our evaluation over the different configurations and parameters involved in each experiment:   
-
-\noindent \textbf{Dataset Size (Na{\"i}ve):}
-Figure~\ref{fig:naive_bubble} depicts the comparison of engines when the dataset size is considered. When \texttt{configuration 1} is compared to itself, the Pearson's correlation value is $1.0$; additionally, it is high and positive when it is compared to \texttt{configurations 2, 3, 5, and 6} (large blue bubbles). 
-Using this parameter, the correlation analysis suggests that both engines behave similarly in all configurations. Moreover, this indicates that only considering the data size is not enough to uncovered the properties of the studied engines.
-
-
-
-
-
 \begin{figure}[!tb]
     \centering
     \subfloat[Dataset 1K]{
@@ -356,6 +345,17 @@ Using this parameter, the correlation analysis suggests that both engines behave
     \caption[Knowledge Graph Tools on Join Selectivity]{\textbf{Comparison of Knowledge Graph Tools on Join Selectivity.} The first two configurations, i.e., 1-2 on x- and y-axis represent SDM-RDFizer on joins with \textit{high} selectivity (5\%-20\% of data) and joins with \textit{low} selectivity (60\%-100\% of data), respectively.  Configurations 3 and 4 represent RMLMapper on joins with \textit{high} selectivity (5\%-20\% of data) and joins with \textit{low} selectivity (60\%-100\% of data), respectively. Grey bubbles correspond to correlation value of $1.0$; blue bubbles show a positive correlation while red bubbles show a negative correlation. Dataset size and join selectivity affect both engines differently.}
     \label{fig:joinselectivity_bubble}
 \end{figure}
+\subsubsection*{Discussion of the Observed Results}
+We observe that the behavior of the engines can be affected when multiple variables are involved in a testbed (e.g. size and relation type) or when different levels of complexity of a variables (e.g. low, high join selectivity). We discuss the obtained results during our evaluation over the different configurations and parameters involved in each experiment:   
+
+\noindent \textbf{Dataset Size (Na{\"i}ve):}
+Figure~\ref{fig:naive_bubble} depicts the comparison of engines when the dataset size is considered. When \texttt{configuration 1} is compared to itself, the Pearson's correlation value is $1.0$; additionally, it is high and positive when it is compared to \texttt{configurations 2, 3, 5, and 6} (large blue bubbles). 
+Using this parameter, the correlation analysis suggests that both engines behave similarly in all configurations. Moreover, this indicates that only considering the data size is not enough to uncovered the properties of the studied engines.
+
+
+
+
+
 
 
 
