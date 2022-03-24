@@ -10,7 +10,7 @@ Over the last years, a large and constant growth of data have been made availabl
 This thesis addresses the problem of constructing knowledge graphs exploiting declarative mapping rules. The contributions presented in this document are:
 
 - A complete evaluation framework for knowledge graph construction engines.
-- The concept of \textit{mapping translation} and its desirable properties.
+- The concept of __mapping translation__ and its desirable properties.
 - Optimizations and enhancements during the access to heterogeneous data sources in the construction of virtual knowledge graphs exploiting the mapping translation concept.
 - Optimizations in the construction of materialized knowledge graphs over complex data integration scenarios translating mapping rules among different specifications.
 
